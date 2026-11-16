@@ -16,13 +16,11 @@ chunking:
     min_chars: 100       # skip sections smaller than this
     max_chars: 4000      # split larger sections
 
-# B 决定用哪个模型。A 的语料和界面与模型无关，只要求两点：
-#   1. 建索引和查 query 用同一个 embedding 模型（否则向量空间错配）
-#   2. dimensions 定下来后告诉 A，报告里要写
+# B 决定用哪个模型。
 embedding:
   provider: ""        # B 填：local | vertex | dashscope | openai
   model: ""           # B 填，例如 Qwen/Qwen3-Embedding-0.6B、BGE-M3
-  dimensions: null    # B 填完后回填给 A
+  dimensions: null    
   batch_size: 32
 
 retrieval:
