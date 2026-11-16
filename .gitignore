@@ -1,0 +1,25 @@
+# Raw docs bundle (34MB zip + extracted HTML) — too large for GitHub
+data/raw/
+
+# Generated vector DB / cache
+data/*.sqlite
+data/*.db
+.tmp/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
