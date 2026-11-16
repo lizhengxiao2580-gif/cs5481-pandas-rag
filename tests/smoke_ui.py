@@ -22,7 +22,7 @@ assert not at.exception, at.exception
 rows = at.dataframe[0].value
 print("table rows :", len(rows))
 print("columns    :", list(rows.columns))
-assert len(rows) == 52, f"expected 52 pages, got {len(rows)}"
+assert len(rows) == 82, f"expected 82 pages, got {len(rows)}"
 
 # QA tab: submitting a question should hit the not-implemented notice from B's stub.
 at.text_input[0].input("How do I group by two columns?")
