@@ -1,0 +1,40 @@
+# RAG QA Configuration
+# Copy to config.local.yaml for personal overrides (gitignored)
+
+corpus:
+  doc_version: "3.1.1"
+  scopes: ["user_guide", "getting_started"]
+  raw_dir: "data/raw/pandas-docs-3.1.1"
+
+chunking:
+  strategy_a:
+    name: "fixed_size"
+    chunk_size: 500      # tokens
+    overlap: 100         # tokens
+  strategy_b:
+    name: "structure_aware"
+    min_chars: 100       # skip sections smaller than this
+    max_chars: 4000      # split larger sections
+
+embedding:
+  provider: "vertex"     # vertex | local | fake
+  model: "text-multilingual-embedding-002"
+  dimensions: 768
+  batch_size: 32
+
+retrieval:
+  default_k: 5
+  comparison_k: [5, 8]
+  score_threshold: 0.3   # discard below this
+
+generation:
+  provider: "vertex"     # vertex | local | fake
+  model: "gemini-2.0-flash"
+  temperature: 0.1
+  max_tokens: 1024
+  refusal_message: "无法从知识库中找到答案"
+
+evaluation:
+  questions_path: "eval/questions.jsonl"
+  output_path: "eval/report.md"
+  min_questions: 20
