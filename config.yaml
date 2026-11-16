@@ -16,34 +16,28 @@ chunking:
     min_chars: 100       # skip sections smaller than this
     max_chars: 4000      # split larger sections
 
+# B 决定用哪个模型。A 的语料和界面与模型无关，只要求两点：
+#   1. 建索引和查 query 用同一个 embedding 模型（否则向量空间错配）
+#   2. dimensions 定下来后告诉 A，报告里要写
 embedding:
-  provider: "local"                # local | vertex | fake
-  model: "Qwen/Qwen3-Embedding-0.6B"
-  dimensions: 1024
+  provider: ""        # B 填：local | vertex | dashscope | openai
+  model: ""           # B 填，例如 Qwen/Qwen3-Embedding-0.6B、BGE-M3
+  dimensions: null    # B 填完后回填给 A
   batch_size: 32
-  torch_dtype: "float16"           # float16 for T4 GPU
-  trust_remote_code: true
-  # Vertex API fallback (if TA enables aiplatform.googleapis.com):
-  # provider: "vertex"
-  # model: "text-multilingual-embedding-002"
-  # dimensions: 768
 
 retrieval:
   default_k: 5
   comparison_k: [5, 8]
   score_threshold: 0.3   # discard below this
 
+# B 决定生成模型。唯一硬性要求：回答里的 [n] 必须对应 citations 里的 n，
+# 无法回答时 refused=True 且 answer 为 refusal_message。
 generation:
-  provider: "vertex"               # vertex | dashscope | local | fake
-  model: "gemini-2.0-flash"        # Vertex Model Garden; swap to Qwen if deployed
+  provider: ""        # B 填：vertex | dashscope | openai | local
+  model: ""           # B 填
   temperature: 0.1
   max_tokens: 1024
   refusal_message: "无法从知识库中找到答案"
-  # If using DashScope (Alibaba Cloud) for Qwen generation:
-  # provider: "dashscope"
-  # model: "qwen-plus"
-  # api_key: "${DASHSCOPE_API_KEY}"
-  # base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 evaluation:
   questions_path: "eval/questions.jsonl"
