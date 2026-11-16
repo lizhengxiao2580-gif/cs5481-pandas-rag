@@ -32,16 +32,21 @@ streamlit run src/app.py      # 打开界面（http://localhost:8501）
 # 从 https://pandas.pydata.org/docs/pandas.zip 下载并解压到 data/raw/
 ```
 
-### GCP Vertex AI（B 用）
+### GCP / 模型配置（B 用）
 
-B 的 embedding/generation 依赖 Vertex AI，需设置：
-```bash
-export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service-account.json
-export GOOGLE_CLOUD_PROJECT=cs5481-<eid>-a
-export GOOGLE_CLOUD_REGION=asia-east2
+**Embedding（已确定）：** Qwen3-Embedding-0.6B，transformers 本地加载，1024 维。
+在 GCP T4 Notebook 里直接跑，不需要启用 Vertex AI API：
+```python
+from transformers import AutoModel, AutoTokenizer
+import torch
+model = AutoModel.from_pretrained("Qwen/Qwen3-Embedding-0.6B", trust_remote_code=True, torch_dtype=torch.float16, device_map="auto")
 ```
 
-本地调试可用 fake embedding 跳过认证，见 `config.yaml`。
+**Generation（待定）：** 默认 config.yaml 写的是 Vertex Gemini Flash。
+如果 TA 启用了 aiplatform.googleapis.com，可直接用；否则 B 可改用 DashScope API 或本地小模型。
+详见 `config.yaml` 里的注释。
+
+本地调试可用 `provider: "fake"` 跳过模型加载，见 `config.yaml`。
 
 ## 数据字段
 

@@ -3,7 +3,7 @@
 
 corpus:
   doc_version: "3.1.1"
-  scopes: ["user_guide", "getting_started"]
+  scopes: ["user_guide", "getting_started", "reference/api"]
   raw_dir: "data/raw/pandas-docs-3.1.1"
 
 chunking:
@@ -17,10 +17,16 @@ chunking:
     max_chars: 4000      # split larger sections
 
 embedding:
-  provider: "vertex"     # vertex | local | fake
-  model: "text-multilingual-embedding-002"
-  dimensions: 768
+  provider: "local"                # local | vertex | fake
+  model: "Qwen/Qwen3-Embedding-0.6B"
+  dimensions: 1024
   batch_size: 32
+  torch_dtype: "float16"           # float16 for T4 GPU
+  trust_remote_code: true
+  # Vertex API fallback (if TA enables aiplatform.googleapis.com):
+  # provider: "vertex"
+  # model: "text-multilingual-embedding-002"
+  # dimensions: 768
 
 retrieval:
   default_k: 5
@@ -28,11 +34,16 @@ retrieval:
   score_threshold: 0.3   # discard below this
 
 generation:
-  provider: "vertex"     # vertex | local | fake
-  model: "gemini-2.0-flash"
+  provider: "vertex"               # vertex | dashscope | local | fake
+  model: "gemini-2.0-flash"        # Vertex Model Garden; swap to Qwen if deployed
   temperature: 0.1
   max_tokens: 1024
   refusal_message: "无法从知识库中找到答案"
+  # If using DashScope (Alibaba Cloud) for Qwen generation:
+  # provider: "dashscope"
+  # model: "qwen-plus"
+  # api_key: "${DASHSCOPE_API_KEY}"
+  # base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 evaluation:
   questions_path: "eval/questions.jsonl"
