@@ -1,15 +1,15 @@
 # pandas 文档 RAG（CS5481 项目，Topic 5）
 
 知识库：pandas 3.1.1 官方文档（2026-11-04 构建，BSD 许可）。
-范围：`user_guide` 32 页 + `getting_started` 20 页，共 52 页；API reference 暂不纳入。
+范围：`user_guide` 32 页 + `getting_started` 20 页 + 高频 API reference 30 页，共 82 页 / 412 小节；完整 API reference（2500+ 页）暂不纳入。
 
 ## 目录
 
 ```
 data/raw/pandas-docs-3.1.1.zip     官方 HTML 包（34 MB）
 data/raw/pandas-docs-3.1.1/        解压后的站点，语料在 user_guide/ 和 getting_started/
-data/docs.jsonl                    页面记录，52 条
-data/sections.jsonl                小节记录，382 条（B 的切块输入）
+data/docs.jsonl                    页面记录，82 条（52 user_guide/getting_started + 30 API）
+data/sections.jsonl                小节记录，412 条（B 的切块输入）
 src/ingest.py                      HTML → 两份 jsonl
 src/qa_api.py                      answer() 契约，B 实现
 src/app.py                         Streamlit 界面（含文档导入按钮）
@@ -22,7 +22,8 @@ eval/questions.jsonl               （待创建）≥20 条评测问题
 
 ```bash
 pip install -r requirements.txt
-python src/ingest.py          # 重新生成 docs.jsonl / sections.jsonl
+python src/ingest.py          # 重新生成 docs.jsonl / sections.jsonl（user_guide + getting_started）
+python src/ingest.py --from-file data/raw/api_targets_prefixed.txt --append   # 追加高频 API 页
 streamlit run src/app.py      # 打开界面（http://localhost:8501）
 ```
 
@@ -130,4 +131,4 @@ python src/evaluate.py --questions eval/questions.jsonl --output eval/report.md
 - 跳过 2 个 meta refresh 跳转页（`copy_on_write.html`、`migration-3-strings.html`）。
 - 保留 8 条小于 100 字符的小节，评测阶段可按 `n_chars` 过滤。
 - `user_guide/io.html` 单页 26 万字符、314 个代码块，按 h2 切成 24 个小节，块内再切由 B 的 chunker 负责。
-- API reference 未纳入（3812 页多为签名 stub），如需加入请限定 ≤50 个高频方法页。
+- API reference 仅纳入 30 个高频方法页（read_csv, merge, groupby, pivot_table, loc, iloc, dropna, fillna 等），完整 2500+ 页会稀释检索质量，如需扩展请编辑 `data/raw/api_targets_prefixed.txt` 后重跑 `--append`。

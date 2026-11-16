@@ -62,7 +62,10 @@ def block_texts(root) -> list[str]:
     return [text for text in (render_block(el) for el in blocks) if text]
 
 
-def page_files(only: str | None) -> list[Path]:
+def page_files(only: str | None, from_file: str | None = None) -> list[Path]:
+    if from_file:
+        lines = Path(from_file).read_text(encoding="utf-8").splitlines()
+        return [RAW_DIR / line.strip() for line in lines if line.strip()]
     if only:
         return [RAW_DIR / only]
     files: list[Path] = []
@@ -192,6 +195,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=0, help="process only the first N pages")
     parser.add_argument("--only", default=None, help="process a single page, path relative to the docs root")
+    parser.add_argument("--from-file", default=None, help="read page paths from a text file (one per line, relative to docs root)")
+    parser.add_argument("--append", action="store_true", help="append to existing jsonl instead of overwriting")
     parser.add_argument("--out-dir", default=str(OUT_DIR))
     args = parser.parse_args()
 
@@ -199,7 +204,7 @@ def main() -> int:
         print(f"docs not found: {RAW_DIR}", file=sys.stderr)
         return 1
 
-    files = page_files(args.only)
+    files = page_files(args.only, args.from_file)
     if args.limit:
         files = files[: args.limit]
 
@@ -217,8 +222,30 @@ def main() -> int:
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    write_jsonl(out_dir / "docs.jsonl", docs)
-    write_jsonl(out_dir / "sections.jsonl", sections)
+
+    docs_path = out_dir / "docs.jsonl"
+    sections_path = out_dir / "sections.jsonl"
+
+    if args.append:
+        # Load existing and deduplicate by doc_id / section_id
+        existing_docs = []
+        existing_sections = []
+        if docs_path.exists():
+            existing_docs = [json.loads(l) for l in docs_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+        if sections_path.exists():
+            existing_sections = [json.loads(l) for l in sections_path.read_text(encoding="utf-8").splitlines() if l.strip()]
+        existing_doc_ids = {d["doc_id"] for d in existing_docs}
+        existing_section_ids = {s["section_id"] for s in existing_sections}
+        new_docs = [d for d in docs if d["doc_id"] not in existing_doc_ids]
+        new_sections = [s for s in sections if s["section_id"] not in existing_section_ids]
+        all_docs = existing_docs + new_docs
+        all_sections = existing_sections + new_sections
+        write_jsonl(docs_path, all_docs)
+        write_jsonl(sections_path, all_sections)
+        print(f"appended {len(new_docs)} docs / {len(new_sections)} sections (total {len(all_docs)} / {len(all_sections)})")
+    else:
+        write_jsonl(docs_path, docs)
+        write_jsonl(sections_path, sections)
 
     total_chars = sum(d["n_chars"] for d in docs)
     ids = [s["section_id"] for s in sections]
