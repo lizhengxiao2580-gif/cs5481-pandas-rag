@@ -4,6 +4,13 @@ data/raw/
 # Generated vector DB / cache
 data/*.sqlite
 data/*.db
+data/index/
+data/index-work/
+.index-bundle-*/
+data/uploads/
+config.local.yaml
+.config.local-*.tmp
+.env
 .tmp/
 
 # Python

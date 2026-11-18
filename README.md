@@ -1,110 +1,67 @@
-# pandas 文档 RAG（CS5481 项目，Topic 5）
+# pandas Docs QA
 
-知识库：pandas 3.1.1 官方文档（2026-11-04 构建，BSD 许可）。
-范围：`user_guide` 32 页 + `getting_started` 20 页 + 高频 API reference 30 页，共 82 页 / 412 小节；完整 API reference（2500+ 页）暂不纳入。
+CS5481 Topic 5. Ask questions about pandas and check each answer against the cited documentation. The included corpus contains **82 pages and 412 sections** from pandas 3.1.1, including 30 API reference pages.
 
-## 我完成了什么
-
-角色 A：语料收集与清洗、数据导入、演示界面、接口契约。
-
-| 交付物 | 状态 | 说明 |
-|--------|------|------|
-| `data/raw/pandas-docs-3.1.1/` | 完成 | 官方 HTML 包解压站点，34 MB，来源 https://pandas.pydata.org/docs/pandas.zip |
-| `data/docs.jsonl` | 完成 | 82 条页面记录，含标题、带锚点的原文链接、字符数、代码块数、版本号 |
-| `data/sections.jsonl` | 完成 | 412 条小节记录，按 h2 切分，每条带 heading_path 和可点击的原文 url |
-| `src/ingest.py` | 完成 | HTML → jsonl 解析器，支持 `--from-file` 批量指定页面和 `--append` 增量追加 |
-| `src/app.py` | 完成 | Streamlit 演示界面：文档库页签（筛选、度量、下载、HTML 导入）和问答页签（k 滑杆、引用展开） |
-| `src/qa_api.py` | 完成 | `answer()` 的接口契约，与界面解耦 |
-| `tests/smoke_ui.py` | 完成 | 无头冒烟测试，验证 82 行表格、度量值和问答页占位提示 |
-| `config.yaml` | 完成 | 语料、切块、embedding、检索、生成、评测的参数模板 |
-| `README.md` | 完成 | 数据字段、运行方式、接口契约、取舍记录 |
-
-## 目录
-
-```
-data/raw/pandas-docs-3.1.1.zip     官方 HTML 包（34 MB）
-data/raw/pandas-docs-3.1.1/        解压后的站点，语料在 user_guide/、getting_started/、reference/api/
-data/docs.jsonl                    页面记录，82 条
-data/sections.jsonl                小节记录，412 条
-src/ingest.py                      HTML → 两份 jsonl
-src/qa_api.py                      answer() 契约
-src/app.py                         Streamlit 界面（含文档导入按钮）
-tests/smoke_ui.py                  无头冒烟测试
-config.yaml                        切块/检索/模型参数
-```
-
-## 跑起来
+## Run the app
 
 ```bash
-pip install -r requirements.txt
-python src/ingest.py          # 重新生成 docs.jsonl / sections.jsonl（user_guide + getting_started）
-python src/ingest.py --from-file data/raw/api_targets_prefixed.txt --append   # 追加高频 API 页
-streamlit run src/app.py      # 打开界面（http://localhost:8501）
+python -m pip install -r requirements.txt
+streamlit run src/app.py
 ```
 
-首次运行需下载原始语料：
+1. Open **Settings**. Configure each OpenAI-compatible endpoint and test the connections, then click **Save settings** in each form. Use the provider's API base URL (including its version path) and its exact model ID. Embedding calls `/embeddings`; Generation calls `/chat/completions`.
+2. Open **Library** and load the preset to reuse the included vectors, or create and select a named library for your current embedding settings. **Update indexes** builds or adds missing pages to the active library. Pause or stop at the next batch or collection boundary. Resume from the controls or rerun an interrupted update to reuse saved vectors.
+3. Open **Ask** and run a sample question. Choose the strategy used to generate the answer and follow inline citations to the source cards. Switch to **Compare retrieval** to browse both rankings without another model request. **Compare retrieval only** works with only the embedding endpoint configured.
+
+The UI saves settings and entered API keys to the Git-ignored `config.local.yaml`. The application and CLI load that file automatically after a restart. **Generation → System prompt** lets you inspect, edit, and restore the default prompt. You can also edit the file directly. For example:
+
+```yaml
+embedding:
+  base_url: "https://api.siliconflow.cn/v1"
+  model: "Qwen/Qwen3-Embedding-8B"
+  dimensions: 1024
+  api_key_env: EMBEDDING_API_KEY
+  query_instruction: "Given a pandas question, retrieve documentation passages that answer it."
+generation:
+  base_url: "https://openrouter.ai/api/v1"
+  model: "replace-with-a-model-id-your-provider-supports"
+  api_key_env: GENERATION_API_KEY
+```
+
+Leave the API key field blank to use the named environment variable. Entering a key and saving stores it as plain text in the local file. Omit `dimensions` or set it to `null` for endpoints that expect the provider default. If a server rejects batches, lower `batch_size` (use `1` for single-text requests).
+
+## Data and indexes
+
+- [`data/docs.jsonl`](data/docs.jsonl) contains page IDs, titles, official URLs, scope and counts.
+- [`data/sections.jsonl`](data/sections.jsonl) contains ordered sections with stable IDs, heading paths, text and deep links.
+- **Fixed window** joins sections in order within each page, then takes 500-token windows with 100-token overlap. **Structure-aware** starts at each section boundary and uses the same windows inside long sections. Both use `cl100k_base` for reproducible token counts. The tokenizer downloads its data on first use.
+- Each vector library contains two Qdrant collections with chunk text, section IDs, and source URLs. Retrieval uses cosine similarity. Named libraries remember their embedding settings and can be switched independently of the answer strategy. Updating a library adds missing pages using its original chunking parameters. Editing the query instruction does not rebuild document vectors.
+- **Library → Import a pandas page** accepts an official pandas HTML page. Preview it and confirm the import. Supply the official URL if it is absent from the HTML. The page and its sections are stored together in ignored `data/uploads/`, and become searchable after **Update indexes** succeeds for both strategies.
+- The tracked corpus is enough to build the indexes. To regenerate the source corpus itself, download the [pandas HTML package](https://pandas.pydata.org/docs/pandas.zip) into `data/raw/` and use `src/ingest.py`. Run it with `--out-dir` when generating a separate copy. The standard ingestion run covers the user guide and getting started pages; `--from-file` with `--append` adds explicitly listed API pages.
+
+### CLI and submission bundle
 
 ```bash
-# 从 https://pandas.pydata.org/docs/pandas.zip 下载并解压到 data/raw/
+python src/index_cli.py build
+python src/index_cli.py bundle
+python src/index_cli.py install
 ```
 
-## 数据字段
+`build` updates both indexes for the active embedding settings and includes any local imports. `bundle` exports existing vectors for the tracked corpus without calling the embedding API. The archive contains both Qdrant collections and an index manifest. Local imports and API keys are excluded.
 
-`docs.jsonl`：`doc_id, title, url, scope, path, doc_version, n_sections, n_chars, n_pre, n_tables`
+The bundled `data/prebuilt-index.zip` contains both indexes for the public pandas corpus at 1,024 dimensions. Configure an embedding endpoint, then choose **Library → Load preset library** or run `python src/index_cli.py install`. The original embedding binding loads locally. When an endpoint, model alias, or default output dimension needs verification, the app compares three public passages against the stored vectors. A compatible endpoint can reuse the preset. If compatibility fails, create a separate library from the current embedding settings and build it explicitly. Each teammate supplies their own API credentials and can select their own generation model. Live questions still call the embedding and generation APIs. Use `--archive PATH` to write or read an archive at a different path.
 
-`sections.jsonl`：`doc_id, section_id, order, heading, heading_path, anchor, url, n_chars, text`
+## Evaluation interface
 
-`url` 是带锚点的原文链接，引用可以直接点回 pandas 文档对应小节。
-
-## 语料清洗做了什么
-
-- 只取 `article.bd-article` 主体，丢掉导航、侧栏、页脚。
-- 删掉每个标题里的 `a.headerlink`，否则每段都以 `#` 开头，会污染 embedding。
-- 按叶子块（p、pre、ul、table 等）提取文本，不是整篇 `get_text()`。第一版用整篇提取，代码块被拆成 `grouped / = / df / .` 这样的单 token；换成块级提取后代码块完整。
-- `pre` 保留换行，其余块折叠空白。
-- 跳过 2 个 meta refresh 跳转存根页：`copy_on_write.html`、`migration-3-strings.html`（内容在真实页面里，不算缺失）。
-- 切分粒度到 h2，`user_guide/io.html` 这种 26 万字符、314 个代码块的大页被切成 24 个小节，不会变成单个巨型块。
-
-## 语料统计
-
-| 指标 | 数值 |
-|------|------|
-| 页面 | 82 |
-| 小节 | 412 |
-| 字符 | 1,662,660 |
-| 代码块 | 2,814 |
-| 重复 section_id | 0 |
-| 空小节 | 0 |
-| 最长小节 | `user_guide/io#csv-text-files`，64,209 字符 |
-
-## 接口契约
-
-`src/qa_api.py::answer(question, k=5) -> Answer`
+From the repository root, run evaluation with `src/` on the Python module path. For example, an evaluator under `src/` can import directly:
 
 ```python
-{
-  "answer": str,           # 带 [n] 引用的回答，或拒绝语句
-  "refused": bool,         # True 表示无法从知识库找到答案
-  "latency_ms": int,
-  "citations": [
-    {
-      "n": 1,              # 引用编号，对应 answer 中的 [1]
-      "doc_id": "...",
-      "title": "...",
-      "url": "...",        # 带锚点的原文链接
-      "section_id": "...",
-      "score": 0.83,       # 相似度分数
-      "text": "..."        # 原文片段（≤1200 字符）
-    }
-  ]
-}
+from qa_api import query, retrieve_chunks
+
+hits = retrieve_chunks("How do I group by two columns?", k=5, strategy="fixed_size")
+result = query("How do I group by two columns?", k=5, strategy="structure_aware")
 ```
 
-界面只依赖这个函数，`answer()` 换实现不用改 UI。
+Both paths use `config.yaml` with optional `config.local.yaml` overrides. Valid strategy IDs are `fixed_size` and `structure_aware`. Each hit includes `chunk_id`, `doc_id`, `section_ids`, `score`, the text, and source links. A fixed window can touch more than one section. Label evaluation questions by page or section ID and count a hit if any of its IDs matches.
 
-## 已知取舍
-
-- 跳过 2 个 meta refresh 跳转页（`copy_on_write.html`、`migration-3-strings.html`）。
-- 保留 7 条小于 100 字符的小节，评测阶段可按 `n_chars` 过滤。
-- API reference 仅纳入 30 个高频方法页（read_csv、merge、groupby、pivot_table、loc、iloc、dropna、fillna 等），完整 2500+ 页会稀释检索质量；如需扩展，编辑 `data/raw/api_targets_prefixed.txt` 后重跑 `--append`。
-- 本机 pandas 3.0.6，文档版本 3.1.1，数据里已标 `doc_version`。
+`query()` returns `answer`, `refused`, `latency_ms` and numbered `citations`. It validates that every emitted citation marker points to a retrieved chunk. Check whether each citation supports its claim when scoring answer correctness. For the strategy comparison, use the same questions, model, and `k` for both runs. The assignment asks for at least 20 question–answer pairs and reporting retrieval hit rate and answer correctness.

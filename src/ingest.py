@@ -17,6 +17,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from bs4 import BeautifulSoup
 
@@ -39,9 +40,7 @@ BLOCK_TAGS = (
 
 def clean(text: str) -> str:
     text = text.replace("\u200b", "").replace("\xa0", " ")
-    text = re.sub(r"[ \t]+", " ", text)
-    text = re.sub(r"\n\s*\n+", "\n\n", text)
-    return text.strip()
+    return text.strip("\r\n")
 
 
 def strip_heading(text: str) -> str:
@@ -76,6 +75,43 @@ def page_files(only: str | None, from_file: str | None = None) -> list[Path]:
 
 def build_page(path: Path) -> tuple[dict, list[dict]] | None:
     soup = BeautifulSoup(path.read_text(encoding="utf-8-sig"), "lxml")
+    return parse_page(soup, path.relative_to(RAW_DIR).as_posix())
+
+
+def parse_official_upload(html: bytes, source_url: str = "") -> tuple[dict, list[dict]]:
+    soup = BeautifulSoup(html, "lxml")
+    canonical = soup.find("link", rel="canonical")
+    og_url = soup.find("meta", property="og:url")
+    embedded_url = (canonical.get("href") if canonical else None) or (og_url.get("content") if og_url else None)
+    embedded_path = official_path(embedded_url or "")
+    supplied_path = official_path(source_url)
+    if source_url and not supplied_path:
+        raise ValueError("Enter the official pandas documentation page URL.")
+    if embedded_path and supplied_path and embedded_path != supplied_path:
+        raise ValueError("The entered URL differs from the official source in this HTML file.")
+    rel = embedded_path or supplied_path
+    if not rel:
+        raise ValueError("This file does not identify its official source. Enter the pandas page URL.")
+    parsed = parse_page(soup, rel)
+    if parsed is None or not any(section["text"] for section in parsed[1]):
+        raise ValueError("No pandas documentation content was found in this file.")
+    return parsed
+
+
+def official_path(url: str) -> str | None:
+    try:
+        address = urlsplit(url.strip())
+    except ValueError:
+        return None
+    if address.scheme != "https" or address.netloc.lower() != "pandas.pydata.org":
+        return None
+    matched = re.fullmatch(r"/docs/((?:[\w.-]+/)*[\w.-]+\.html)", address.path)
+    if matched and not {".", ".."}.intersection(matched[1].split("/")):
+        return matched[1]
+    return None
+
+
+def parse_page(soup: BeautifulSoup, rel: str) -> tuple[dict, list[dict]] | None:
     article = soup.select_one("article.bd-article")
     if article is None:
         return None
@@ -85,9 +121,8 @@ def build_page(path: Path) -> tuple[dict, list[dict]] | None:
         anchor.decompose()
 
     h1 = article.find("h1")
-    title = strip_heading(h1.get_text(" ", strip=True)) if h1 else path.stem
+    title = strip_heading(h1.get_text(" ", strip=True)) if h1 else Path(rel).stem
 
-    rel = path.relative_to(RAW_DIR).as_posix()
     doc_id = rel[: -len(".html")]
     page_url = BASE_URL + rel
     n_pre = len(article.find_all("pre"))
