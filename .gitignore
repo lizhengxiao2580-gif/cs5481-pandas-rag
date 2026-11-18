@@ -28,5 +28,6 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Streamlit
+# Frontend dependencies and local settings
+web/node_modules/
 .streamlit/secrets.toml

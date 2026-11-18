@@ -6,14 +6,27 @@ CS5481 Topic 5. Ask questions about pandas and check each answer against the cit
 
 ```bash
 python -m pip install -r requirements.txt
-streamlit run src/app.py
+python src/app.py
 ```
 
-1. Open **Settings**. Configure each OpenAI-compatible endpoint and test the connections, then click **Save settings** in each form. Use the provider's API base URL (including its version path) and its exact model ID. Embedding calls `/embeddings`; Generation calls `/chat/completions`.
-2. Open **Library** and load the preset to reuse the included vectors, or create and select a named library for your current embedding settings. **Update indexes** builds or adds missing pages to the active library. Pause or stop at the next batch or collection boundary. Resume from the controls or rerun an interrupted update to reuse saved vectors.
-3. Open **Ask** and run a sample question. Choose the strategy used to generate the answer and follow inline citations to the source cards. Switch to **Compare retrieval** to browse both rankings without another model request. **Compare retrieval only** works with only the embedding endpoint configured.
+Open [http://127.0.0.1:8501](http://127.0.0.1:8501). FastAPI serves the built React app from `web/dist/`, so running the project only requires Python.
 
-The UI saves settings and entered API keys to the Git-ignored `config.local.yaml`. The application and CLI load that file automatically after a restart. **Generation → System prompt** lets you inspect, edit, and restore the default prompt. You can also edit the file directly. For example:
+1. Open **Settings**. Set an OpenAI-compatible base URL and model ID under both **Embedding Model** and **Generation Model**. Click **Test Connection**, then **Save Settings** for each model. Embedding uses `/embeddings` and Generation uses `/chat/completions`.
+2. Under **Library → Manage Libraries**, load the preset or create a library for your embedding model. **Update Index** adds missing pages to the active library. Pause or stop at the next batch or collection boundary. Resume from the controls or rerun an interrupted update to reuse saved vectors.
+3. Open **Ask & Compare** and run a sample question. Choose a retrieval strategy next to **Ask** and follow inline citations to the source passage. Switch to **Compare** to browse both rankings without another model request. Starting in Compare mode runs retrieval without generating an answer.
+
+### Edit the frontend
+
+Keep `python src/app.py` running. In a second terminal, run the following from `web/` with a Node.js version supported by Vite (Node 22.12 or newer in the 22.x line):
+
+```bash
+npm ci
+npm run dev
+```
+
+Vite opens a development address and proxies `/api` to the Python service on port 8501. After modifying the frontend, run `npm run build` in `web/` and include the updated `web/dist/` files in the submission. The bundled app and API can be checked with `python tests/smoke_ui.py`.
+
+The UI saves settings and entered API keys to the Git-ignored `config.local.yaml`. The application and CLI load that file automatically after a restart. **Generation Model → Advanced Connection Parameters** contains the system prompt and the option to restore its default. You can also edit the file directly:
 
 ```yaml
 embedding:
@@ -28,7 +41,7 @@ generation:
   api_key_env: GENERATION_API_KEY
 ```
 
-Leave the API key field blank to use the named environment variable. Entering a key and saving stores it as plain text in the local file. Omit `dimensions` or set it to `null` for endpoints that expect the provider default. If a server rejects batches, lower `batch_size` (use `1` for single-text requests).
+Leaving the API key field blank keeps an existing saved key. To switch to the named environment variable, click **Clear saved key from disk**, then **Save Settings**. A key entered in the app is saved as plain text in the local file. Omit `dimensions` or set it to `null` to use the provider's default. If a server rejects batches, lower `batch_size` (use `1` for single-text requests).
 
 ## Data and indexes
 
@@ -36,7 +49,7 @@ Leave the API key field blank to use the named environment variable. Entering a 
 - [`data/sections.jsonl`](data/sections.jsonl) contains ordered sections with stable IDs, heading paths, text and deep links.
 - **Fixed window** joins sections in order within each page, then takes 500-token windows with 100-token overlap. **Structure-aware** starts at each section boundary and uses the same windows inside long sections. Both use `cl100k_base` for reproducible token counts. The tokenizer downloads its data on first use.
 - Each vector library contains two Qdrant collections with chunk text, section IDs, and source URLs. Retrieval uses cosine similarity. Named libraries remember their embedding settings and can be switched independently of the answer strategy. Updating a library adds missing pages using its original chunking parameters. Editing the query instruction does not rebuild document vectors.
-- **Library → Import a pandas page** accepts an official pandas HTML page. Preview it and confirm the import. Supply the official URL if it is absent from the HTML. The page and its sections are stored together in ignored `data/uploads/`, and become searchable after **Update indexes** succeeds for both strategies.
+- **Library → Import HTML** accepts an official pandas HTML page. Preview it and confirm the import. Supply the official URL if it is absent from the HTML. The page and its sections are stored together in ignored `data/uploads/` and become searchable once **Update Index** succeeds for both strategies.
 - The tracked corpus is enough to build the indexes. To regenerate the source corpus itself, download the [pandas HTML package](https://pandas.pydata.org/docs/pandas.zip) into `data/raw/` and use `src/ingest.py`. Run it with `--out-dir` when generating a separate copy. The standard ingestion run covers the user guide and getting started pages; `--from-file` with `--append` adds explicitly listed API pages.
 
 ### CLI and submission bundle
@@ -49,7 +62,7 @@ python src/index_cli.py install
 
 `build` updates both indexes for the active embedding settings and includes any local imports. `bundle` exports existing vectors for the tracked corpus without calling the embedding API. The archive contains both Qdrant collections and an index manifest. Local imports and API keys are excluded.
 
-The bundled `data/prebuilt-index.zip` contains both indexes for the public pandas corpus at 1,024 dimensions. Configure an embedding endpoint, then choose **Library → Load preset library** or run `python src/index_cli.py install`. The original embedding binding loads locally. When an endpoint, model alias, or default output dimension needs verification, the app compares three public passages against the stored vectors. A compatible endpoint can reuse the preset. If compatibility fails, create a separate library from the current embedding settings and build it explicitly. Each teammate supplies their own API credentials and can select their own generation model. Live questions still call the embedding and generation APIs. Use `--archive PATH` to write or read an archive at a different path.
+The bundled `data/prebuilt-index.zip` contains both indexes for the public pandas corpus at 1,024 dimensions. Configure an embedding endpoint, then choose **Load preset** or **Verify & Load** under **Library → Manage Libraries**. The CLI equivalent is `python src/index_cli.py install`. The original embedding binding loads locally. When an endpoint, model alias, or default output dimension needs verification, the app compares three public passages against the stored vectors. A compatible endpoint can reuse the preset. If compatibility fails, create a separate library from the current embedding settings and build it explicitly. Each teammate supplies their own API credentials and can select their own generation model. Live questions still call the embedding and generation APIs. Use `--archive PATH` to write or read an archive at a different path.
 
 ## Evaluation interface
 
