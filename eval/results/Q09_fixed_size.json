@@ -1,0 +1,245 @@
+{
+  "question_id": "Q09",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:06:02.645303+00:00",
+  "answer": "To remove every occurrence of duplicate values in an `id` column, pass that column as `subset` and use `keep=False`:\n\n```python\ndf.drop_duplicates(subset=[\"id\"], keep=False)\n```\n\n`keep=False` means “Drop all duplicates” [1][2]. If duplicates should be identified using multiple columns, pass a list of those columns as `subset` [1][2].\n\n`DataFrame.drop_duplicates` does not compare index labels. The documentation states: “Indexes, including time indexes are ignored” [1]. It also says: “Duplicates in the index are not considered” [3].\n\nTo remove every occurrence of duplicate index labels instead, use `Index.duplicated(keep=False)` with boolean indexing:\n\n```python\ndf.loc[~df.index.duplicated(keep=False), :]\n```\n\nThis keeps only rows whose index label occurs once [4][5].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0001",
+      "doc_id": "reference/api/pandas.DataFrame.drop_duplicates",
+      "title": "pandas.DataFrame.drop_duplicates",
+      "text": "pandas.DataFrame.drop_duplicates\nDataFrame.drop_duplicates(subset=None, *, keep='first', inplace=<no_default>, ignore_index=False)[source]\nReturn DataFrame with duplicate rows removed.\nConsidering certain columns is optional. Indexes, including time indexes are ignored.\nParameters:\nsubsetcolumn label or iterable of labels, optional\nOnly consider certain columns for identifying duplicates, by default use all of the columns.\nkeep{‘first’, ‘last’, False}, default ‘first’\nDetermines which duplicates (if any) to keep.\n‘first’ : Drop duplicates except for the first occurrence.\n‘last’ : Drop duplicates except for the last occurrence.\nFalse : Drop all duplicates.\ninplacebool, default False\nWhether to modify the DataFrame rather than creating a new one.\nDeprecated since version 3.1.0: This keyword is deprecated and will be removed in pandas 4.0. See the whatsnew note on PDEP-8 for more details.\nignore_indexbool, default False\nIf True, the resulting axis will be labeled 0, 1, …, n - 1.\nReturns:\nDataFrame or None\nDataFrame with duplicates removed or None if inplace=True.\nSee also\nDataFrame.value_counts\nCount unique combinations of columns.\nIndex.duplicated\nIndicate duplicate index values.\nNotes\nThis method requires columns specified by subset to be of hashable type. Passing unhashable columns will raise a TypeError.\nExamples\nConsider dataset containing ramen rating.\n>>> df = pd.DataFrame(\n... {\n... \"brand\": [\"Yum Yum\", \"Yum Yum\", \"Indomie\", \"Indomie\", \"Indomie\"],\n... \"style\": [\"cup\", \"cup\", \"cup\", \"pack\", \"pack\"],\n... \"rating\": [4, 4, 3.5, 15, 5],\n... }\n... )\n>>> df\n brand style rating\n0 Yum Yum cup 4.0\n1 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nBy default, it removes duplicate rows based on all columns.\n>>> df.drop_duplicates()\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+          "heading_path": "pandas.DataFrame.drop_duplicates",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.drop_duplicates#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html",
+      "score": 0.8397182674574499
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/indexing:0067",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "Out[317]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n4 two x 0.052469\n5 three x -2.294560\n6 four x 2.148507\n\nIn [318]: df2.duplicated('a')\nOut[318]:\n0 False\n1 True\n2 False\n3 True\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [319]: df2.duplicated('a', keep='last')\nOut[319]:\n0 True\n1 False\n2 True\n3 True\n4 False\n5 False\n6 False\ndtype: bool\n\nIn [320]: df2.duplicated('a', keep=False)\nOut[320]:\n0 True\n1 True\n2 True\n3 True\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [321]: df2.drop_duplicates('a')\nOut[321]:\n a b c\n0 one x -1.467157\n2 two x -1.428572\n5 three x -2.294560\n6 four x 2.148507\n\nIn [322]: df2.drop_duplicates('a', keep='last')\nOut[322]:\n a b c\n1 one y 0.113937\n4 two x 0.052469\n5 three x -2.294560\n6 four x 2.148507\n\nIn [323]: df2.drop_duplicates('a', keep=False)\nOut[323]:\n a b c\n5 three x -2.294560\n6 four x 2.148507\nAlso, you can pass a list of columns to identify duplications.\nIn [324]: df2.duplicated(['a', 'b'])\nOut[324]:\n0 False\n1 False\n2 False\n3 False\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [325]: df2.drop_duplicates(['a', 'b'])\nOut[325]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n5 three x -2.294560\n6 four x 2.148507\nTo drop duplicates by index value, use Index.duplicated then perform slicing.",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#duplicate-data",
+          "heading_path": "Indexing and selecting data > Duplicate data",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#duplicate-data"
+      ],
+      "section_id": "user_guide/indexing#duplicate-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data",
+      "score": 0.8029095900032563
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0002",
+      "doc_id": "reference/api/pandas.DataFrame.drop_duplicates",
+      "title": "pandas.DataFrame.drop_duplicates",
+      "text": "um Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nBy default, it removes duplicate rows based on all columns.\n>>> df.drop_duplicates()\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nTo remove duplicates on specific column(s), use subset.\n>>> df.drop_duplicates(subset=[\"brand\"])\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\nTo remove duplicates and keep last occurrences, use keep.\n>>> df.drop_duplicates(subset=[\"brand\", \"style\"], keep=\"last\")\n brand style rating\n1 Yum Yum cup 4.0\n2 Indomie cup 3.5\n4 Indomie pack 5.0\nDuplicates in the index are not considered. To drop rows with a duplicate index label, use Index.duplicated() with boolean indexing.\n>>> indexed = df.set_index(\"brand\")\n>>> indexed[~indexed.index.duplicated(keep=\"first\")]\n style rating\nbrand\nYum Yum cup 4.0\nIndomie cup 3.5",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+          "heading_path": "pandas.DataFrame.drop_duplicates",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.drop_duplicates#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html",
+      "score": 0.8248557245260921
+    },
+    {
+      "n": 4,
+      "chunk_id": "fixed_size:user_guide/duplicates:0004",
+      "doc_id": "user_guide/duplicates",
+      "title": "Duplicate Labels",
+      "text": "whether a label is repeated.\nIn [16]: df2.index.duplicated()\nOut[16]: array([False, True, False])\nWhich can be used as a boolean filter to drop duplicate rows.\nIn [17]: df2.loc[~df2.index.duplicated(), :]\nOut[17]:\n A\na 0\nb 2\nThis approach keeps the first occurrence of each label. To keep the last occurrence instead, you can pass keep=\"last\":\nIn [18]: df2.loc[~df2.index.duplicated(keep=\"last\"), :]\nOut[18]:\n A\na 1\nb 2\nIf you want to remove all occurrences of duplicated labels, you can use keep=False:\nIn [19]: df2.loc[~df2.index.duplicated(keep=False), :]\nOut[19]:\n A\nb 2\nIf you need additional logic to handle duplicate labels, rather than just dropping the repeats, using groupby() on the index is a common trick. For example, we’ll resolve duplicates by taking the average of all rows with the same label.\nIn [20]: df2.groupby(level=0).mean()\nOut[20]:\n A\na 0.5\nb 2.0\n\nAs noted above, handling duplicates is an important feature when reading in raw data. That said, you may want to avoid introducing duplicates as part of a data processing pipeline (from methods like pandas.concat(), rename(), etc.). Both Series and DataFrame disallow duplicate labels by calling .set_flags(allows_duplicate_labels=False). (the default is to allow them). If there are duplicate labels, an exception will be raised.\nIn [21]: pd.Series([0, 1, 2], index=[\"a\", \"b\", \"b\"]).set_flags(allows_duplicate_labels=False)\n---------------------------------------------------------------------------\nDuplicateLabelError Traceback (most recent call last)\nCell In[21], line 1\n----> 1 pd.Series([0, 1, 2], index=[\"a\", \"b\", \"b\"]).set_flags(allows_duplicate_labels=False)\n\nFile ~/work/pandas/pandas/pandas/core/generic.py:484, in NDFrame.set_flags(self, copy, allows_duplicate_labels)\n 480 \"\"\"\n 481 self._check_copy_deprecation(copy)\n 482 df = self.copy(deep=False)\n 483 if allows_duplicate_labels is not None:\n--> 484 df.flags[\"allows_duplicate_labels\"] = allows_duplicate",
+      "sources": [
+        {
+          "section_id": "user_guide/duplicates#duplicate-label-detection",
+          "heading_path": "Duplicate Labels > Duplicate Label Detection",
+          "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#duplicate-label-detection"
+        },
+        {
+          "section_id": "user_guide/duplicates#disallowing-duplicate-labels",
+          "heading_path": "Duplicate Labels > Disallowing Duplicate Labels",
+          "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#disallowing-duplicate-labels"
+        }
+      ],
+      "section_ids": [
+        "user_guide/duplicates#duplicate-label-detection",
+        "user_guide/duplicates#disallowing-duplicate-labels"
+      ],
+      "section_id": "user_guide/duplicates#duplicate-label-detection",
+      "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#duplicate-label-detection",
+      "score": 0.7902059359671547
+    },
+    {
+      "n": 5,
+      "chunk_id": "fixed_size:user_guide/indexing:0068",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "False\n6 False\ndtype: bool\n\nIn [325]: df2.drop_duplicates(['a', 'b'])\nOut[325]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n5 three x -2.294560\n6 four x 2.148507\nTo drop duplicates by index value, use Index.duplicated then perform slicing. The same set of options are available for the keep parameter.\nIn [326]: df3 = pd.DataFrame({'a': np.arange(6),\n .....: 'b': np.random.randn(6)},\n .....: index=['a', 'a', 'b', 'c', 'b', 'a'])\n .....:\n\nIn [327]: df3\nOut[327]:\n a b\na 0 -0.293144\na 1 -1.596615\nb 2 0.149716\nc 3 0.173897\nb 4 -0.049440\na 5 1.394590\n\nIn [328]: df3.index.duplicated()\nOut[328]: array([False, True, False, False, True, True])\n\nIn [329]: df3[~df3.index.duplicated()]\nOut[329]:\n a b\na 0 -0.293144\nb 2 0.149716\nc 3 0.173897\n\nIn [330]: df3[~df3.index.duplicated(keep='last')]\nOut[330]:\n a b\nc 3 0.173897\nb 4 -0.049440\na 5 1.394590\n\nIn [331]: df3[~df3.index.duplicated(keep=False)]\nOut[331]:\n a b\nc 3 0.173897\n\nEach of Series or DataFrame have a get method which can return a default value.\nIn [332]: s = pd.Series([1, 2, 3], index=['a', 'b', 'c'])\n\nIn [333]: s.get('a') # equivalent to s['a']\nOut[333]: np.int64(1)\n\nIn [334]: s.get('x', default=-1)\nOut[334]: -1\n\nSometimes you want to extract a set of values given a sequence of row labels and column labels,",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#duplicate-data",
+          "heading_path": "Indexing and selecting data > Duplicate data",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data"
+        },
+        {
+          "section_id": "user_guide/indexing#dictionary-like-get-method",
+          "heading_path": "Indexing and selecting data > Dictionary-like get() method",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#dictionary-like-get-method"
+        },
+        {
+          "section_id": "user_guide/indexing#looking-up-values-by-index-column-labels",
+          "heading_path": "Indexing and selecting data > Looking up values by index/column labels",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#looking-up-values-by-index-column-labels"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#duplicate-data",
+        "user_guide/indexing#dictionary-like-get-method",
+        "user_guide/indexing#looking-up-values-by-index-column-labels"
+      ],
+      "section_id": "user_guide/indexing#duplicate-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data",
+      "score": 0.7801548886546734
+    }
+  ],
+  "latency_ms": 21255,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0001",
+      "doc_id": "reference/api/pandas.DataFrame.drop_duplicates",
+      "title": "pandas.DataFrame.drop_duplicates",
+      "text": "pandas.DataFrame.drop_duplicates\nDataFrame.drop_duplicates(subset=None, *, keep='first', inplace=<no_default>, ignore_index=False)[source]\nReturn DataFrame with duplicate rows removed.\nConsidering certain columns is optional. Indexes, including time indexes are ignored.\nParameters:\nsubsetcolumn label or iterable of labels, optional\nOnly consider certain columns for identifying duplicates, by default use all of the columns.\nkeep{‘first’, ‘last’, False}, default ‘first’\nDetermines which duplicates (if any) to keep.\n‘first’ : Drop duplicates except for the first occurrence.\n‘last’ : Drop duplicates except for the last occurrence.\nFalse : Drop all duplicates.\ninplacebool, default False\nWhether to modify the DataFrame rather than creating a new one.\nDeprecated since version 3.1.0: This keyword is deprecated and will be removed in pandas 4.0. See the whatsnew note on PDEP-8 for more details.\nignore_indexbool, default False\nIf True, the resulting axis will be labeled 0, 1, …, n - 1.\nReturns:\nDataFrame or None\nDataFrame with duplicates removed or None if inplace=True.\nSee also\nDataFrame.value_counts\nCount unique combinations of columns.\nIndex.duplicated\nIndicate duplicate index values.\nNotes\nThis method requires columns specified by subset to be of hashable type. Passing unhashable columns will raise a TypeError.\nExamples\nConsider dataset containing ramen rating.\n>>> df = pd.DataFrame(\n... {\n... \"brand\": [\"Yum Yum\", \"Yum Yum\", \"Indomie\", \"Indomie\", \"Indomie\"],\n... \"style\": [\"cup\", \"cup\", \"cup\", \"pack\", \"pack\"],\n... \"rating\": [4, 4, 3.5, 15, 5],\n... }\n... )\n>>> df\n brand style rating\n0 Yum Yum cup 4.0\n1 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nBy default, it removes duplicate rows based on all columns.\n>>> df.drop_duplicates()\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+          "heading_path": "pandas.DataFrame.drop_duplicates",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.drop_duplicates#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html",
+      "score": 0.8397182674574499
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0002",
+      "doc_id": "reference/api/pandas.DataFrame.drop_duplicates",
+      "title": "pandas.DataFrame.drop_duplicates",
+      "text": "um Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nBy default, it removes duplicate rows based on all columns.\n>>> df.drop_duplicates()\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\n3 Indomie pack 15.0\n4 Indomie pack 5.0\nTo remove duplicates on specific column(s), use subset.\n>>> df.drop_duplicates(subset=[\"brand\"])\n brand style rating\n0 Yum Yum cup 4.0\n2 Indomie cup 3.5\nTo remove duplicates and keep last occurrences, use keep.\n>>> df.drop_duplicates(subset=[\"brand\", \"style\"], keep=\"last\")\n brand style rating\n1 Yum Yum cup 4.0\n2 Indomie cup 3.5\n4 Indomie pack 5.0\nDuplicates in the index are not considered. To drop rows with a duplicate index label, use Index.duplicated() with boolean indexing.\n>>> indexed = df.set_index(\"brand\")\n>>> indexed[~indexed.index.duplicated(keep=\"first\")]\n style rating\nbrand\nYum Yum cup 4.0\nIndomie cup 3.5",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+          "heading_path": "pandas.DataFrame.drop_duplicates",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.drop_duplicates#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.drop_duplicates#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.drop_duplicates.html",
+      "score": 0.8248557245260921
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0067",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "Out[317]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n4 two x 0.052469\n5 three x -2.294560\n6 four x 2.148507\n\nIn [318]: df2.duplicated('a')\nOut[318]:\n0 False\n1 True\n2 False\n3 True\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [319]: df2.duplicated('a', keep='last')\nOut[319]:\n0 True\n1 False\n2 True\n3 True\n4 False\n5 False\n6 False\ndtype: bool\n\nIn [320]: df2.duplicated('a', keep=False)\nOut[320]:\n0 True\n1 True\n2 True\n3 True\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [321]: df2.drop_duplicates('a')\nOut[321]:\n a b c\n0 one x -1.467157\n2 two x -1.428572\n5 three x -2.294560\n6 four x 2.148507\n\nIn [322]: df2.drop_duplicates('a', keep='last')\nOut[322]:\n a b c\n1 one y 0.113937\n4 two x 0.052469\n5 three x -2.294560\n6 four x 2.148507\n\nIn [323]: df2.drop_duplicates('a', keep=False)\nOut[323]:\n a b c\n5 three x -2.294560\n6 four x 2.148507\nAlso, you can pass a list of columns to identify duplications.\nIn [324]: df2.duplicated(['a', 'b'])\nOut[324]:\n0 False\n1 False\n2 False\n3 False\n4 True\n5 False\n6 False\ndtype: bool\n\nIn [325]: df2.drop_duplicates(['a', 'b'])\nOut[325]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n5 three x -2.294560\n6 four x 2.148507\nTo drop duplicates by index value, use Index.duplicated then perform slicing.",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#duplicate-data",
+          "heading_path": "Indexing and selecting data > Duplicate data",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#duplicate-data"
+      ],
+      "section_id": "user_guide/indexing#duplicate-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data",
+      "score": 0.8029095900032563
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/duplicates:0004",
+      "doc_id": "user_guide/duplicates",
+      "title": "Duplicate Labels",
+      "text": "whether a label is repeated.\nIn [16]: df2.index.duplicated()\nOut[16]: array([False, True, False])\nWhich can be used as a boolean filter to drop duplicate rows.\nIn [17]: df2.loc[~df2.index.duplicated(), :]\nOut[17]:\n A\na 0\nb 2\nThis approach keeps the first occurrence of each label. To keep the last occurrence instead, you can pass keep=\"last\":\nIn [18]: df2.loc[~df2.index.duplicated(keep=\"last\"), :]\nOut[18]:\n A\na 1\nb 2\nIf you want to remove all occurrences of duplicated labels, you can use keep=False:\nIn [19]: df2.loc[~df2.index.duplicated(keep=False), :]\nOut[19]:\n A\nb 2\nIf you need additional logic to handle duplicate labels, rather than just dropping the repeats, using groupby() on the index is a common trick. For example, we’ll resolve duplicates by taking the average of all rows with the same label.\nIn [20]: df2.groupby(level=0).mean()\nOut[20]:\n A\na 0.5\nb 2.0\n\nAs noted above, handling duplicates is an important feature when reading in raw data. That said, you may want to avoid introducing duplicates as part of a data processing pipeline (from methods like pandas.concat(), rename(), etc.). Both Series and DataFrame disallow duplicate labels by calling .set_flags(allows_duplicate_labels=False). (the default is to allow them). If there are duplicate labels, an exception will be raised.\nIn [21]: pd.Series([0, 1, 2], index=[\"a\", \"b\", \"b\"]).set_flags(allows_duplicate_labels=False)\n---------------------------------------------------------------------------\nDuplicateLabelError Traceback (most recent call last)\nCell In[21], line 1\n----> 1 pd.Series([0, 1, 2], index=[\"a\", \"b\", \"b\"]).set_flags(allows_duplicate_labels=False)\n\nFile ~/work/pandas/pandas/pandas/core/generic.py:484, in NDFrame.set_flags(self, copy, allows_duplicate_labels)\n 480 \"\"\"\n 481 self._check_copy_deprecation(copy)\n 482 df = self.copy(deep=False)\n 483 if allows_duplicate_labels is not None:\n--> 484 df.flags[\"allows_duplicate_labels\"] = allows_duplicate",
+      "sources": [
+        {
+          "section_id": "user_guide/duplicates#duplicate-label-detection",
+          "heading_path": "Duplicate Labels > Duplicate Label Detection",
+          "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#duplicate-label-detection"
+        },
+        {
+          "section_id": "user_guide/duplicates#disallowing-duplicate-labels",
+          "heading_path": "Duplicate Labels > Disallowing Duplicate Labels",
+          "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#disallowing-duplicate-labels"
+        }
+      ],
+      "section_ids": [
+        "user_guide/duplicates#duplicate-label-detection",
+        "user_guide/duplicates#disallowing-duplicate-labels"
+      ],
+      "section_id": "user_guide/duplicates#duplicate-label-detection",
+      "url": "https://pandas.pydata.org/docs/user_guide/duplicates.html#duplicate-label-detection",
+      "score": 0.7902059359671547
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0068",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "False\n6 False\ndtype: bool\n\nIn [325]: df2.drop_duplicates(['a', 'b'])\nOut[325]:\n a b c\n0 one x -1.467157\n1 one y 0.113937\n2 two x -1.428572\n3 two y 0.337109\n5 three x -2.294560\n6 four x 2.148507\nTo drop duplicates by index value, use Index.duplicated then perform slicing. The same set of options are available for the keep parameter.\nIn [326]: df3 = pd.DataFrame({'a': np.arange(6),\n .....: 'b': np.random.randn(6)},\n .....: index=['a', 'a', 'b', 'c', 'b', 'a'])\n .....:\n\nIn [327]: df3\nOut[327]:\n a b\na 0 -0.293144\na 1 -1.596615\nb 2 0.149716\nc 3 0.173897\nb 4 -0.049440\na 5 1.394590\n\nIn [328]: df3.index.duplicated()\nOut[328]: array([False, True, False, False, True, True])\n\nIn [329]: df3[~df3.index.duplicated()]\nOut[329]:\n a b\na 0 -0.293144\nb 2 0.149716\nc 3 0.173897\n\nIn [330]: df3[~df3.index.duplicated(keep='last')]\nOut[330]:\n a b\nc 3 0.173897\nb 4 -0.049440\na 5 1.394590\n\nIn [331]: df3[~df3.index.duplicated(keep=False)]\nOut[331]:\n a b\nc 3 0.173897\n\nEach of Series or DataFrame have a get method which can return a default value.\nIn [332]: s = pd.Series([1, 2, 3], index=['a', 'b', 'c'])\n\nIn [333]: s.get('a') # equivalent to s['a']\nOut[333]: np.int64(1)\n\nIn [334]: s.get('x', default=-1)\nOut[334]: -1\n\nSometimes you want to extract a set of values given a sequence of row labels and column labels,",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#duplicate-data",
+          "heading_path": "Indexing and selecting data > Duplicate data",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data"
+        },
+        {
+          "section_id": "user_guide/indexing#dictionary-like-get-method",
+          "heading_path": "Indexing and selecting data > Dictionary-like get() method",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#dictionary-like-get-method"
+        },
+        {
+          "section_id": "user_guide/indexing#looking-up-values-by-index-column-labels",
+          "heading_path": "Indexing and selecting data > Looking up values by index/column labels",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#looking-up-values-by-index-column-labels"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#duplicate-data",
+        "user_guide/indexing#dictionary-like-get-method",
+        "user_guide/indexing#looking-up-values-by-index-column-labels"
+      ],
+      "section_id": "user_guide/indexing#duplicate-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#duplicate-data",
+      "score": 0.7801548886546734
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 21255
+}

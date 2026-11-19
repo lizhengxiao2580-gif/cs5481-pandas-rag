@@ -1,0 +1,108 @@
+{
+  "question_id": "Q30",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:46.184922+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 4078,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/overview:0008",
+      "doc_id": "getting_started/overview",
+      "title": "Package overview",
+      "text": "The list of the Core Team members and more detailed information can be found on the pandas website.",
+      "sources": [
+        {
+          "section_id": "getting_started/overview#development-team",
+          "heading_path": "Package overview > Development team",
+          "url": "https://pandas.pydata.org/docs/getting_started/overview.html#development-team"
+        }
+      ],
+      "section_ids": [
+        "getting_started/overview#development-team"
+      ],
+      "section_id": "getting_started/overview#development-team",
+      "url": "https://pandas.pydata.org/docs/getting_started/overview.html#development-team",
+      "score": 0.4323302988266888
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/overview:0009",
+      "doc_id": "getting_started/overview",
+      "title": "Package overview",
+      "text": "The information about current institutional partners can be found on pandas website page.",
+      "sources": [
+        {
+          "section_id": "getting_started/overview#institutional-partners",
+          "heading_path": "Package overview > Institutional partners",
+          "url": "https://pandas.pydata.org/docs/getting_started/overview.html#institutional-partners"
+        }
+      ],
+      "section_ids": [
+        "getting_started/overview#institutional-partners"
+      ],
+      "section_id": "getting_started/overview#institutional-partners",
+      "url": "https://pandas.pydata.org/docs/getting_started/overview.html#institutional-partners",
+      "score": 0.43085922389300924
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/tutorials:0007",
+      "doc_id": "getting_started/tutorials",
+      "title": "Tutorials and Books",
+      "text": "Practice your skills with real data sets and exercises. For more resources, please visit the main repository.",
+      "sources": [
+        {
+          "section_id": "getting_started/tutorials#exercises-for-new-users",
+          "heading_path": "Tutorials and Books > Exercises for new users",
+          "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#exercises-for-new-users"
+        }
+      ],
+      "section_ids": [
+        "getting_started/tutorials#exercises-for-new-users"
+      ],
+      "section_id": "getting_started/tutorials#exercises-for-new-users",
+      "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#exercises-for-new-users",
+      "score": 0.42734124543886365
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/tutorials:0010",
+      "doc_id": "getting_started/tutorials",
+      "title": "Tutorials and Books",
+      "text": "Pandas: .head() to .tail() (2016) (1:26) GitHub repo\nData analysis in Python with pandas (2016-2018) GitHub repo and Jupyter Notebook\nBest practices with pandas (2018) GitHub repo and Jupyter Notebook",
+      "sources": [
+        {
+          "section_id": "getting_started/tutorials#video-tutorials",
+          "heading_path": "Tutorials and Books > Video tutorials",
+          "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#video-tutorials"
+        }
+      ],
+      "section_ids": [
+        "getting_started/tutorials#video-tutorials"
+      ],
+      "section_id": "getting_started/tutorials#video-tutorials",
+      "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#video-tutorials",
+      "score": 0.4070654474513181
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/tutorials:0003",
+      "doc_id": "getting_started/tutorials",
+      "title": "Tutorials and Books",
+      "text": "Bamboo Weekly is a mailing list that provides weekly, hands on data analysis exercises to practice using pandas.",
+      "sources": [
+        {
+          "section_id": "getting_started/tutorials#bamboo-weekly-by-reuven-lerner",
+          "heading_path": "Tutorials and Books > Bamboo Weekly by Reuven Lerner",
+          "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#bamboo-weekly-by-reuven-lerner"
+        }
+      ],
+      "section_ids": [
+        "getting_started/tutorials#bamboo-weekly-by-reuven-lerner"
+      ],
+      "section_id": "getting_started/tutorials#bamboo-weekly-by-reuven-lerner",
+      "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#bamboo-weekly-by-reuven-lerner",
+      "score": 0.402575875472607
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 4078
+}

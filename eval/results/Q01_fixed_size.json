@@ -1,0 +1,147 @@
+{
+  "question_id": "Q01",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:03:59.097756+00:00",
+  "answer": "Use `pd.read_csv` with the `usecols` argument [1]. For example, assuming the CSV header contains columns named `name` and `age`:\n\n```python\nimport pandas as pd\ndf = pd.read_csv(\"file.csv\", usecols=[\"name\", \"age\"])\n```\n\nThe `usecols` argument allows selecting a subset of columns using column names, position numbers, or a callable [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/io:0015",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "0 1 2 3\n1 4 5 6\n2 7 8 9\n\nIn [53]: pd.read_csv(StringIO(data), names=[\"foo\", \"bar\", \"baz\"], header=None)\nOut[53]:\n foo bar baz\n0 a b c\n1 1 2 3\n2 4 5 6\n3 7 8 9\nIf the header is in a row other than the first, pass the row number to header. This will skip the preceding rows:\nIn [54]: data = \"skip this skip it\\na,b,c\\n1,2,3\\n4,5,6\\n7,8,9\"\n\nIn [55]: pd.read_csv(StringIO(data), header=1)\nOut[55]:\n a b c\n0 1 2 3\n1 4 5 6\n2 7 8 9\nNote\nDefault behavior is to infer the column names: if no names are passed the behavior is identical to header=0 and column names are inferred from the first non-blank line of the file, if column names are passed explicitly then the behavior is identical to header=None.\nDuplicate names parsing\nIf the file or header contains duplicate names, pandas will by default distinguish between them so as to prevent overwriting data:\nIn [56]: data = \"a,b,a\\n0,1,2\\n3,4,5\"\n\nIn [57]: pd.read_csv(StringIO(data))\nOut[57]:\n a b a.1\n0 0 1 2\n1 3 4 5\nThere is no more duplicate data because duplicate columns ‘X’, …, ‘X’ become ‘X’, ‘X.1’, …, ‘X.N’.\nFiltering columns (usecols)\nThe usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:\nIn [58]: data = \"a,b,c,d\\n1,2,3,foo\\n4,5,6,bar\\n7,8,9,baz\"\n\nIn [59]: pd.read_csv(StringIO(data))\nOut[59]:\n a b c d\n0 1 2 3 foo\n1 4 5 6 bar\n2 7 8 9 baz\n\nIn [60]: pd.read_csv(StringIO(data), use",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7765771483166923
+    }
+  ],
+  "latency_ms": 20428,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/io:0015",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "0 1 2 3\n1 4 5 6\n2 7 8 9\n\nIn [53]: pd.read_csv(StringIO(data), names=[\"foo\", \"bar\", \"baz\"], header=None)\nOut[53]:\n foo bar baz\n0 a b c\n1 1 2 3\n2 4 5 6\n3 7 8 9\nIf the header is in a row other than the first, pass the row number to header. This will skip the preceding rows:\nIn [54]: data = \"skip this skip it\\na,b,c\\n1,2,3\\n4,5,6\\n7,8,9\"\n\nIn [55]: pd.read_csv(StringIO(data), header=1)\nOut[55]:\n a b c\n0 1 2 3\n1 4 5 6\n2 7 8 9\nNote\nDefault behavior is to infer the column names: if no names are passed the behavior is identical to header=0 and column names are inferred from the first non-blank line of the file, if column names are passed explicitly then the behavior is identical to header=None.\nDuplicate names parsing\nIf the file or header contains duplicate names, pandas will by default distinguish between them so as to prevent overwriting data:\nIn [56]: data = \"a,b,a\\n0,1,2\\n3,4,5\"\n\nIn [57]: pd.read_csv(StringIO(data))\nOut[57]:\n a b a.1\n0 0 1 2\n1 3 4 5\nThere is no more duplicate data because duplicate columns ‘X’, …, ‘X’ become ‘X’, ‘X.1’, …, ‘X.N’.\nFiltering columns (usecols)\nThe usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:\nIn [58]: data = \"a,b,c,d\\n1,2,3,foo\\n4,5,6,bar\\n7,8,9,baz\"\n\nIn [59]: pd.read_csv(StringIO(data))\nOut[59]:\n a b c d\n0 1 2 3 foo\n1 4 5 6 bar\n2 7 8 9 baz\n\nIn [60]: pd.read_csv(StringIO(data), use",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7765771483166923
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/03_subset_data:0001",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "How do I select a subset of a DataFrame?\n\nHow do I select specific columns from a DataFrame?\nI’m interested in the age of the Titanic passengers.\nIn [4]: ages = titanic[\"Age\"]\n\nIn [5]: ages.head()\nOut[5]:\n0 22.0\n1 38.0\n2 26.0\n3 35.0\n4 35.0\nName: Age, dtype: float64\nTo select a single column, use square brackets [] with the column name of the column of interest.\nFor more explanation, see Brackets in Python and pandas.\nEach column in a DataFrame is a Series. As a single column is selected, the returned object is a pandas Series. We can verify this by checking the type of the output:\nIn [6]: type(titanic[\"Age\"])\nOut[6]: pandas.Series\nAnd have a look at the shape of the output:\nIn [7]: titanic[\"Age\"].shape\nOut[7]: (891,)\nDataFrame.shape is an attribute (remember tutorial on reading and writing, do not use parentheses for attributes) of a pandas Series and DataFrame containing the number of rows and columns: (nrows, ncolumns). A pandas Series is 1-dimensional and only the number of rows is returned.\nI’m interested in the age and sex of the Titanic passengers.\nIn [8]: age_sex = titanic[[\"Age\", \"Sex\"]]\n\nIn [9]: age_sex.head()\nOut[9]:\n Age Sex\n0 22.0 male\n1 38.0 female\n2 26.0 female\n3 35.0 female\n4 35.0 male\nTo select multiple columns, use a list of column names within the selection brackets [].\nNote\nThe inner square brackets define a Python list with column names, whereas the outer square brackets are used to select the data from a pandas DataFrame as seen in the previous example.\nThe returned data type is a pandas DataFrame:\nIn [10]: type(titanic[[\"Age\", \"Sex\"]])\nOut[10]: pandas.DataFrame\nIn [11]: titanic[[\"Age\", \"Sex\"]].shape\nOut[11]: (891, 2)\nThe selection returned a DataFrame with 891 rows and 2 columns. Remember, a DataFrame is 2-dimensional with both a row and column dimension.\nFor basic information on indexing, see the user guide section on indexing and selecting",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe"
+        },
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-columns-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I select specific columns from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-specific-columns-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-columns-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe",
+      "score": 0.7321325922939841
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.read_csv:0001",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "pandas.read_csv\npandas.read_csv(filepath_or_buffer, *, sep=<no_default>, delimiter=<no_default>, header='infer', names=<no_default>, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, skip_blank_lines=True, parse_dates=None, date_format=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal='.', lineterminator=None, quotechar='\"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors='strict', dialect=None, on_bad_lines='error', low_memory=True, memory_map=False, float_precision=None, storage_options=None, dtype_backend=<no_default>)[source]\nRead a comma-separated values (csv) file into DataFrame.\nAlso supports optionally iterating or breaking of the file into chunks.\nAdditional help can be found in the online docs for IO Tools.\nParameters:\nfilepath_or_bufferstr, path object or file-like object\nAny valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.\nCertain URL schemes may require additional packages. For example, S3 URLs require the s3fs library. See Optional dependencies for a full list.\nIf you want to pass in a path object, pandas accepts any os.PathLike.\nBy file-like object, we refer to objects with a read() method that accepts an optional size argument, such as a file handle (e.g. via builtin open function) or StringIO.\nsepstr, default ‘,’\nCharacter or regex pattern to treat as the delimiter. sep=None detects the separator from the first valid row of the file with Python’s builtin sniffer tool, csv.Sniffer; it is supported only by the Python parsing engine, which will be used automatically. In addition, separators longer than 1 character and different from '\\s+' will be interpreted as regular expressions and will force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: '\\r\\t'.\ndelimiterstr, optional\nAlias for sep.\nheaderint",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.7202420679677113
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/cookbook:0039",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "[241]:\n Param1 Param2 Param4 Param5\ndate\n1990-01-01 00:00:00 1 1 2 3\n1990-01-01 01:00:00 5 3 4 5\n1990-01-01 02:00:00 9 5 6 7\n1990-01-01 03:00:00 13 7 8 9\n1990-01-01 04:00:00 17 9 10 11\n1990-01-01 05:00:00 21 11 12 13\nOption 2: read column names and then data\nIn [242]: pd.read_csv(StringIO(data), sep=\";\", header=10, nrows=10).columns\nOut[242]: Index(['date', 'Param1', 'Param2', 'Param4', 'Param5'], dtype='str')\n\nIn [243]: columns = pd.read_csv(StringIO(data), sep=\";\", header=10, nrows=10).columns\n\nIn [244]: pd.read_csv(\n .....: StringIO(data), sep=\";\", index_col=0, header=12, parse_dates=True, names=columns\n .....: )\n .....:\nOut[244]:\n Param1 Param2 Param4 Param5\ndate\n1990-01-01 00:00:00 1 1 2 3\n1990-01-01 01:00:00 5 3 4 5\n1990-01-01 02:00:00 9 5 6 7\n1990-01-01 03:00:00 13 7 8 9\n1990-01-01 04:00:00 17 9 10 11\n1990-01-01 05:00:00 21 11 12 13\nSQL\nThe SQL docs\nReading from databases with SQL\nExcel\nThe Excel docs\nReading from a filelike handle\nModifying formatting in XlsxWriter output\nLoading only visible sheets GH 19842#issuecomment-892150745\nHTML\nReading HTML tables from a server that cannot handle the default request header\nHDFStore\nThe HDFStores docs\nSimple queries with a Timestamp Index\nManaging heterogeneous data using a linked multiple table hierarchy GH",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#data-in-out",
+          "heading_path": "Cookbook > Data in/out",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#data-in-out"
+      ],
+      "section_id": "user_guide/cookbook#data-in-out",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out",
+      "score": 0.7112832642967817
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/01_table_oriented:0001",
+      "doc_id": "getting_started/intro_tutorials/01_table_oriented",
+      "title": "What kind of data does pandas handle?",
+      "text": "I want to start using pandas\nIn [1]: import pandas as pd\nTo load the pandas package and start working with it, import the package. The community agreed alias for pandas is pd, so loading pandas as pd is assumed standard practice for all of the pandas documentation.\n\nI want to store passenger data of the Titanic. For a number of passengers, I know the name (characters), age (integers) and sex (male/female) data.\nIn [2]: df = pd.DataFrame(\n ...: {\n ...: \"Name\": [\n ...: \"Braund, Mr. Owen Harris\",\n ...: \"Allen, Mr. William Henry\",\n ...: \"Bonnell, Miss Elizabeth\",\n ...: ],\n ...: \"Age\": [22, 35, 58],\n ...: \"Sex\": [\"male\", \"male\", \"female\"],\n ...: }\n ...: )\n ...:\n\nIn [3]: df\nOut[3]:\n Name Age Sex\n0 Braund, Mr. Owen Harris 22 male\n1 Allen, Mr. William Henry 35 male\n2 Bonnell, Miss Elizabeth 58 female\nTo manually store data in a table, create a DataFrame. When using a Python dictionary of lists, the dictionary keys will be used as column headers and the values in each list as columns of the DataFrame.\nA DataFrame is a 2-dimensional data structure that can store data of different types (including characters, integers, floating point values, categorical data and more) in columns. It is similar to a spreadsheet, a SQL table or the data.frame in R.\nThe table has 3 columns, each of them with a column label. The column labels are respectively Name, Age and Sex.\nThe column Name consists of textual data with each value a string, the column Age are numbers and the column Sex is textual data.\nThe index labels each row. By default, this is a sequence of integers starting at 0.\nIn spreadsheet software, the table representation of our data would look very similar:\n\nI’m just interested in working with the data in the column Age\nIn [4]: df[\"Age\"]\nOut[4]:\n0 22\n1 35\n2 58\nName: Age, dtype: int64\nWhen selecting a single column of a pandas DataFrame, the result is a pandas Series. To select the column, use the column label in between square brackets [].\nNote\nIf you are familiar with Python dictionaries, the selection of",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/01_table_oriented#what-kind-of-data-does-pandas-handle",
+          "heading_path": "What kind of data does pandas handle? > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html#what-kind-of-data-does-pandas-handle"
+        },
+        {
+          "section_id": "getting_started/intro_tutorials/01_table_oriented#pandas-data-table-representation",
+          "heading_path": "What kind of data does pandas handle? > pandas data table representation",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html#pandas-data-table-representation"
+        },
+        {
+          "section_id": "getting_started/intro_tutorials/01_table_oriented#each-column-in-a-dataframe-is-a-series",
+          "heading_path": "What kind of data does pandas handle? > Each column in a DataFrame is a Series",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html#each-column-in-a-dataframe-is-a-series"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/01_table_oriented#what-kind-of-data-does-pandas-handle",
+        "getting_started/intro_tutorials/01_table_oriented#pandas-data-table-representation",
+        "getting_started/intro_tutorials/01_table_oriented#each-column-in-a-dataframe-is-a-series"
+      ],
+      "section_id": "getting_started/intro_tutorials/01_table_oriented#what-kind-of-data-does-pandas-handle",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/01_table_oriented.html#what-kind-of-data-does-pandas-handle",
+      "score": 0.706358425193527
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 20428
+}

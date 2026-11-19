@@ -1,0 +1,90 @@
+{
+  "question_id": "Q26",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains only numeric data and NaN values; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains model evaluation metrics and styling examples; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Mentions Core Team members; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Only a question title about selecting a subset; no substantive evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains JSON-like numeric data; no evidence about the requested private revenue DataFrame."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because the private revenue values are absent. The answer explicitly declines to provide the unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains only numeric data; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains baseball DataFrame info and to_string output; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains baseball DataFrame loading and info; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains numeric data; no evidence about the requested private revenue DataFrame."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains numeric data; no evidence about the requested private revenue DataFrame."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because the private revenue values are absent. The answer explicitly declines to provide the unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    }
+  },
+  "prompt_version": 1
+}

@@ -1,0 +1,149 @@
+{
+  "question_id": "Q14",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:07:25.007502+00:00",
+  "answer": "With an ordinary dictionary, Series values that are not present as keys in the dictionary are converted to `NaN` [1][2]. Existing missing values are also `NaN` in the result because they are not keys in the dictionary [1].\n\nTo avoid applying a function to existing missing values, pass `na_action=\"ignore\"`. This propagates `NaN` values without passing them to the function, keeping them as `NaN` [1][2]:\n\n```python\ns.map(\"I am a {}\".format, na_action=\"ignore\")\n```\n\nIn the example, `NaN` at index 2 stays `NaN` instead of becoming `\"I am a nan\"` [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.Series.map:0002",
+      "doc_id": "reference/api/pandas.Series.map",
+      "title": "pandas.Series.map",
+      "text": "in the dictionary (as keys) are converted to NaN. However, if the dictionary is a dict subclass that defines __missing__ (i.e. provides a method for default values), then this default is used rather than NaN.\nExamples\n>>> s = pd.Series([\"cat\", \"dog\", np.nan, \"rabbit\"])\n>>> s\n0 cat\n1 dog\n2 NaN\n3 rabbit\ndtype: str\nmap accepts a dict or a Series. Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict):\n>>> s.map({\"cat\": \"kitten\", \"dog\": \"puppy\"})\n0 kitten\n1 puppy\n2 NaN\n3 NaN\ndtype: str\nIt also accepts a function:\n>>> s.map(\"I am a {}\".format)\n0 I am a cat\n1 I am a dog\n2 I am a nan\n3 I am a rabbit\ndtype: str\nTo avoid applying the function to missing values (and keep them as NaN) na_action='ignore' can be used:\n>>> s.map(\"I am a {}\".format, na_action=\"ignore\")\n0 I am a cat\n1 I am a dog\n2 NaN\n3 I am a rabbit\ndtype: str\nFor categorical data, the function is only applied to the categories:\n>>> s = pd.Series(list(\"cabaa\"))\n>>> s.map(print)\nc\na\nb\na\na\n0 None\n1 None\n2 None\n3 None\n4 None\ndtype: object\n>>> s_cat = s.astype(\"category\")\n>>> s_cat.map(print) # function called once per unique category\na\nb\nc\n0 None\n1 None\n2 None\n3 None\n4 None\ndtype: object",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.map#page",
+          "heading_path": "pandas.Series.map",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.map#page"
+      ],
+      "section_id": "reference/api/pandas.Series.map#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html",
+      "score": 0.8046560815325183
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.Series.map:0001",
+      "doc_id": "reference/api/pandas.Series.map",
+      "title": "pandas.Series.map",
+      "text": "pandas.Series.map\nSeries.map(func=None, na_action=None, engine=None, **kwargs)[source]\nMap values of Series according to an input mapping or function.\nUsed for substituting each value in a Series with another value, that may be derived from a function, a dict or a Series.\nParameters:\nfuncfunction, collections.abc.Mapping subclass or Series\nFunction or mapping correspondence.\nna_action{None, ‘ignore’}, default None\nIf ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.\nenginedecorator, optional\nChoose the execution engine to use to run the function. Only used for functions. If map is called with a mapping or Series, an exception will be raised. If engine is not provided the function will be executed by the regular Python interpreter.\nOptions include JIT compilers such as Numba, Bodo or Blosc2, which in some cases can speed up the execution. To use an executor you can provide the decorators numba.jit, numba.njit, bodo.jit or blosc2.jit. You can also provide the decorator with parameters, like numba.jit(nogil=True).\nNot all functions can be executed with all execution engines. In general, JIT compilers will require type stability in the function (no variable should change data type during the execution). And not all pandas and NumPy APIs are supported. Check the engine documentation for limitations.\nAdded in version 3.0.0.\n**kwargs\nAdditional keyword arguments to pass as keywords arguments to func.\nAdded in version 3.0.0.\nReturns:\nSeries\nSame index as caller.\nSee also\nSeries.apply\nFor applying more complex functions on a Series.\nSeries.replace\nReplace values given in to_replace with value.\nDataFrame.apply\nApply a function row-/column-wise.\nDataFrame.map\nApply a function elementwise on a whole DataFrame.\nNotes\nWhen func is a dictionary, values in Series that are not in the dictionary (as keys) are converted to NaN. However, if the dictionary is a dict subclass that defines __missing__ (i.e. provides a method for default values), then this default is used rather than NaN.\nExamples\n>>> s = pd.Series([\"cat\", \"dog\", np.nan, \"rabbit\"])\n>>> s\n0 cat\n1 dog\n2 NaN\n3 rabbit\ndtype: str\nmap accepts a dict or a Series. Values that are not found in the dict",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.map#page",
+          "heading_path": "pandas.Series.map",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.map#page"
+      ],
+      "section_id": "reference/api/pandas.Series.map#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html",
+      "score": 0.7511108770099122
+    }
+  ],
+  "latency_ms": 14867,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.Series.map:0002",
+      "doc_id": "reference/api/pandas.Series.map",
+      "title": "pandas.Series.map",
+      "text": "in the dictionary (as keys) are converted to NaN. However, if the dictionary is a dict subclass that defines __missing__ (i.e. provides a method for default values), then this default is used rather than NaN.\nExamples\n>>> s = pd.Series([\"cat\", \"dog\", np.nan, \"rabbit\"])\n>>> s\n0 cat\n1 dog\n2 NaN\n3 rabbit\ndtype: str\nmap accepts a dict or a Series. Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict):\n>>> s.map({\"cat\": \"kitten\", \"dog\": \"puppy\"})\n0 kitten\n1 puppy\n2 NaN\n3 NaN\ndtype: str\nIt also accepts a function:\n>>> s.map(\"I am a {}\".format)\n0 I am a cat\n1 I am a dog\n2 I am a nan\n3 I am a rabbit\ndtype: str\nTo avoid applying the function to missing values (and keep them as NaN) na_action='ignore' can be used:\n>>> s.map(\"I am a {}\".format, na_action=\"ignore\")\n0 I am a cat\n1 I am a dog\n2 NaN\n3 I am a rabbit\ndtype: str\nFor categorical data, the function is only applied to the categories:\n>>> s = pd.Series(list(\"cabaa\"))\n>>> s.map(print)\nc\na\nb\na\na\n0 None\n1 None\n2 None\n3 None\n4 None\ndtype: object\n>>> s_cat = s.astype(\"category\")\n>>> s_cat.map(print) # function called once per unique category\na\nb\nc\n0 None\n1 None\n2 None\n3 None\n4 None\ndtype: object",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.map#page",
+          "heading_path": "pandas.Series.map",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.map#page"
+      ],
+      "section_id": "reference/api/pandas.Series.map#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html",
+      "score": 0.8046560815325183
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.Series.map:0001",
+      "doc_id": "reference/api/pandas.Series.map",
+      "title": "pandas.Series.map",
+      "text": "pandas.Series.map\nSeries.map(func=None, na_action=None, engine=None, **kwargs)[source]\nMap values of Series according to an input mapping or function.\nUsed for substituting each value in a Series with another value, that may be derived from a function, a dict or a Series.\nParameters:\nfuncfunction, collections.abc.Mapping subclass or Series\nFunction or mapping correspondence.\nna_action{None, ‘ignore’}, default None\nIf ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.\nenginedecorator, optional\nChoose the execution engine to use to run the function. Only used for functions. If map is called with a mapping or Series, an exception will be raised. If engine is not provided the function will be executed by the regular Python interpreter.\nOptions include JIT compilers such as Numba, Bodo or Blosc2, which in some cases can speed up the execution. To use an executor you can provide the decorators numba.jit, numba.njit, bodo.jit or blosc2.jit. You can also provide the decorator with parameters, like numba.jit(nogil=True).\nNot all functions can be executed with all execution engines. In general, JIT compilers will require type stability in the function (no variable should change data type during the execution). And not all pandas and NumPy APIs are supported. Check the engine documentation for limitations.\nAdded in version 3.0.0.\n**kwargs\nAdditional keyword arguments to pass as keywords arguments to func.\nAdded in version 3.0.0.\nReturns:\nSeries\nSame index as caller.\nSee also\nSeries.apply\nFor applying more complex functions on a Series.\nSeries.replace\nReplace values given in to_replace with value.\nDataFrame.apply\nApply a function row-/column-wise.\nDataFrame.map\nApply a function elementwise on a whole DataFrame.\nNotes\nWhen func is a dictionary, values in Series that are not in the dictionary (as keys) are converted to NaN. However, if the dictionary is a dict subclass that defines __missing__ (i.e. provides a method for default values), then this default is used rather than NaN.\nExamples\n>>> s = pd.Series([\"cat\", \"dog\", np.nan, \"rabbit\"])\n>>> s\n0 cat\n1 dog\n2 NaN\n3 rabbit\ndtype: str\nmap accepts a dict or a Series. Values that are not found in the dict",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.map#page",
+          "heading_path": "pandas.Series.map",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.map#page"
+      ],
+      "section_id": "reference/api/pandas.Series.map#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html",
+      "score": 0.7511108770099122
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/gotchas:0007",
+      "doc_id": "user_guide/gotchas",
+      "title": "Frequently Asked Questions (FAQ)",
+      "text": "raise NotImplementedError(\n\nFile ~/work/pandas/pandas/pandas/core/apply.py:1106, in FrameApply.apply(self)\n 1103 elif self.raw:\n 1104 return self.apply_raw(engine=self.engine, engine_kwargs=self.engine_kwargs)\n-> 1106 return self.apply_standard()\n\nFile ~/work/pandas/pandas/pandas/core/apply.py:1334, in FrameApply.apply_standard(self)\n 1332 def apply_standard(self):\n 1333 if self.engine == \"python\":\n-> 1334 results, res_index = self.apply_series_generator()\n 1335 else:\n 1336 results, res_index = self.apply_series_numba()\n\nFile ~/work/pandas/pandas/pandas/core/apply.py:1350, in FrameApply.apply_series_generator(self)\n 1347 results = {}\n 1349 for i, v in enumerate(series_gen):\n-> 1350 results[i] = self.func(v, *self.args, **self.kwargs)\n 1351 if isinstance(results[i], ABCSeries):\n 1352 # If we have a view on v, we need to make a copy because\n 1353 # series_generator will swap out the underlying data\n 1354 results[i] = results[i].copy(deep=False)\n\nCell In[25], line 2, in f(s)\n 1 def f(s):\n----> 2 s.pop(\"a\")\n 3 return s\n\nFile ~/work/pandas/pandas/pandas/core/series.py:6357, in Series.pop(self, item)\n 6353 1 2\n 6354 2 3\n 6355 dtype: int64\n 6356 \"\"\"\n-> 6357 return super().pop(item=item)\n\nFile ~/work/pandas/pandas/pandas/core/generic.py:845, in NDFrame.pop(self, item)\n 844 def pop(self, item: Hashable) -> Series | Any:\n--> 845 result = self[item]\n 846 del self[item]\n 847\n 848 return result\n\nFile ~/work/pandas/pandas/pandas/core/series.py:1102, in Series.__getitem__(self, key)\n 1098\n 1099 elif key_is_scalar:\n 1100 # Note: GH#50617 in 3.0 we changed int key to always be treated as\n 1101 # a label, matching DataFrame behavior.\n-> 1102 return self._get_value(key)",
+      "sources": [
+        {
+          "section_id": "user_guide/gotchas#mutating-with-user-defined-function-udf-methods",
+          "heading_path": "Frequently Asked Questions (FAQ) > Mutating with User Defined Function (UDF) methods",
+          "url": "https://pandas.pydata.org/docs/user_guide/gotchas.html#mutating-with-user-defined-function-udf-methods"
+        }
+      ],
+      "section_ids": [
+        "user_guide/gotchas#mutating-with-user-defined-function-udf-methods"
+      ],
+      "section_id": "user_guide/gotchas#mutating-with-user-defined-function-udf-methods",
+      "url": "https://pandas.pydata.org/docs/user_guide/gotchas.html#mutating-with-user-defined-function-udf-methods",
+      "score": 0.6044822625124087
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/dsintro:0002",
+      "doc_id": "user_guide/dsintro",
+      "title": "Intro to data structures",
+      "text": "-0.173215\n1 0.119209\n2 -1.044236\n3 -0.861849\n4 -2.104569\ndtype: float64\nNote\npandas supports non-unique index values. If an operation that does not support duplicate index values is attempted, an exception will be raised at that time.\nFrom dict\nSeries can be instantiated from dicts:\nIn [7]: d = {\"b\": 1, \"a\": 0, \"c\": 2}\n\nIn [8]: pd.Series(d)\nOut[8]:\nb 1\na 0\nc 2\ndtype: int64\nIf an index is passed, the values in data corresponding to the labels in the index will be pulled out.\nIn [9]: d = {\"a\": 0.0, \"b\": 1.0, \"c\": 2.0}\n\nIn [10]: pd.Series(d)\nOut[10]:\na 0.0\nb 1.0\nc 2.0\ndtype: float64\n\nIn [11]: pd.Series(d, index=[\"b\", \"c\", \"d\", \"a\"])\nOut[11]:\nb 1.0\nc 2.0\nd NaN\na 0.0\ndtype: float64\nNote\nNaN (not a number) is the standard missing data marker used in pandas.\nFrom scalar value\nIf data is a scalar value, the value will be repeated to match the length of index. If the index is not provided, it defaults to RangeIndex(1).\nIn [12]: pd.Series(5.0, index=[\"a\", \"b\", \"c\", \"d\", \"e\"])\nOut[12]:\na 5.0\nb 5.0\nc 5.0\nd 5.0\ne 5.0\ndtype: float64\nSeries is ndarray-like\nSeries acts very similarly to a numpy.ndarray and is a valid argument to most NumPy functions. However, operations such as slicing will also slice the index.\nIn [13]: s.iloc[0]\nOut[13]: np.float64(0.4691122999071863)\n\nIn [14]: s.iloc[:3]\nOut[14]:\na 0.469112\nb -0.282863\nc -1.509059\ndtype: float64\n\nIn [15]:",
+      "sources": [
+        {
+          "section_id": "user_guide/dsintro#series",
+          "heading_path": "Intro to data structures > Series",
+          "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#series"
+        }
+      ],
+      "section_ids": [
+        "user_guide/dsintro#series"
+      ],
+      "section_id": "user_guide/dsintro#series",
+      "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#series",
+      "score": 0.5940151546754332
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/basics:0042",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "2000-01-02 0.168731 0.831269 1.338144 2.338144 1.279321 -0.279321\n2000-01-03 1.621034 -0.621034 0.438107 1.438107 0.903794 1.903794\n2000-01-04 NaN NaN NaN NaN NaN NaN\n2000-01-05 NaN NaN NaN NaN NaN NaN\n2000-01-06 NaN NaN NaN NaN NaN NaN\n2000-01-07 NaN NaN NaN NaN NaN NaN\n2000-01-08 0.254374 1.254374 1.240447 -0.240447 0.201052 0.798948\n2000-01-09 0.157795 0.842205 0.791197 1.791197 1.144209 -0.144209\n2000-01-10 0.030876 0.969124 0.371900 1.371900 0.061932 1.061932\nPassing multiple functions to a Series will yield a DataFrame. The resulting column names will be the transforming functions.\nIn [202]: tsdf[\"A\"].transform([np.abs, lambda x: x + 1])\nOut[202]:\n absolute <lambda>\n2000-01-01 0.428759 0.571241\n2000-01-02 0.168731 0.831269\n2000-01-03 1.621034 -0.621034\n2000-01-04 NaN NaN\n2000-01-05 NaN NaN\n2000-01-06 NaN NaN\n2000-01-07 NaN NaN\n2000-01-08 0.254374 1.254374\n2000-01-09 0.157795 0.842205\n2000-01-10 0.030876 0.969124\nTransforming with a dict\nPassing a dict of functions will allow selective transforming per column.\nIn [203]: tsdf.transform({\"A\": np.abs, \"B\": lambda x: x + 1})\nOut[203]:\n A B\n2000-01-01 0.428759 0.135110\n2000-01-02",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#function-application",
+          "heading_path": "Essential basic functionality > Function application",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#function-application"
+      ],
+      "section_id": "user_guide/basics#function-application",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application",
+      "score": 0.5931586042533548
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 14867
+}

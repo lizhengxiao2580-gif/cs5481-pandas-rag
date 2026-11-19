@@ -1,0 +1,138 @@
+{
+  "question_id": "Q25",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:12:24.696330+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 4614,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/03_subset_data:0004",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": ") | (titanic[\"Pclass\"] == 3)]\n\nIn [19]: class_23.head()\nOut[19]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nNote\nWhen combining multiple conditional statements, each condition must be surrounded by parentheses (). Moreover, you can not use or/and but need to use the or operator | and the and operator &.\nSee the dedicated section in the user guide about boolean indexing or about the isin function.\nI want to work with passenger data for which the age is known.\nIn [20]: age_no_na = titanic[titanic[\"Age\"].notna()]\n\nIn [21]: age_no_na.head()\nOut[21]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n1 2 1 1 ... 71.2833 C85 C\n2 3 1 3 ... 7.9250 NaN S\n3 4 1 1 ... 53.1000 C123 S\n4 5 0 3 ... 8.0500 NaN S\n\n[5 rows x 12 columns]\nThe notna() conditional function returns a True for each row the values are not a Null value. As such, this can be combined with the selection brackets [] to filter the data table.\nYou might wonder what actually changed, as the first 5 lines are still the same values. One way to verify is to check if the shape has changed:\nIn [22]: age_no_na.shape\nOut[22]: (714, 12)\nFor more dedicated functions on missing values, see the user guide section about handling missing data.\n\nHow do I select specific rows and columns from a DataFrame?\nI’m interested in the names of the passengers older than 35 years.\nIn [23]: adult_names = titanic.loc[titanic[\"Age\"] > 35, \"Name\"]\n\nIn [24]: adult_names.head()\nOut[24",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        },
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-rows-and-columns-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I select specific rows and columns from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-specific-rows-and-columns-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-rows-and-columns-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6130194479162976
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.read_csv:0005",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "lines to skip (int) at the start of the file.\nIf callable, the callable function will be evaluated against the row indices, returning True if the row should be skipped and False otherwise. An example of a valid callable argument would be lambda x: x in [0, 2].\nskipfooterint, default 0\nNumber of lines at bottom of file to skip (Unsupported with engine='c').\nnrowsint, optional\nNumber of rows of file to read. Useful for reading pieces of large files. Refers to the number of data rows in the returned DataFrame, excluding:\nThe header row containing column names.\nRows before the header row, if header=1 or larger.\nExample usage:\nTo read the first 999,999 (non-header) rows: read_csv(..., nrows=999999)\nTo read rows 1,000,000 through 1,999,999: read_csv(..., skiprows=1000000, nrows=999999)\nna_valuesHashable, Iterable of Hashable or dict of {HashableIterable},\noptional Additional strings to recognize as NA/NaN. If dict passed, specific per-column NA values. By default the following values are interpreted as NaN: empty string, “NaN”, “N/A”, “NULL”, and other common representations of missing data.\nkeep_default_nabool, default True\nWhether or not to include the default NaN values when parsing the data. Depending on whether na_values is passed in, the behavior is as follows:\nIf keep_default_na is True, and na_values are specified, na_values is appended to the default NaN values used for parsing.\nIf keep_default_na is True, and na_values are not specified, only the default NaN values are used for parsing.\nIf keep_default_na is False, and na_values are specified, only the NaN values specified na_values are used for parsing.\nIf keep_default_na is False, and na_values are not specified, no strings will be parsed as NaN.\nNote that if na_filter is passed in as False, the keep_default_na and na_values parameters will be ignored.\nna_filterbool, default True\nDetect missing value markers (empty strings and the value of na_values). In data without any NA values, passing na_filter=False can improve the performance of reading a large file.\nskip_blank_linesbool, default True\nIf True, skip over blank lines rather than interpreting as NaN values.\nparse_datesbool, None, list of Hashable,",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.6122446144872438
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/10min:0015",
+      "doc_id": "user_guide/10min",
+      "title": "10 minutes to pandas",
+      "text": "-0.494929 5.0 2.0 NaN\n2013-01-04 0.721555 -0.706771 -1.039575 5.0 3.0 NaN\nDataFrame.dropna() drops any rows that have missing data:\nIn [60]: df1.dropna(how=\"any\")\nOut[60]:\n A B C D F E\n2013-01-02 1.212112 -0.173215 0.119209 5.0 1.0 1.0\nDataFrame.fillna() fills missing data:\nIn [61]: df1.fillna(value=5)\nOut[61]:\n A B C D F E\n2013-01-01 0.000000 0.000000 -1.509059 5.0 5.0 1.0\n2013-01-02 1.212112 -0.173215 0.119209 5.0 1.0 1.0\n2013-01-03 -0.861849 -2.104569 -0.494929 5.0 2.0 5.0\n2013-01-04 0.721555 -0.706771 -1.039575 5.0 3.0 5.0\nisna() gets the boolean mask where values are nan:\nIn [62]: pd.isna(df1)\nOut[62]:\n A B C D F E\n2013-01-01 False False False False True False\n2013-01-02 False False False False False False\n2013-01-03 False False False False False True\n2013-01-04 False False False False False True\n\nSee the Basic section on Binary Ops.\nStats\nOperations in general exclude missing data.\nCalculate the mean value for each column:\nIn [63]: df.mean()\nOut[63]:\nA -0.004474\nB -0.383981\nC -0.687758\nD 5.000000\nF 3.000000\ndtype: float64\nCalculate the mean value for each row:\nIn [64]: df.mean(axis=1)\nOut[64]:\n2013-01-01 0.872735\n2013-01-02 1.431621\n2013-01-03 0.707",
+      "sources": [
+        {
+          "section_id": "user_guide/10min#missing-data",
+          "heading_path": "10 minutes to pandas > Missing data",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#missing-data"
+        },
+        {
+          "section_id": "user_guide/10min#operations",
+          "heading_path": "10 minutes to pandas > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/10min#missing-data",
+        "user_guide/10min#operations"
+      ],
+      "section_id": "user_guide/10min#missing-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/10min.html#missing-data",
+      "score": 0.6060773568078548
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_spss:0002",
+      "doc_id": "getting_started/comparison/comparison_with_spss",
+      "title": "Comparison with SPSS",
+      "text": "_values(\"col1\")\nNote\nYou will see an inplace=True or copy=False keyword argument available for some methods:\ndf.replace(5, inplace=True)\nThere is an active discussion about deprecating and removing inplace and copy for most methods (e.g. dropna) except for a very small subset of methods (including replace). Both keywords won’t be necessary anymore in the context of Copy-on-Write. The proposal can be found here.\n\nReading external data\nLike SPSS, pandas provides utilities for reading in data from many formats. The tips dataset, found within the pandas tests (csv) will be used in many of the following examples.\nIn SPSS, you would use File > Open > Data to import a CSV file:\nFILE > OPEN > DATA\n/TYPE=CSV\n/FILE='tips.csv'\n/DELIMITERS=\",\"\n/FIRSTCASE=2\n/VARIABLES=col1 col2 col3.\nThe pandas equivalent would use read_csv():\nurl = (\n \"https://raw.githubusercontent.com/pandas-dev\"\n \"/pandas/main/pandas/tests/io/data/csv/tips.csv\"\n)\ntips = pd.read_csv(url)\ntips\nLike SPSS’s data import wizard, read_csv can take a number of parameters to specify how the data should be parsed. For example, if the data was instead tab delimited, and did not have column names, the pandas command would be:\ntips = pd.read_csv(\"tips.csv\", sep=\"\\t\", header=None)\n\n# alternatively, read_table is an alias to read_csv with tab delimiter\ntips = pd.read_table(\"tips.csv\", header=None)\n\nFiltering\nIn SPSS, filtering is done through Data > Select Cases:\nSELECT IF (total_bill > 10).\nEXECUTE.\nIn pandas, boolean indexing can be used:\ntips[tips[\"total_bill\"] > 10]\nSorting\nIn SPSS, sorting is done through Data > Sort Cases:\nSORT CASES BY sex total_bill.\nEXECUTE.\nIn pandas, this would be written as:\ntips.sort_values([\"sex\", \"total_bill\"])\n\nFinding length of string\nIn SPSS:\nCOMPUTE length = LENGTH(time).\nEXECUTE.\nYou can find the length of a character string with Series.str.len(). In Python 3, all strings are Unicode strings. len includes trailing blanks. Use len and rstrip to exclude trailing blanks.\nIn [3]: tips[\"time\"].str.len()\nOut[3]:\n67 6\n92 6",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_spss#copies-vs-in-place-operations",
+          "heading_path": "Comparison with SPSS > Copies vs. in place operations",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#copies-vs-in-place-operations"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_spss#data-input-output",
+          "heading_path": "Comparison with SPSS > Data input / output",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#data-input-output"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_spss#data-operations",
+          "heading_path": "Comparison with SPSS > Data operations",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#data-operations"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_spss#string-processing",
+          "heading_path": "Comparison with SPSS > String processing",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#string-processing"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_spss#copies-vs-in-place-operations",
+        "getting_started/comparison/comparison_with_spss#data-input-output",
+        "getting_started/comparison/comparison_with_spss#data-operations",
+        "getting_started/comparison/comparison_with_spss#string-processing"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_spss#copies-vs-in-place-operations",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#copies-vs-in-place-operations",
+      "score": 0.5891218844351831
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0029",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "296 if self.low_memory:\n--> 297 chunks = self._reader.read_low_memory(nrows)\n 298 # destructive to chunks\n 299 data = _concatenate_chunks(\n 300 chunks, self._low_memory_column_labels(chunks)\n 301 )\n\nFile pandas/_libs/parsers.pyx:1041, in pandas._libs.parsers.TextReader.read_low_memory()\n-> 1041 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1182, in pandas._libs.parsers.TextReader._read_rows()\n-> 1182 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1149, in pandas._libs.parsers.TextReader._tokenize_rows()\n-> 1149 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1170, in pandas._libs.parsers.TextReader._check_tokenize_status()\n-> 1170 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:4400, in pandas._libs.parsers.raise_parser_error()\n-> 4400 'Could not get source, probably due dynamically evaluated source code.'\nParserError: Error tokenizing data. C error: Expected 3 fields in line 3, saw 4\nYou can elect to skip bad lines:\nIn [145]: data = \"a,b,c\\n1,2,3\\n4,5,6,7\\n8,9,10\"\n\nIn [146]: pd.read_csv(StringIO(data), on_bad_lines=\"skip\")\nOut[146]:\n a b c\n0 1 2 3\n1 8 9 10\nOr pass a callable function to handle the bad line if engine=\"python\". The bad line will be a list of strings that was split by the sep:\nIn [147]: external_list = []\n\nIn [148]: def bad_lines_func(line):\n .....: external_list.append(line)\n .....: return line[-3:]\n .....:\n\nIn [149]: external_list\nOut[149]: []\nNote\nThe callable function will handle only a line with too many fields. Bad lines caused by other errors will be silently skipped.\nIn [150]: bad_lines_func = lambda line: print(line)\n\nIn [151]: data = 'name,type\\nname a,a is of type a\\nname b,\"b\\\" is of type b",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.5798752684941461
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 4614
+}

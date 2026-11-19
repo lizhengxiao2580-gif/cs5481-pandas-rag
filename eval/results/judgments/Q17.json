@@ -1,0 +1,92 @@
+{
+  "question_id": "Q17",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "A ValueError is raised if there are any duplicates.",
+          "reason": "Directly supports required point 1 that pivot raises ValueError for duplicate index/column combinations."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "pivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().",
+          "reason": "Supports required point 1 and the recommendation to use pivot_table for duplicates."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains pivot_table examples but no explicit statement about aggregation or handling duplicates."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains pivot_table examples but no explicit statement about aggregation or handling duplicates."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "When there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.",
+          "reason": "Supports required point 1 and indicates pivot_table for aggregation."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states pivot raises ValueError for duplicates and pivot_table handles duplicates with aggregation. Both required points are supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "pivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().",
+          "reason": "Supports required point 1 and the recommendation to use pivot_table for duplicates."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "A ValueError is raised if there are any duplicates.",
+          "reason": "Directly supports required point 1 that pivot raises ValueError for duplicate index/column combinations."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "When there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.",
+          "reason": "Supports required point 1 and indicates pivot_table for aggregation."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Contains pivot_table examples but no explicit statement about aggregation or handling duplicates."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "aggfuncfunction, list of functions, dict, default “mean”",
+          "reason": "Supports required point 2 by showing pivot_table has an aggfunc parameter with default mean."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states pivot raises ValueError for duplicates and pivot_table handles duplicates with aggregation, including default aggfunc mean. Both required points are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

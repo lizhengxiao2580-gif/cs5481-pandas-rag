@@ -1,0 +1,92 @@
+{
+  "question_id": "Q21",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "The keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.",
+          "reason": "Supports required point about keys constructing an outer hierarchical level."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "ignore_indexbool, default False\nIf True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1.",
+          "reason": "Supports required point about ignore_index renumbering from 0 to n-1."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Clear the existing index and reset it in the result by setting the ignore_index option to True.\n>>> pd.concat([s1, s2], ignore_index=True)\n0 a\n1 b\n2 c\n3 d",
+          "reason": "Supports ignore_index renumbering with example."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "The MultiIndex created has levels that are constructed from the passed keys and the index of the DataFrame pieces:",
+          "reason": "Supports keys creating hierarchical index with outer level."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses general concatenation but does not contain substantive evidence for either required point."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are correctly explained and supported by cited passages. No material factual errors."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "The keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.",
+          "reason": "Supports required point about keys constructing an outer hierarchical level."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "ignore_indexbool, default False\nIf True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1.",
+          "reason": "Supports required point about ignore_index renumbering from 0 to n-1."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Clear the existing index and reset it in the result by setting the ignore_index option to True.\n>>> pd.concat([s1, s2], ignore_index=True)\n0 a\n1 b\n2 c\n3 d",
+          "reason": "Supports ignore_index renumbering with example."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "For DataFrame objects which don’t have a meaningful index, the ignore_index ignores overlapping indexes.",
+          "reason": "Supports ignore_index behavior, though not the exact renumbering point."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses general concatenation and index preservation but does not contain substantive evidence for either required point."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are correctly explained and supported by cited passages. No material factual errors."
+    }
+  },
+  "prompt_version": 1
+}

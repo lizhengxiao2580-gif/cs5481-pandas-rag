@@ -1,0 +1,92 @@
+{
+  "question_id": "Q20",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "pandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation. In [1]: gb = tips.groupby(\"smoker\")[\"total_bill\"] In [2]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")",
+          "reason": "Shows transform broadcasting group mean back to original rows, supporting required point 2."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text discusses expanding, replacing values, sorting groups, and creating multiple aggregated columns; no substantive evidence for aggregation vs transform or broadcasting group mean."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "pandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples. In [65]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()",
+          "reason": "Shows aggregation reducing groups to summary rows, supporting required point 1."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "Unlike aggregations, the groupings that are used to split the original object are not included in the result. Note Since transformations do not include the groupings that are used to split the result, the arguments as_index and sort in DataFrame.groupby() and Series.groupby() have no effect. A common use of a transformation is to add the result back into the original DataFrame.",
+          "reason": "Explains transform result excludes grouping keys and can be added back to original DataFrame, supporting required point 2."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "In addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result.",
+          "reason": "States that passing aggregation method to transform broadcasts result across group, supporting required point 2."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly distinguishes aggregation (group-level summary) and transform (broadcasts group value to original rows), and recommends transform('mean') to add group mean back. Both required points are supported by cited passages."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "pandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation. In [67]: gb = tips.groupby(\"smoker\")[\"total_bill\"] In [68]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")",
+          "reason": "Shows transform broadcasting group mean back to original rows, supporting required point 2."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "A transformation is a GroupBy operation whose result is indexed the same as the one being grouped. Common examples include cumsum() and diff().",
+          "reason": "Defines transformation as preserving original index, supporting required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "pandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples. In [1]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()",
+          "reason": "Shows aggregation reducing groups to summary rows, supporting required point 1."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "The transform method is similar to an aggregation, with the difference that the result is broadcasted to the original data.",
+          "reason": "States transform broadcasts result to original data, supporting required point 2."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "In addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result.",
+          "reason": "States that passing aggregation method to transform broadcasts result across group, supporting required point 2."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly distinguishes aggregation and transform, and recommends transform('mean') to add group mean back. Both required points are supported by cited passages."
+    }
+  },
+  "prompt_version": 2
+}

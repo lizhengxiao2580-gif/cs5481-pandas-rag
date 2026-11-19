@@ -1,0 +1,90 @@
+{
+  "question_id": "Q29",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable from the provided documentation. The system explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are irrelevant as they contain no substantive evidence."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains only numeric data and no substantive evidence about live exchange rates or refusal."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable from the provided documentation. The system explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are irrelevant as they contain no substantive evidence."
+    }
+  },
+  "prompt_version": 1
+}

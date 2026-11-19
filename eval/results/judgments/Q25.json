@@ -1,0 +1,90 @@
+{
+  "question_id": "Q25",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses filtering Titanic data for known ages, not the private customers.csv missing age count."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage describes read_csv parameters, not the private file's missing age count."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows parser error handling, unrelated to the private data question."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is a table of contents, no substantive evidence for the required answer."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows usecols error handling, unrelated to the private data question."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because the private file was not provided. System X explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses filtering Titanic data for known ages, not the private customers.csv missing age count."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage describes read_csv parameters, not the private file's missing age count."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows missing data operations on a sample DataFrame, not the private file's missing age count."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage compares SPSS and pandas operations, unrelated to the private data question."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows parser error handling, unrelated to the private data question."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because the private file was not provided. System Y explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    }
+  },
+  "prompt_version": 1
+}

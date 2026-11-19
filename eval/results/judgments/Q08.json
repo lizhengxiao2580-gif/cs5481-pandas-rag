@@ -1,0 +1,90 @@
+{
+  "question_id": "Q08",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Convert certain columns to a specific dtype by passing a dict to astype().",
+          "reason": "Directly supports the required point of passing a mapping to astype."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Convert a subset of columns to a specified type using astype().",
+          "reason": "Shows astype usage for subset columns, supporting the mapping approach."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types.",
+          "reason": "Explicitly documents the mapping parameter for column-specific casting."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses default dtypes and upcasting, not the mapping to astype."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Covers to_numeric and apply, not the astype mapping."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses astype with a column-to-dtype mapping and all claims are supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Convert certain columns to a specific dtype by passing a dict to astype().",
+          "reason": "Directly supports the required point of passing a mapping to astype."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types.",
+          "reason": "Explicitly documents the mapping parameter for column-specific casting."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses apply and to_numeric, not the astype mapping."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses default dtypes and upcasting, not the mapping to astype."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses select_dtypes and other topics, not the astype mapping."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses astype with a column-to-dtype mapping and all claims are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

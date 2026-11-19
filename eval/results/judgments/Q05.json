@@ -1,0 +1,92 @@
+{
+  "question_id": "Q05",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses filling with a DataFrame and notes column D is not affected, but does not mention per-column dictionary filling or that unspecified columns remain unfilled."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Value to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled.",
+          "reason": "Directly supports both required points: per-column dictionary and unspecified columns not filled."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Replace NA with column-specific values using a dict\nIn [103]: df.fillna({\"np\": 0, \"arrow\": 1})",
+          "reason": "Shows an example of using a dict for column-specific filling, supporting the first required point."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses dropna, ffill, and filling with mean, not per-column dictionary filling."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "Replace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.\n>>> values = {\"A\": 0, \"B\": 1, \"C\": 2, \"D\": 3}\n>>> df.fillna(value=values)",
+          "reason": "Provides an example of using a dict to fill specific columns, supporting the first required point."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses df.fillna with a dictionary and states unspecified columns are not filled. Both required points are supported by cited passages. The optional assumption about dtype is not a material factual error and is not required to be cited."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses filling with a DataFrame and notes column D is not affected, but does not mention per-column dictionary filling or that unspecified columns remain unfilled."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Value to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled.",
+          "reason": "Directly supports both required points: per-column dictionary and unspecified columns not filled."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Replace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.\n>>> values = {\"A\": 0, \"B\": 1, \"C\": 2, \"D\": 3}\n>>> df.fillna(value=values)",
+          "reason": "Provides an example of using a dict to fill specific columns, supporting the first required point."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses filling with None, np.nan, pd.NA, and ffill/bfill, not per-column dictionary filling."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses arithmetic fill_value and missing data operations, not per-column dictionary filling."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses df.fillna with a dictionary and states unspecified columns are not filled. Both required points are supported by cited passages. The optional assumption about dtype is not a material factual error and is not required to be cited."
+    }
+  },
+  "prompt_version": 1
+}

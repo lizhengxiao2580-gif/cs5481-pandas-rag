@@ -1,0 +1,167 @@
+{
+  "question_id": "Q04",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:04:18.852938+00:00",
+  "answer": "Use `df.dropna(subset=[\"name\", \"age\"])` to drop rows where either the `name` or `age` column has a missing value, while ignoring missing values in all other columns [1][2]. By default, `how='any'` drops a row if any of the subset columns contain NA values [2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.dropna:0002",
+      "doc_id": "reference/api/pandas.DataFrame.dropna",
+      "title": "pandas.DataFrame.dropna",
+      "text": "na\nReplace missing values.\nSeries.dropna\nDrop missing values.\nIndex.dropna\nDrop missing indices.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"name\": [\"Alfred\", \"Batman\", \"Catwoman\"],\n... \"toy\": [np.nan, \"Batmobile\", \"Bullwhip\"],\n... \"born\": [pd.NaT, pd.Timestamp(\"1940-04-25\"), pd.NaT],\n... }\n... )\n>>> df\n name toy born\n0 Alfred NaN NaT\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nDrop the rows where at least one element is missing.\n>>> df.dropna()\n name toy born\n1 Batman Batmobile 1940-04-25\nDrop the columns where at least one element is missing.\n>>> df.dropna(axis=\"columns\")\n name\n0 Alfred\n1 Batman\n2 Catwoman\nDrop the rows where all elements are missing.\n>>> df.dropna(how=\"all\")\n name toy born\n0 Alfred NaN NaT\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nKeep only the rows with at least 2 non-NA values.\n>>> df.dropna(thresh=2)\n name toy born\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nDefine in which columns to look for missing values.\n>>> df.dropna(subset=[\"name\", \"toy\"])\n name toy born\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.dropna#page",
+          "heading_path": "pandas.DataFrame.dropna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.dropna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.dropna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html",
+      "score": 0.7901912053933541
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.dropna:0001",
+      "doc_id": "reference/api/pandas.DataFrame.dropna",
+      "title": "pandas.DataFrame.dropna",
+      "text": "pandas.DataFrame.dropna\nDataFrame.dropna(*, axis=0, how=<no_default>, thresh=<no_default>, subset=None, inplace=<no_default>, ignore_index=False)[source]\nRemove missing values.\nSee the User Guide for more on which values are considered missing, and how to work with missing data.\nParameters:\naxis{0 or ‘index’, 1 or ‘columns’}, default 0\nDetermine if rows or columns which contain missing values are removed.\n0, or ‘index’ : Drop rows which contain missing values.\n1, or ‘columns’ : Drop columns which contain missing values.\nOnly a single axis is allowed.\nhow{‘any’, ‘all’}, default ‘any’\nDetermine if row or column is removed from DataFrame, when we have at least one NA or all NA.\n‘any’ : If any NA values are present, drop that row or column.\n‘all’ : If all values are NA, drop that row or column.\nthreshint, optional\nRequire that many non-NA values. Cannot be combined with how.\nsubsetcolumn label or iterable of labels, optional\nLabels along other axis to consider, e.g. if you are dropping rows these would be a list of columns to include.\ninplacebool, default False\nWhether to modify the DataFrame rather than creating a new one.\nDeprecated since version 3.1.0: This keyword is deprecated and will be removed in pandas 4.0. See the whatsnew note on PDEP-8 for more details.\nignore_indexbool, default False\nIf True, the resulting axis will be labeled 0, 1, …, n - 1.\nAdded in version 2.0.0.\nReturns:\nDataFrame or None\nDataFrame with NA entries dropped from it or None if inplace=True.\nSee also\nDataFrame.isna\nIndicate missing values.\nDataFrame.notna\nIndicate existing (non-missing) values.\nDataFrame.fillna\nReplace missing values.\nSeries.dropna\nDrop missing values.\nIndex.dropna\nDrop missing indices.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"name\": [\"Alfred\", \"Batman\", \"Catwoman\"],\n... \"toy\": [np.nan, \"Batmobile\", \"Bullwhip\"],\n... \"born\": [pd.NaT, pd.Timestamp(\"1940-04-25\"), pd.NaT],\n... }\n... )\n>>> df\n name toy born",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.dropna#page",
+          "heading_path": "pandas.DataFrame.dropna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.dropna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.dropna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html",
+      "score": 0.7847388564317371
+    }
+  ],
+  "latency_ms": 7524,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.dropna:0002",
+      "doc_id": "reference/api/pandas.DataFrame.dropna",
+      "title": "pandas.DataFrame.dropna",
+      "text": "na\nReplace missing values.\nSeries.dropna\nDrop missing values.\nIndex.dropna\nDrop missing indices.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"name\": [\"Alfred\", \"Batman\", \"Catwoman\"],\n... \"toy\": [np.nan, \"Batmobile\", \"Bullwhip\"],\n... \"born\": [pd.NaT, pd.Timestamp(\"1940-04-25\"), pd.NaT],\n... }\n... )\n>>> df\n name toy born\n0 Alfred NaN NaT\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nDrop the rows where at least one element is missing.\n>>> df.dropna()\n name toy born\n1 Batman Batmobile 1940-04-25\nDrop the columns where at least one element is missing.\n>>> df.dropna(axis=\"columns\")\n name\n0 Alfred\n1 Batman\n2 Catwoman\nDrop the rows where all elements are missing.\n>>> df.dropna(how=\"all\")\n name toy born\n0 Alfred NaN NaT\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nKeep only the rows with at least 2 non-NA values.\n>>> df.dropna(thresh=2)\n name toy born\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT\nDefine in which columns to look for missing values.\n>>> df.dropna(subset=[\"name\", \"toy\"])\n name toy born\n1 Batman Batmobile 1940-04-25\n2 Catwoman Bullwhip NaT",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.dropna#page",
+          "heading_path": "pandas.DataFrame.dropna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.dropna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.dropna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html",
+      "score": 0.7901912053933541
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.dropna:0001",
+      "doc_id": "reference/api/pandas.DataFrame.dropna",
+      "title": "pandas.DataFrame.dropna",
+      "text": "pandas.DataFrame.dropna\nDataFrame.dropna(*, axis=0, how=<no_default>, thresh=<no_default>, subset=None, inplace=<no_default>, ignore_index=False)[source]\nRemove missing values.\nSee the User Guide for more on which values are considered missing, and how to work with missing data.\nParameters:\naxis{0 or ‘index’, 1 or ‘columns’}, default 0\nDetermine if rows or columns which contain missing values are removed.\n0, or ‘index’ : Drop rows which contain missing values.\n1, or ‘columns’ : Drop columns which contain missing values.\nOnly a single axis is allowed.\nhow{‘any’, ‘all’}, default ‘any’\nDetermine if row or column is removed from DataFrame, when we have at least one NA or all NA.\n‘any’ : If any NA values are present, drop that row or column.\n‘all’ : If all values are NA, drop that row or column.\nthreshint, optional\nRequire that many non-NA values. Cannot be combined with how.\nsubsetcolumn label or iterable of labels, optional\nLabels along other axis to consider, e.g. if you are dropping rows these would be a list of columns to include.\ninplacebool, default False\nWhether to modify the DataFrame rather than creating a new one.\nDeprecated since version 3.1.0: This keyword is deprecated and will be removed in pandas 4.0. See the whatsnew note on PDEP-8 for more details.\nignore_indexbool, default False\nIf True, the resulting axis will be labeled 0, 1, …, n - 1.\nAdded in version 2.0.0.\nReturns:\nDataFrame or None\nDataFrame with NA entries dropped from it or None if inplace=True.\nSee also\nDataFrame.isna\nIndicate missing values.\nDataFrame.notna\nIndicate existing (non-missing) values.\nDataFrame.fillna\nReplace missing values.\nSeries.dropna\nDrop missing values.\nIndex.dropna\nDrop missing indices.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"name\": [\"Alfred\", \"Batman\", \"Catwoman\"],\n... \"toy\": [np.nan, \"Batmobile\", \"Bullwhip\"],\n... \"born\": [pd.NaT, pd.Timestamp(\"1940-04-25\"), pd.NaT],\n... }\n... )\n>>> df\n name toy born",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.dropna#page",
+          "heading_path": "pandas.DataFrame.dropna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.dropna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.dropna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.dropna.html",
+      "score": 0.7847388564317371
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/03_subset_data:0004",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": ") | (titanic[\"Pclass\"] == 3)]\n\nIn [19]: class_23.head()\nOut[19]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nNote\nWhen combining multiple conditional statements, each condition must be surrounded by parentheses (). Moreover, you can not use or/and but need to use the or operator | and the and operator &.\nSee the dedicated section in the user guide about boolean indexing or about the isin function.\nI want to work with passenger data for which the age is known.\nIn [20]: age_no_na = titanic[titanic[\"Age\"].notna()]\n\nIn [21]: age_no_na.head()\nOut[21]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n1 2 1 1 ... 71.2833 C85 C\n2 3 1 3 ... 7.9250 NaN S\n3 4 1 1 ... 53.1000 C123 S\n4 5 0 3 ... 8.0500 NaN S\n\n[5 rows x 12 columns]\nThe notna() conditional function returns a True for each row the values are not a Null value. As such, this can be combined with the selection brackets [] to filter the data table.\nYou might wonder what actually changed, as the first 5 lines are still the same values. One way to verify is to check if the shape has changed:\nIn [22]: age_no_na.shape\nOut[22]: (714, 12)\nFor more dedicated functions on missing values, see the user guide section about handling missing data.\n\nHow do I select specific rows and columns from a DataFrame?\nI’m interested in the names of the passengers older than 35 years.\nIn [23]: adult_names = titanic.loc[titanic[\"Age\"] > 35, \"Name\"]\n\nIn [24]: adult_names.head()\nOut[24",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        },
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-rows-and-columns-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I select specific rows and columns from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-specific-rows-and-columns-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-specific-rows-and-columns-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.7130162883658897
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0045",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "5\nc 3 6\ncond may also be a callable that returns a boolean mask, or an expression created with pandas.col(). These two forms may be passed positionally, which is convenient in a method chain where the intermediate object has no name:\nIn [191]: df.filter(pd.col('A') > 1)\nOut[191]:\n A B\nb 2 5\nc 3 6\n\nIn [192]: df.assign(C=pd.col('A') + pd.col('B')).filter(lambda df: df['C'] > 5)\nOut[192]:\n A B C\nb 2 5 7\nc 3 6 9\nPass axis=1 to filter columns instead of rows:\nIn [193]: df.filter(cond=df.columns.str.startswith('A'), axis=1)\nOut[193]:\n A\na 1\nb 2\nc 3\nMissing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead, or na=\"raise\" to raise an error:\nIn [194]: mask = pd.array([True, None, False], dtype=\"boolean\")\n\nIn [195]: df.filter(cond=mask)\nOut[195]:\n A B\na 1 4\n\nIn [196]: df.filter(cond=mask, na=True)\nOut[196]:\n A B\na 1 4\nb 2 5\n\nConsider the isin() method of Series, which returns a boolean vector that is true wherever the Series elements exist in the passed list. This allows you to select rows where one or more columns have values you want:\nIn [197]: s = pd.Series(np.arange(5), index=np.arange(5)[::-1], dtype='int64')\n\nIn [198]: s\nOut[198]:\n4 0\n3 1\n2 2\n1 3\n0 4\ndtype: int64\n\nIn [199]: s.isin([2, 4, 6])\nOut[199]:\n4 False\n3 False\n2 True\n1 False\n0 True\ndtype: bool\n\nIn [200]: s[s.isin([2, 4, 6])]\nOut[200]:\n2 2\n0 4\ndtype: int64\nThe same method is available for Index objects and is useful for the cases when you don",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#boolean-indexing",
+          "heading_path": "Indexing and selecting data > Boolean indexing",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing"
+        },
+        {
+          "section_id": "user_guide/indexing#indexing-with-isin",
+          "heading_path": "Indexing and selecting data > Indexing with isin",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-with-isin"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#boolean-indexing",
+        "user_guide/indexing#indexing-with-isin"
+      ],
+      "section_id": "user_guide/indexing#boolean-indexing",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing",
+      "score": 0.6942776651077829
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/10min:0015",
+      "doc_id": "user_guide/10min",
+      "title": "10 minutes to pandas",
+      "text": "-0.494929 5.0 2.0 NaN\n2013-01-04 0.721555 -0.706771 -1.039575 5.0 3.0 NaN\nDataFrame.dropna() drops any rows that have missing data:\nIn [60]: df1.dropna(how=\"any\")\nOut[60]:\n A B C D F E\n2013-01-02 1.212112 -0.173215 0.119209 5.0 1.0 1.0\nDataFrame.fillna() fills missing data:\nIn [61]: df1.fillna(value=5)\nOut[61]:\n A B C D F E\n2013-01-01 0.000000 0.000000 -1.509059 5.0 5.0 1.0\n2013-01-02 1.212112 -0.173215 0.119209 5.0 1.0 1.0\n2013-01-03 -0.861849 -2.104569 -0.494929 5.0 2.0 5.0\n2013-01-04 0.721555 -0.706771 -1.039575 5.0 3.0 5.0\nisna() gets the boolean mask where values are nan:\nIn [62]: pd.isna(df1)\nOut[62]:\n A B C D F E\n2013-01-01 False False False False True False\n2013-01-02 False False False False False False\n2013-01-03 False False False False False True\n2013-01-04 False False False False False True\n\nSee the Basic section on Binary Ops.\nStats\nOperations in general exclude missing data.\nCalculate the mean value for each column:\nIn [63]: df.mean()\nOut[63]:\nA -0.004474\nB -0.383981\nC -0.687758\nD 5.000000\nF 3.000000\ndtype: float64\nCalculate the mean value for each row:\nIn [64]: df.mean(axis=1)\nOut[64]:\n2013-01-01 0.872735\n2013-01-02 1.431621\n2013-01-03 0.707",
+      "sources": [
+        {
+          "section_id": "user_guide/10min#missing-data",
+          "heading_path": "10 minutes to pandas > Missing data",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#missing-data"
+        },
+        {
+          "section_id": "user_guide/10min#operations",
+          "heading_path": "10 minutes to pandas > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/10min#missing-data",
+        "user_guide/10min#operations"
+      ],
+      "section_id": "user_guide/10min#missing-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/10min.html#missing-data",
+      "score": 0.6903893384537327
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 7524
+}

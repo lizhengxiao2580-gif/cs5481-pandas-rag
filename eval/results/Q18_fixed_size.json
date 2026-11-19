@@ -1,0 +1,201 @@
+{
+  "question_id": "Q18",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:08:43.531487+00:00",
+  "answer": "`.loc` is **label-based** selection. It is a strict inclusion-based protocol: labels must exist in the index, and integers are treated as labels, not positions [1]. With `.loc`, slice endpoints are **inclusive**: both the start and stop labels are included when present in the index [1]. Under your assumption of unique sorted labels and valid slice bounds, this means the stop endpoint is included [2][1]. For stepped `.loc` slices, start and stop remain inclusive label boundaries, while the step is applied positionally within that label range [2][3].\n\n`.iloc` is **purely positional / integer-based** indexing. It follows Python and NumPy slicing semantics, is 0-based, and trying to use a non-integer, even a valid label, raises an `IndexError` [3]. With `.iloc`, the start bound is **included**, but the stop/upper bound is **excluded** [3].\n\nThe Cookbook summarizes the distinction as: positional-oriented slicing is Python-style and **exclusive of the end**, while label-oriented slicing is non-Python-style and **inclusive of the end** [4].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/indexing:0019",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "52]:\n A B C D\n2013-01-02 0.357021 -0.674600 -1.776904 -0.968914\n2013-01-03 -1.294524 0.413738 0.276662 -0.472035\n2013-01-04 -0.013960 -0.362543 -0.006154 -0.923061\npandas provides a suite of methods in order to have purely label based indexing. This is a strict inclusion based protocol. Every label asked for must be in the index, or a KeyError will be raised. When slicing, both the start bound AND the stop bound are included, if present in the index. Integers are valid labels, but they refer to the label and not the position.\nThe .loc attribute is the primary access method. The following are valid inputs:\nA single label, e.g. 5 or 'a' (Note that 5 is interpreted as a label of the index. This use is not an integer position along the index.).\nA list or array of labels ['a', 'b', 'c'].\nA slice object with labels 'a':'f'. Note that contrary to usual Python slices, both the start and the stop are included, when present in the index! See Slicing with labels.\nA boolean array.\nA callable, see Selection By Callable.\nIn [53]: s1 = pd.Series(np.random.randn(6), index=list('abcdef'))\n\nIn [54]: s1\nOut[54]:\na 1.431256\nb 1.340309\nc -1.170299\nd -0.226169\ne 0.410835\nf 0.813850\ndtype: float64\n\nIn [55]: s1.loc['c':]\nOut[55]:\nc -1.170299\nd -0.226169\ne 0.410835\nf 0.813850\ndtype: float64\n\nIn [56]: s1.loc['b']\nOut[56]: np.float64(1.3403088497993827)\nNote that setting works as well:\nIn [57]: s1.loc['c':] = 0\n\nIn [58]: s1\nOut[58]:\na 1.431256\nb 1.340309\nc 0.000000\nd 0.000",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7708939910108715
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/indexing:0022",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "explicitly:\n# this is also equivalent to ``df1.at['a','A']``\nIn [69]: df1.loc['a', 'A']\nOut[69]: np.float64(0.13200317033032932)\nSlicing with labels\nWhen using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned:\nIn [70]: s = pd.Series(list('abcde'), index=[0, 3, 2, 5, 4])\n\nIn [71]: s.loc[3:5]\nOut[71]:\n3 b\n2 c\n5 d\ndtype: str\nIf the index is sorted, and can be compared against start and stop labels, then slicing will still work as expected, by selecting labels which rank between the two:\nIn [72]: s.sort_index()\nOut[72]:\n0 a\n2 c\n3 b\n4 e\n5 d\ndtype: str\n\nIn [73]: s.sort_index().loc[1:6]\nOut[73]:\n2 c\n3 b\n4 e\n5 d\ndtype: str\nHowever, if at least one of the two is absent and the index is not sorted, an error will be raised (since doing otherwise would be computationally expensive, as well as potentially ambiguous for mixed type indexes). For instance, in the above example, s.loc[1:6] would raise KeyError.\nFor the rationale behind this behavior, see Endpoints are inclusive.\nIn [74]: s = pd.Series(list('abcdef'), index=[0, 3, 2, 5, 4, 2])\n\nIn [75]: s.loc[3:5]\nOut[75]:\n3 b\n2 c\n5 d\ndtype: str\nAlso, if the index has duplicate labels and either the start or the stop label is duplicated, an error will be raised. For instance, in the above example, s.loc[2:5] would raise a KeyError.\nFor more information about duplicate labels, see Duplicate Labels.\nWhen using a slice with a step, such as .loc[start:stop:step], note that start and stop are interpreted as labels, while step is applied over the positional index within that label range. This means a stepped slice will behave differently than using the labels range(start, stop, step) when the index is not contiguous integers.",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7947028823274545
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:user_guide/indexing:0024",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "64\n\nIn [81]: s.loc[['b', 'd', 'f', 'h']] # explicit label selection\nOut[81]:\nb 1\nd 3\nf 5\nh 7\ndtype: int64\nIn both cases, start and stop determine the label boundaries (inclusive), while step skips positions within that range, regardless of the index type.\n\npandas provides a suite of methods in order to get purely integer based indexing. The semantics follow closely Python and NumPy slicing. These are 0-based indexing. When slicing, the start bound is included, while the upper bound is excluded. Trying to use a non-integer, even a valid label will raise an IndexError.\nThe .iloc attribute is the primary access method. The following are valid inputs:\nAn integer e.g. 5.\nA list or array of integers [4, 3, 0].\nA slice object with ints 1:7.\nA boolean array.\nA callable, see Selection By Callable.\nA tuple of row (and column) indexes, whose elements are one of the above types.\nIn [82]: s1 = pd.Series(np.random.randn(5), index=list(range(0, 10, 2)))\n\nIn [83]: s1\nOut[83]:\n0 0.695775\n2 0.341734\n4 0.959726\n6 -1.110336\n8 -0.619976\ndtype: float64\n\nIn [84]: s1.iloc[:3]\nOut[84]:\n0 0.695775\n2 0.341734\n4 0.959726\ndtype: float64\n\nIn [85]: s1.iloc[3]\nOut[85]: np.float64(-1.110336102891167)\nNote that setting works as well:\nIn [86]: s1.iloc[:3] = 0\n\nIn [87]: s1\nOut[87]:\n0 0.000000\n2 0.000000\n4 0.000000\n6 -1.110336\n8 -0.619976\ndtype: float64\nWith a DataFrame:\nIn [88]: df1 = pd.DataFrame(np.random.randn(6, 4),\n ....: index=list(range(0, 12, 2)),\n ....: columns=list(range(0, 8, 2)))\n ....:\n\nIn [89]: df1\nOut",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        },
+        {
+          "section_id": "user_guide/indexing#selection-by-position",
+          "heading_path": "Indexing and selecting data > Selection by position",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-position"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label",
+        "user_guide/indexing#selection-by-position"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7554747712028343
+    },
+    {
+      "n": 4,
+      "chunk_id": "fixed_size:user_guide/cookbook:0007",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "30 -30\n3 7 40 -50\n\nIn [52]: df[(df.AAA <= 6) & (df.index.isin([0, 2, 4]))]\nOut[52]:\n AAA BBB CCC\n0 4 10 100\n2 6 30 -30\nUse loc for label-oriented slicing and iloc positional slicing GH 2904\nIn [53]: df = pd.DataFrame(\n ....: {\"AAA\": [4, 5, 6, 7], \"BBB\": [10, 20, 30, 40], \"CCC\": [100, 50, -30, -50]},\n ....: index=[\"foo\", \"bar\", \"boo\", \"kar\"],\n ....: )\n ....:\nThere are 2 explicit slicing methods, with a third general case\nPositional-oriented (Python slicing style : exclusive of end)\nLabel-oriented (Non-Python slicing style : inclusive of end)\nGeneral (Either slicing style : depends on if the slice contains labels or positions)\nIn [54]: df.loc[\"bar\":\"kar\"] # Label\nOut[54]:\n AAA BBB CCC\nbar 5 20 50\nboo 6 30 -30\nkar 7 40 -50\n\n# Generic\nIn [55]: df[0:3]\nOut[55]:\n AAA BBB CCC\nfoo 4 10 100\nbar 5 20 50\nboo 6 30 -30\n\nIn [56]: df[\"bar\":\"kar\"]\nOut[56]:\n AAA BBB CCC\nbar 5 20 50\nboo 6 30 -30\nkar 7 40 -50\nAmbiguity arises when an index consists of integers with a non-zero start or non-unit increment.\nIn [57]: data = {\"AAA\": [4, 5, 6, 7], \"BBB\": [10, 20, 30, 40], \"CCC\": [100, 50, -30, -50]}\n\nIn [58]: df2 = pd.DataFrame(data=data, index=[1, 2, 3, 4]) # Note index starts at 1.\n\nIn [59]: df2.iloc[1:3] # Position-oriented\nOut[59]:\n AAA BBB CCC\n2 5 20 50\n3 6 30 -30\n\nIn [60]: df2.loc",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#selection",
+          "heading_path": "Cookbook > Selection",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#selection"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#selection"
+      ],
+      "section_id": "user_guide/cookbook#selection",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#selection",
+      "score": 0.7656503761927664
+    }
+  ],
+  "latency_ms": 66189,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0022",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "explicitly:\n# this is also equivalent to ``df1.at['a','A']``\nIn [69]: df1.loc['a', 'A']\nOut[69]: np.float64(0.13200317033032932)\nSlicing with labels\nWhen using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned:\nIn [70]: s = pd.Series(list('abcde'), index=[0, 3, 2, 5, 4])\n\nIn [71]: s.loc[3:5]\nOut[71]:\n3 b\n2 c\n5 d\ndtype: str\nIf the index is sorted, and can be compared against start and stop labels, then slicing will still work as expected, by selecting labels which rank between the two:\nIn [72]: s.sort_index()\nOut[72]:\n0 a\n2 c\n3 b\n4 e\n5 d\ndtype: str\n\nIn [73]: s.sort_index().loc[1:6]\nOut[73]:\n2 c\n3 b\n4 e\n5 d\ndtype: str\nHowever, if at least one of the two is absent and the index is not sorted, an error will be raised (since doing otherwise would be computationally expensive, as well as potentially ambiguous for mixed type indexes). For instance, in the above example, s.loc[1:6] would raise KeyError.\nFor the rationale behind this behavior, see Endpoints are inclusive.\nIn [74]: s = pd.Series(list('abcdef'), index=[0, 3, 2, 5, 4, 2])\n\nIn [75]: s.loc[3:5]\nOut[75]:\n3 b\n2 c\n5 d\ndtype: str\nAlso, if the index has duplicate labels and either the start or the stop label is duplicated, an error will be raised. For instance, in the above example, s.loc[2:5] would raise a KeyError.\nFor more information about duplicate labels, see Duplicate Labels.\nWhen using a slice with a step, such as .loc[start:stop:step], note that start and stop are interpreted as labels, while step is applied over the positional index within that label range. This means a stepped slice will behave differently than using the labels range(start, stop, step) when the index is not contiguous integers.",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7947028823274545
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0021",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "Accessing via label slices:\nIn [62]: df1.loc['d':, 'A':'C']\nOut[62]:\n A B C\nd 0.974466 -2.006747 -0.410001\ne 0.545952 -1.219217 -1.226825\nf -1.281247 -0.727707 -0.121306\nFor getting a cross section using a label (equivalent to df.xs('a')):\nIn [63]: df1.loc['a']\nOut[63]:\nA 0.132003\nB -0.827317\nC -0.076467\nD -1.187678\nName: a, dtype: float64\nFor getting values with a boolean array:\nIn [64]: df1.loc['a'] > 0\nOut[64]:\nA True\nB False\nC False\nD False\nName: a, dtype: bool\n\nIn [65]: df1.loc[:, df1.loc['a'] > 0]\nOut[65]:\n A\na 0.132003\nb 1.130127\nc 1.024180\nd 0.974466\ne 0.545952\nf -1.281247\nNA values in a boolean array propagate as False:\nIn [66]: mask = pd.array([True, False, True, False, pd.NA, False], dtype=\"boolean\")\n\nIn [67]: mask\nOut[67]:\n<BooleanArray>\n[True, False, True, False, <NA>, False]\nLength: 6, dtype: boolean\n\nIn [68]: df1[mask]\nOut[68]:\n A B C D\na 0.132003 -0.827317 -0.076467 -1.187678\nc 1.024180 0.569605 0.875906 -2.211372\nFor getting a value explicitly:\n# this is also equivalent to ``df1.at['a','A']``\nIn [69]: df1.loc['a', 'A']\nOut[69]: np.float64(0.13200317033032932)\nSlicing with labels\nWhen using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned:\nIn [70]: s = pd.Series(list('abcde'),",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7756770870874878
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0019",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "52]:\n A B C D\n2013-01-02 0.357021 -0.674600 -1.776904 -0.968914\n2013-01-03 -1.294524 0.413738 0.276662 -0.472035\n2013-01-04 -0.013960 -0.362543 -0.006154 -0.923061\npandas provides a suite of methods in order to have purely label based indexing. This is a strict inclusion based protocol. Every label asked for must be in the index, or a KeyError will be raised. When slicing, both the start bound AND the stop bound are included, if present in the index. Integers are valid labels, but they refer to the label and not the position.\nThe .loc attribute is the primary access method. The following are valid inputs:\nA single label, e.g. 5 or 'a' (Note that 5 is interpreted as a label of the index. This use is not an integer position along the index.).\nA list or array of labels ['a', 'b', 'c'].\nA slice object with labels 'a':'f'. Note that contrary to usual Python slices, both the start and the stop are included, when present in the index! See Slicing with labels.\nA boolean array.\nA callable, see Selection By Callable.\nIn [53]: s1 = pd.Series(np.random.randn(6), index=list('abcdef'))\n\nIn [54]: s1\nOut[54]:\na 1.431256\nb 1.340309\nc -1.170299\nd -0.226169\ne 0.410835\nf 0.813850\ndtype: float64\n\nIn [55]: s1.loc['c':]\nOut[55]:\nc -1.170299\nd -0.226169\ne 0.410835\nf 0.813850\ndtype: float64\n\nIn [56]: s1.loc['b']\nOut[56]: np.float64(1.3403088497993827)\nNote that setting works as well:\nIn [57]: s1.loc['c':] = 0\n\nIn [58]: s1\nOut[58]:\na 1.431256\nb 1.340309\nc 0.000000\nd 0.000",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7708939910108715
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/cookbook:0007",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "30 -30\n3 7 40 -50\n\nIn [52]: df[(df.AAA <= 6) & (df.index.isin([0, 2, 4]))]\nOut[52]:\n AAA BBB CCC\n0 4 10 100\n2 6 30 -30\nUse loc for label-oriented slicing and iloc positional slicing GH 2904\nIn [53]: df = pd.DataFrame(\n ....: {\"AAA\": [4, 5, 6, 7], \"BBB\": [10, 20, 30, 40], \"CCC\": [100, 50, -30, -50]},\n ....: index=[\"foo\", \"bar\", \"boo\", \"kar\"],\n ....: )\n ....:\nThere are 2 explicit slicing methods, with a third general case\nPositional-oriented (Python slicing style : exclusive of end)\nLabel-oriented (Non-Python slicing style : inclusive of end)\nGeneral (Either slicing style : depends on if the slice contains labels or positions)\nIn [54]: df.loc[\"bar\":\"kar\"] # Label\nOut[54]:\n AAA BBB CCC\nbar 5 20 50\nboo 6 30 -30\nkar 7 40 -50\n\n# Generic\nIn [55]: df[0:3]\nOut[55]:\n AAA BBB CCC\nfoo 4 10 100\nbar 5 20 50\nboo 6 30 -30\n\nIn [56]: df[\"bar\":\"kar\"]\nOut[56]:\n AAA BBB CCC\nbar 5 20 50\nboo 6 30 -30\nkar 7 40 -50\nAmbiguity arises when an index consists of integers with a non-zero start or non-unit increment.\nIn [57]: data = {\"AAA\": [4, 5, 6, 7], \"BBB\": [10, 20, 30, 40], \"CCC\": [100, 50, -30, -50]}\n\nIn [58]: df2 = pd.DataFrame(data=data, index=[1, 2, 3, 4]) # Note index starts at 1.\n\nIn [59]: df2.iloc[1:3] # Position-oriented\nOut[59]:\n AAA BBB CCC\n2 5 20 50\n3 6 30 -30\n\nIn [60]: df2.loc",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#selection",
+          "heading_path": "Cookbook > Selection",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#selection"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#selection"
+      ],
+      "section_id": "user_guide/cookbook#selection",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#selection",
+      "score": 0.7656503761927664
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0024",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "64\n\nIn [81]: s.loc[['b', 'd', 'f', 'h']] # explicit label selection\nOut[81]:\nb 1\nd 3\nf 5\nh 7\ndtype: int64\nIn both cases, start and stop determine the label boundaries (inclusive), while step skips positions within that range, regardless of the index type.\n\npandas provides a suite of methods in order to get purely integer based indexing. The semantics follow closely Python and NumPy slicing. These are 0-based indexing. When slicing, the start bound is included, while the upper bound is excluded. Trying to use a non-integer, even a valid label will raise an IndexError.\nThe .iloc attribute is the primary access method. The following are valid inputs:\nAn integer e.g. 5.\nA list or array of integers [4, 3, 0].\nA slice object with ints 1:7.\nA boolean array.\nA callable, see Selection By Callable.\nA tuple of row (and column) indexes, whose elements are one of the above types.\nIn [82]: s1 = pd.Series(np.random.randn(5), index=list(range(0, 10, 2)))\n\nIn [83]: s1\nOut[83]:\n0 0.695775\n2 0.341734\n4 0.959726\n6 -1.110336\n8 -0.619976\ndtype: float64\n\nIn [84]: s1.iloc[:3]\nOut[84]:\n0 0.695775\n2 0.341734\n4 0.959726\ndtype: float64\n\nIn [85]: s1.iloc[3]\nOut[85]: np.float64(-1.110336102891167)\nNote that setting works as well:\nIn [86]: s1.iloc[:3] = 0\n\nIn [87]: s1\nOut[87]:\n0 0.000000\n2 0.000000\n4 0.000000\n6 -1.110336\n8 -0.619976\ndtype: float64\nWith a DataFrame:\nIn [88]: df1 = pd.DataFrame(np.random.randn(6, 4),\n ....: index=list(range(0, 12, 2)),\n ....: columns=list(range(0, 8, 2)))\n ....:\n\nIn [89]: df1\nOut",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#selection-by-label",
+          "heading_path": "Indexing and selecting data > Selection by label",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label"
+        },
+        {
+          "section_id": "user_guide/indexing#selection-by-position",
+          "heading_path": "Indexing and selecting data > Selection by position",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-position"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#selection-by-label",
+        "user_guide/indexing#selection-by-position"
+      ],
+      "section_id": "user_guide/indexing#selection-by-label",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#selection-by-label",
+      "score": 0.7554747712028343
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 66190
+}

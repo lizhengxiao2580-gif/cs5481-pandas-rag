@@ -1,0 +1,92 @@
+{
+  "question_id": "Q13",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Or the string alias \"Int64\" (note the capital \"I\") to differentiate from NumPy’s 'int64' dtype:",
+          "reason": "Directly supports required point 1 about capital I and differentiation from NumPy int64."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "If you need to represent integers with possibly missing values, use one of the nullable-integer extension dtypes provided by pandas or pyarrow",
+          "reason": "Supports required point 1 by recommending nullable integer extension dtypes."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "In [11]: pd.Series([1, None], dtype=\"Int64\")\nOut[11]:\n0 1\n1 <NA>\ndtype: Int64",
+          "reason": "Shows explicit Int64 usage and missing value as <NA>, supporting both required points."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "In [15]: s = pd.Series([1, 2, None], dtype=\"Int64\")",
+          "reason": "Demonstrates constructing a Series with Int64 dtype, supporting required point 1."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "NA for StringDtype, Int64Dtype (and other bit widths), Float64Dtype (and other bit widths), BooleanDtype and ArrowDtype.",
+          "reason": "Supports required point 2 by indicating NA is used for Int64Dtype."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly specifies dtype='Int64' with capital I and states missing values are pandas.NA. Both required points are met and supported by cited passages."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Or the string alias \"Int64\" (note the capital \"I\") to differentiate from NumPy’s 'int64' dtype:",
+          "reason": "Directly supports required point 1 about capital I and differentiation from NumPy int64."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "In [15]: s = pd.Series([1, 2, None], dtype=\"Int64\")",
+          "reason": "Demonstrates constructing a Series with Int64 dtype, supporting required point 1."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "If you need to represent integers with possibly missing values, use one of the nullable-integer extension dtypes provided by pandas or pyarrow",
+          "reason": "Supports required point 1 by recommending nullable integer extension dtypes."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "arrays.IntegerArray uses pandas.NA as its missing value.",
+          "reason": "Directly supports required point 2 that missing values are pandas.NA."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "In [11]: pd.Series([1, None], dtype=\"Int64\")\nOut[11]:\n0 1\n1 <NA>\ndtype: Int64",
+          "reason": "Shows explicit Int64 usage and missing value as <NA>, supporting both required points."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly specifies dtype='Int64' with capital I and states missing values are pandas.NA. Both required points are met and supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

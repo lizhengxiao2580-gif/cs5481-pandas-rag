@@ -1,0 +1,108 @@
+{
+  "question_id": "Q26",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:12:20.078505+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 4601,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/style:0035",
+      "doc_id": "user_guide/style",
+      "title": "Table Visualization",
+      "text": "94 2.08 6.33 4.70 2.41 6.84 0.50 -3.68 -1.10 -0.67 -2.80 -0.28 -1.88 -3.91 1.67 -1.48 4.15 0.17 0.79\n12 2.76 3.21 6.80 -4.75 -5.36 -4.53 -3.00 1.17 6.52 4.20 2.25 7.97 0.98 -3.45 -1.59 -0.86 -3.09 -0.24 -2.08 -3.73 1.03 -0.18 4.54 0.48 1.69\n13 1.69 2.02 5.31 -5.51 -4.79 -4.34 -1.42 -0.24 6.96 2.92 0.97 6.70 2.18 -3.38 -0.33 -0.77 -2.39 0.42 -1.53 -3.59 1.98 0.01 4.61 0.52 1.11\n14 0.17 1.26 7.10 -5.35 -5.81 -4.61 -0.45 1.61 5.10 1.31 -1.18 6.09 1.25 -2.23 0.32 -1.33 -0.08 -0.19 -1.21 -2.83 0.97 0.13 4.89 0.36 1.83\n15 0.01 0.61 7.94 -5.85 -5.35 -5.10 0.14 1.76 3.89 1.72 -1.61 7.86 0.71 -1.38 -1.95 -1.84 -1.88 -0.14 -2.02 -1.45 1.68 1.62 3.97 -1.88 1.80\n16 1.42 0.91 9.86 -6.10 -",
+      "sources": [
+        {
+          "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+          "heading_path": "Table Visualization > Other Fun and Useful Stuff",
+          "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff"
+        }
+      ],
+      "section_ids": [
+        "user_guide/style#Other-Fun-and-Useful-Stuff"
+      ],
+      "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+      "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff",
+      "score": 0.37889177340863045
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/dsintro:0028",
+      "doc_id": "user_guide/dsintro",
+      "title": "Intro to data structures",
+      "text": "non-null int64\n 13 rbi 100 non-null float64\n 14 sb 100 non-null float64\n 15 cs 100 non-null float64\n 16 bb 100 non-null int64\n 17 so 100 non-null float64\n 18 ibb 100 non-null float64\n 19 hbp 100 non-null float64\n 20 sh 100 non-null float64\n 21 sf 100 non-null float64\n 22 gidp 100 non-null float64\ndtypes: float64(9), int64(11), str(3)\nmemory usage: 19.5 KB\nHowever, using DataFrame.to_string() will return a string representation of the DataFrame in tabular form, though it won’t always fit the console width:\nIn [129]: print(baseball.iloc[-20:, :12].to_string())\n id player year stint team lg g ab r h X2b X3b\n80 89474 finlest01 2007 1 COL NL 43 94 9 17 3 0\n81 89480 embreal01 2007 1 OAK AL 4 0 0 0 0 0\n82 89481 edmonji01 2007 1 SLN NL 117 365 39 92 15 2\n83 89482 easleda01 2007 1 NYN NL 76 193 24 54 6 0\n84 89489 delgaca01 2007 1 NYN NL 139 538 71 139 30 0\n85 89493 cormirh01 2007 1 CIN NL 6 0 0 0 0 0\n86 89494 coninje01 2007 2 NYN NL 21 41 2 8 2 0\n87 89495 coninje01 2007 1 CIN NL 80 215 23 57 11 1\n88 89497 clemero02 2007 1 NYA AL 2 2 0 1 0 0\n89 89498 claytro01 2007 2 BOS AL 8 6 1 0 0 0\n90 89499 claytro01 2007 1 TOR AL",
+      "sources": [
+        {
+          "section_id": "user_guide/dsintro#dataframe",
+          "heading_path": "Intro to data structures > DataFrame",
+          "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe"
+        }
+      ],
+      "section_ids": [
+        "user_guide/dsintro#dataframe"
+      ],
+      "section_id": "user_guide/dsintro#dataframe",
+      "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe",
+      "score": 0.36951952718037384
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/dsintro:0027",
+      "doc_id": "user_guide/dsintro",
+      "title": "Intro to data structures",
+      "text": "]: baseball = pd.read_csv(\"data/baseball.csv\")\n\nIn [127]: print(baseball)\n id player year stint team lg ... so ibb hbp sh sf gidp\n0 88641 womacto01 2006 2 CHN NL ... 4.0 0.0 0.0 3.0 0.0 0.0\n1 88643 schilcu01 2006 1 BOS AL ... 1.0 0.0 0.0 0.0 0.0 0.0\n.. ... ... ... ... ... .. ... ... ... ... ... ... ...\n98 89533 aloumo01 2007 1 NYN NL ... 30.0 5.0 2.0 0.0 3.0 13.0\n99 89534 alomasa02 2007 1 NYN NL ... 3.0 0.0 0.0 0.0 0.0 0.0\n\n[100 rows x 23 columns]\n\nIn [128]: baseball.info()\n<class 'pandas.DataFrame'>\nRangeIndex: 100 entries, 0 to 99\nData columns (total 23 columns):\n # Column Non-Null Count Dtype\n--- ------ -------------- -----\n 0 id 100 non-null int64\n 1 player 100 non-null str\n 2 year 100 non-null int64\n 3 stint 100 non-null int64\n 4 team 100 non-null str\n 5 lg 100 non-null str\n 6 g 100 non-null int64\n 7 ab 100 non-null int64\n 8 r 100 non-null int64\n 9 h 100 non-null int64\n 10 X2b 100 non-null int64\n 11 X3b 100 non-null int64\n 12 hr 100 non-null int64\n 13 rbi 100 non-null float64\n 14 sb 100 non-null float64\n 15 cs 100 non-null float64\n 16 bb 100 non-null int64\n 17 so 100 non-null float64\n 18 ibb 100 non-null float64\n 19 hbp 100 non-null float64\n 20 sh 100 non-null float64\n 21 sf 100 non-null float64\n 22",
+      "sources": [
+        {
+          "section_id": "user_guide/dsintro#dataframe",
+          "heading_path": "Intro to data structures > DataFrame",
+          "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe"
+        }
+      ],
+      "section_ids": [
+        "user_guide/dsintro#dataframe"
+      ],
+      "section_id": "user_guide/dsintro#dataframe",
+      "url": "https://pandas.pydata.org/docs/user_guide/dsintro.html#dataframe",
+      "score": 0.3694153182073092
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/style:0045",
+      "doc_id": "user_guide/style",
+      "title": "Table Visualization",
+      "text": "0.222281 0.450658 -1.037929 0.242039 1.604181 -0.044079 -0.002931 0.890995 -0.498676 0.125733 0.170164 0.114292 -0.114529 0.643665 1.550666 -1.196385 -1.005633 0.987484 -2.474021 -0.942943 2.542174 2.005077 -2.240966 2.877203 0.288686 -0.074685 -0.195066 -0.156439 -0.786641 0.319762 1.421286 0.066732 1.170977 0.820487 2.648986 -0.209079\n6 -0.749591 1.131690 -0.828222 0.650511 -1.565665 -0.155689 -0.233177 0.173176 1.329346 0.868886 0.776473 0.688853 1.776149 0.037287 0.451512 -0.719932 -0.382848 0.036005 -0.184394 -1.017601 0.945876 0.059931 -1.157834 0.478029 -0.038687 0.662824 -0.239063 1.090865 -0.130192 0.472693 -1.933048 -0.608379 0.869687 0.226225 -0.160558 -0.879435 0.306166 -1.147555 0.415554 -0.422111 0.471486 -0.982343 -0.946057 0.806259 -0.658906 0.737453 -0.057951 -0.549889 -0.636656 -0.548671 -0.575404 -0.099271 2.593643 -0.155903 1.853823 -0.259022 0.606196 -1.434706 -0.782503 -0.327437 -0.864812 -0.237751 -2.423010 -1.128",
+      "sources": [
+        {
+          "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+          "heading_path": "Table Visualization > Other Fun and Useful Stuff",
+          "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff"
+        }
+      ],
+      "section_ids": [
+        "user_guide/style#Other-Fun-and-Useful-Stuff"
+      ],
+      "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+      "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff",
+      "score": 0.3562295315426849
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/style:0040",
+      "doc_id": "user_guide/style",
+      "title": "Table Visualization",
+      "text": "654 0.064006 -1.171504 -1.513371 -0.968971 -0.286180 0.607660 0.871069 0.869030 1.106125 0.877278 -0.257861 0.953779 0.028636 0.985071 1.368027 -3.557308 -1.776187 2.153103 -3.187064 0.177048 -0.089252 -0.706958 -1.646462 -0.147763 0.051084 1.613329 -0.883413 0.011041 -0.847485 0.842730 0.136301 1.815106 -1.398780 -0.639113\n2 -0.159582 -0.497279 0.107177 0.760978 1.269089 -1.795061 0.031094 -0.274248 0.105435 -2.116092 -0.082721 0.699645 -1.575069 -0.037534 1.868069 -0.823959 0.285640 -0.520791 0.701296 -0.887850 -1.854127 0.404042 -0.819149 1.437661 -1.463543 -1.348649 3.277478 2.547804 -1.254143 -0.522623 0.675212 0.820393 1.470512 0.521458 -0.357868 -0.134012 -0.118804 -0.076112 -0.398441 0.022043 1.871867 0.510832 -0.001008 1.043979 0.202252 -0.694230 0.307778 0.529419 -1.170342 0.096281 2.651506 0.057062 -0.111685 -1.392431 -0.923218 -0.520036 -0.348218 -0.655606 -0.290017 0.490949 -0.115716 0.078608 -0.011831 0.760267 0.540008 -0",
+      "sources": [
+        {
+          "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+          "heading_path": "Table Visualization > Other Fun and Useful Stuff",
+          "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff"
+        }
+      ],
+      "section_ids": [
+        "user_guide/style#Other-Fun-and-Useful-Stuff"
+      ],
+      "section_id": "user_guide/style#Other-Fun-and-Useful-Stuff",
+      "url": "https://pandas.pydata.org/docs/user_guide/style.html#Other-Fun-and-Useful-Stuff",
+      "score": 0.3562249994220412
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 4601
+}

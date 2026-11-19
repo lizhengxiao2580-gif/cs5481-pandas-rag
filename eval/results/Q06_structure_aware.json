@@ -1,0 +1,169 @@
+{
+  "question_id": "Q06",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:05:05.717696+00:00",
+  "answer": "Assuming your DataFrame has columns `region`, `product`, and numeric `sales`:\n\n```python\ndf.groupby([\"region\", \"product\"])[\"sales\"].mean()\n```\n\nGrouping by more than one column is done by passing a list of columns to `groupby()` [1]. This computes the mean for each combination of the grouping columns by using the split-apply-combine approach [1][2]. Alternatively, you can use `pivot_table`:\n\n```python\npd.pivot_table(df, values=\"sales\", index=[\"region\", \"product\"], aggfunc=\"mean\")\n```\n\nA pivot table can calculate aggregations such as `\"mean\"` for a value column by combinations of the specified index columns [3].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_sql:0010",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "2.771452 62\n*/\nIn [22]: tips.groupby(\"day\").agg({\"tip\": \"mean\", \"day\": \"size\"})\nOut[22]:\n tip day\nday\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThur 2.771452 62\nGrouping by more than one column is done by passing a list of columns to the groupby() method.\nSELECT smoker, day, COUNT(*), AVG(tip)\nFROM tips\nGROUP BY smoker, day;\n/*\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thu 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thu 17 3.030000\n*/\nIn [23]: tips.groupby([\"smoker\", \"day\"]).agg({\"tip\": [\"size\", \"mean\"]})\nOut[23]:\n tip\n size mean\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thur 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thur 17 3.030000",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+          "heading_path": "Comparison with SQL > GROUP BY",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#group-by"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by",
+      "score": 0.5628290267483136
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/09_timeseries:0004",
+      "doc_id": "getting_started/intro_tutorials/09_timeseries",
+      "title": "How to handle time series data with ease",
+      "text": "be done to split the calculation of the mean on each of these combinations.\nDanger\nAs we are working with a very short time series in these examples, the analysis does not provide a long-term representative result!\nPlot the typical \\(NO_2\\) pattern during the day of our time series of all stations together. In other words, what is the average value for each hour of the day?\nIn [14]: fig, axs = plt.subplots(figsize=(12, 4))\n\nIn [15]: air_quality.groupby(air_quality[\"datetime\"].dt.hour)[\"value\"].mean().plot(\n ....: kind='bar', rot=0, ax=axs\n ....: )\n ....:\nOut[15]: <Axes: xlabel='datetime'>\n\nIn [16]: plt.xlabel(\"Hour of the day\"); # custom x label using Matplotlib\n\nIn [17]: plt.ylabel(\"$NO_2 (µg/m^3)$\");\nSimilar to the previous case, we want to calculate a given statistic (e.g. mean \\(NO_2\\)) for each hour of the day and we can use the split-apply-combine approach again. For this case, we use the datetime property hour of pandas Timestamp, which is also accessible by the dt accessor.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties",
+          "heading_path": "How to handle time series data with ease > Using pandas datetime properties",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#using-pandas-datetime-properties"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties"
+      ],
+      "section_id": "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#using-pandas-datetime-properties",
+      "score": 0.5650303512003013
+    },
+    {
+      "n": 3,
+      "chunk_id": "structure_aware:reference/api/pandas.DataFrame.pivot_table:0004",
+      "doc_id": "reference/api/pandas.DataFrame.pivot_table",
+      "title": "pandas.DataFrame.pivot_table",
+      "text": "4.500000\n small 2.333333 4.333333\nWe can also calculate multiple types of aggregations for any given value column.\n>>> table = pd.pivot_table(\n... df,\n... values=[\"D\", \"E\"],\n... index=[\"A\", \"C\"],\n... aggfunc={\"D\": \"mean\", \"E\": [\"min\", \"max\", \"mean\"]},\n... )\n>>> table\n D E\n mean max mean min\nA C\nbar large 5.500000 9 7.500000 6\n small 5.500000 9 8.500000 8\nfoo large 2.000000 5 4.500000 4\n small 2.333333 6 4.333333 2",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+          "heading_path": "pandas.DataFrame.pivot_table",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot_table#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+      "score": 0.5475345447022812
+    }
+  ],
+  "latency_ms": 27048,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/09_timeseries:0004",
+      "doc_id": "getting_started/intro_tutorials/09_timeseries",
+      "title": "How to handle time series data with ease",
+      "text": "be done to split the calculation of the mean on each of these combinations.\nDanger\nAs we are working with a very short time series in these examples, the analysis does not provide a long-term representative result!\nPlot the typical \\(NO_2\\) pattern during the day of our time series of all stations together. In other words, what is the average value for each hour of the day?\nIn [14]: fig, axs = plt.subplots(figsize=(12, 4))\n\nIn [15]: air_quality.groupby(air_quality[\"datetime\"].dt.hour)[\"value\"].mean().plot(\n ....: kind='bar', rot=0, ax=axs\n ....: )\n ....:\nOut[15]: <Axes: xlabel='datetime'>\n\nIn [16]: plt.xlabel(\"Hour of the day\"); # custom x label using Matplotlib\n\nIn [17]: plt.ylabel(\"$NO_2 (µg/m^3)$\");\nSimilar to the previous case, we want to calculate a given statistic (e.g. mean \\(NO_2\\)) for each hour of the day and we can use the split-apply-combine approach again. For this case, we use the datetime property hour of pandas Timestamp, which is also accessible by the dt accessor.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties",
+          "heading_path": "How to handle time series data with ease > Using pandas datetime properties",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#using-pandas-datetime-properties"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties"
+      ],
+      "section_id": "getting_started/intro_tutorials/09_timeseries#using-pandas-datetime-properties",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/09_timeseries.html#using-pandas-datetime-properties",
+      "score": 0.5650303512003013
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_sql:0010",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "2.771452 62\n*/\nIn [22]: tips.groupby(\"day\").agg({\"tip\": \"mean\", \"day\": \"size\"})\nOut[22]:\n tip day\nday\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThur 2.771452 62\nGrouping by more than one column is done by passing a list of columns to the groupby() method.\nSELECT smoker, day, COUNT(*), AVG(tip)\nFROM tips\nGROUP BY smoker, day;\n/*\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thu 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thu 17 3.030000\n*/\nIn [23]: tips.groupby([\"smoker\", \"day\"]).agg({\"tip\": [\"size\", \"mean\"]})\nOut[23]:\n tip\n size mean\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thur 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thur 17 3.030000",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+          "heading_path": "Comparison with SQL > GROUP BY",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#group-by"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by",
+      "score": 0.5628290267483136
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0054",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "T00:00:00.000\":0.9597255933,\"2013-01-04T00:00:00.000\":-0.6199759194,\"2013-01-05T00:00:00.000\":-0.7323393705},\"B\":{\"2013-01-01T00:00:00.000\":-0.0978826728,\"2013-01-02T00:00:00.000\":0.3417343559,\"2013-01-03T00:00:00.000\":-1.1103361029,\"2013-01-04T00:00:00.000\":0.1497483186,\"2013-01-05T00:00:00.000\":0.6877383895},\"date\":{\"2013-01-01T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-02T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-03T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-04T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-05T00:00:00.000\":\"2013-01-01T00:00:00.000\"},\"ints\":{\"2013-01-01T00:00:00.000\":0,\"2013-01-02T00:00:00.000\":1,\"2013-01-03T00:00:00.000\":2,\"2013-01-04T00:00:00.000\":3,\"2013-01-05T00:00:00.000\":4},\"bools\":{\"2013-01-01T00:00:00.000\":true,\"2013-01-02T00:00:00.000\":true,\"2013-01-03T00:00:00.000\":true,\"2013-01-04T00:00:00.000\":true,\"2013-01-05T00:00:00.000\":true}}\nFallback",
+      "sources": [
+        {
+          "section_id": "user_guide/io#json",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > JSON",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#json"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#json"
+      ],
+      "section_id": "user_guide/io#json",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#json",
+      "score": 0.5485938558447112
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.DataFrame.pivot_table:0004",
+      "doc_id": "reference/api/pandas.DataFrame.pivot_table",
+      "title": "pandas.DataFrame.pivot_table",
+      "text": "4.500000\n small 2.333333 4.333333\nWe can also calculate multiple types of aggregations for any given value column.\n>>> table = pd.pivot_table(\n... df,\n... values=[\"D\", \"E\"],\n... index=[\"A\", \"C\"],\n... aggfunc={\"D\": \"mean\", \"E\": [\"min\", \"max\", \"mean\"]},\n... )\n>>> table\n D E\n mean max mean min\nA C\nbar large 5.500000 9 7.500000 6\n small 5.500000 9 8.500000 8\nfoo large 2.000000 5 4.500000 4\n small 2.333333 6 4.333333 2",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+          "heading_path": "pandas.DataFrame.pivot_table",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot_table#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+      "score": 0.5475345447022812
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_sas:0020",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "Aggregation\nSAS’s PROC SUMMARY can be used to group by one or more key variables and compute aggregations on numeric columns.\nproc summary data=tips nway;\n class sex smoker;\n var total_bill tip;\n output out=tips_summed sum=;\nrun;\npandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples.\nIn [1]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()\n\nIn [2]: tips_summed\nOut[2]:\n total_bill tip\nsex smoker\nFemale No 869.68 149.77\n Yes 527.27 96.74\nMale No 1725.75 302.00\n Yes 1217.07 183.07\nTransformation\nIn SAS, if the group aggregations need to be used with the original frame, it must be merged back together. For example, to subtract the mean for each observation by smoker group.\nproc summary data=tips missing nway;\n class smoker;\n var total_bill;\n output out=smoker_means mean(total_bill)=group_bill;\nrun;\n\nproc sort data=tips;\n by smoker;\nrun;\n\ndata tips;\n merge tips(in=a) smoker_means(in=b);\n by smoker;\n adj_total_bill = total_bill - group_bill;\n if a and b;\nrun;\npandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation.\nIn [1]: gb = tips.groupby(\"smoker\")[\"total_bill\"]\n\nIn [2]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")\n\nIn [3]: tips\nOut[3]:\n total_bill tip sex smoker day time size adj_total_bill\n67 1.07 1.00 Female Yes Sat Dinner 1 -17.686344\n92 3.75 1.00 Female Yes Fri Dinner 2 -15.006344\n111 5.25 1.00 Female No Sat Dinner 1 -11.938278\n145 6.35 1.50 Female No Thur Lunch 2 -10.838278\n135 6.51 1.25 Female No Thur Lunch 2 -10.678278\n.. ... ... ... ... ... ... ... ...\n182 43.35 3.50 Male Yes Sun Dinner 3 24.593",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+          "heading_path": "Comparison with SAS > GroupBy",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#groupby"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby",
+      "score": 0.5425423475479181
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 27048
+}

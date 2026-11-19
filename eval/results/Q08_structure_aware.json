@@ -1,0 +1,149 @@
+{
+  "question_id": "Q08",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:05:50.996692+00:00",
+  "answer": "Use `DataFrame.astype()` with a mapping of column names to target dtypes:\n\n```python\ndf = df.astype({\"age\": \"int64\", \"score\": \"float64\"})\n```\n\nThis casts `age` to `int64` and `score` to `float64`; columns not present in the mapping are left unchanged [1][2]. The method returns a new pandas object, so assign the result back to the DataFrame if you want to keep the change [2]. You can also use NumPy dtypes, e.g. `df.astype({\"age\": np.int64, \"score\": np.float64})` [1][2].\n\nAvoid assigning through `.loc` for this subset conversion; the docs show `.loc` assignment can upcast and leave the original dtypes unchanged [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:user_guide/basics:0081",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "uint8\nb uint8\nc int64\ndtype: object\nConvert certain columns to a specific dtype by passing a dict to astype().\nIn [385]: dft1 = pd.DataFrame({\"a\": [1, 0, 1], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [386]: dft1 = dft1.astype({\"a\": np.bool_, \"c\": np.float64})\n\nIn [387]: dft1\nOut[387]:\n a b c\n0 True 4 7.0\n1 False 5 8.0\n2 True 6 9.0\n\nIn [388]: dft1.dtypes\nOut[388]:\na bool\nb int64\nc float64\ndtype: object\nNote\nWhen trying to convert a subset of columns to a specified type using astype() and loc(), upcasting occurs.\nloc() tries to fit in what we are assigning to the current dtypes, while [] will overwrite them taking the dtype from the right hand side. Therefore the following piece of code produces the unintended result.\nIn [389]: dft = pd.DataFrame({\"a\": [1, 2, 3], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [390]: dft.loc[:, [\"a\", \"b\"]].astype(np.uint8).dtypes\nOut[390]:\na uint8\nb uint8\ndtype: object\n\nIn [391]: dft.loc[:, [\"a\", \"b\"]] = dft.loc[:, [\"a\", \"b\"]].astype(np.uint8)\n\nIn [392]: dft.dtypes\nOut[392]:\na int64\nb int64\nc int64\ndtype: object\nobject conversion\npandas offers various functions to try to force conversion of types from the object dtype to other types. In cases where the data is already of the correct type, but stored in an object array, the DataFrame.infer_objects() and Series.infer_objects() methods can be used to soft convert to the correct type.\nIn [393]: import datetime\n\nIn [394]: df = pd.DataFrame(\n .....: [\n .....: [1, 2],\n .....: [\"a\", \"b\"],\n .....: [datetime.datetime(2016, 3, 2",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dtypes",
+          "heading_path": "Essential basic functionality > dtypes",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dtypes"
+      ],
+      "section_id": "user_guide/basics#dtypes",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes",
+      "score": 0.6976682681444245
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:reference/api/pandas.DataFrame.astype:0001",
+      "doc_id": "reference/api/pandas.DataFrame.astype",
+      "title": "pandas.DataFrame.astype",
+      "text": "pandas.DataFrame.astype\nDataFrame.astype(dtype, copy=<no_default>, errors='raise')[source]\nCast a pandas object to a specified dtype dtype.\nThis method allows the conversion of the data types of pandas objects, including DataFrames and Series, to the specified dtype. It supports casting entire objects to a single data type or applying different data types to individual columns using a mapping.\nParameters:\ndtypestr, data type, Series or Mapping of column name -> data type\nUse a str, numpy.dtype, pandas.ExtensionDtype or Python type to cast entire pandas object to the same type. Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types. The mapping may be a dict or a Series indexed by column label; columns whose labels are absent from the mapping are left unchanged. A Python type (e.g. int, float, str, bool) is mapped to the corresponding dtype; a type with no such mapping, such as datetime.datetime, raises TypeError.\ncopybool, default False\nThis keyword is now ignored; changing its value will have no impact on the method.\nDeprecated since version 3.0.0: This keyword is ignored and will be removed in pandas 4.0. Since pandas 3.0, this method always returns a new object using a lazy copy mechanism that defers copies until necessary (Copy-on-Write). See the user guide on Copy-on-Write for more details.\nerrors{‘raise’, ‘ignore’}, default ‘raise’\nControl raising of exceptions on invalid data for provided dtype.\nraise : allow exceptions to be raised\nignore : suppress exceptions. On error return original object.\nThis does not apply to keys in a dtype mapping that are not column labels (or, for a Series, not its name); those always raise KeyError.\nReturns:\nsame type as caller\nThe pandas object casted to the specified dtype.\nSee also\nto_datetime\nConvert argument to datetime.\nto_timedelta\nConvert argument to timedelta.\nto_numeric\nConvert argument to a numeric type.\nnumpy.ndarray.astype\nCast a numpy array to a specified type.\nNotes\nChanged in version 2.0.0: Using astype to convert from timezone-naive dtype to timezone-aware dtype will raise an exception. Use Series.dt.tz_localize() instead.\nExamples\nCreate a DataFrame",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.astype#page",
+          "heading_path": "pandas.DataFrame.astype",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.astype#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.astype#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html",
+      "score": 0.6832765932135242
+    }
+  ],
+  "latency_ms": 66241,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0081",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "uint8\nb uint8\nc int64\ndtype: object\nConvert certain columns to a specific dtype by passing a dict to astype().\nIn [385]: dft1 = pd.DataFrame({\"a\": [1, 0, 1], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [386]: dft1 = dft1.astype({\"a\": np.bool_, \"c\": np.float64})\n\nIn [387]: dft1\nOut[387]:\n a b c\n0 True 4 7.0\n1 False 5 8.0\n2 True 6 9.0\n\nIn [388]: dft1.dtypes\nOut[388]:\na bool\nb int64\nc float64\ndtype: object\nNote\nWhen trying to convert a subset of columns to a specified type using astype() and loc(), upcasting occurs.\nloc() tries to fit in what we are assigning to the current dtypes, while [] will overwrite them taking the dtype from the right hand side. Therefore the following piece of code produces the unintended result.\nIn [389]: dft = pd.DataFrame({\"a\": [1, 2, 3], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [390]: dft.loc[:, [\"a\", \"b\"]].astype(np.uint8).dtypes\nOut[390]:\na uint8\nb uint8\ndtype: object\n\nIn [391]: dft.loc[:, [\"a\", \"b\"]] = dft.loc[:, [\"a\", \"b\"]].astype(np.uint8)\n\nIn [392]: dft.dtypes\nOut[392]:\na int64\nb int64\nc int64\ndtype: object\nobject conversion\npandas offers various functions to try to force conversion of types from the object dtype to other types. In cases where the data is already of the correct type, but stored in an object array, the DataFrame.infer_objects() and Series.infer_objects() methods can be used to soft convert to the correct type.\nIn [393]: import datetime\n\nIn [394]: df = pd.DataFrame(\n .....: [\n .....: [1, 2],\n .....: [\"a\", \"b\"],\n .....: [datetime.datetime(2016, 3, 2",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dtypes",
+          "heading_path": "Essential basic functionality > dtypes",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dtypes"
+      ],
+      "section_id": "user_guide/basics#dtypes",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes",
+      "score": 0.6976682681444245
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0080",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "an exception if the astype operation is invalid.\nUpcasting is always according to the NumPy rules. If two different dtypes are involved in an operation, then the more general one will be used as the result of the operation.\nIn [378]: df3\nOut[378]:\n A B C\n0 1.047634 0.256090 26.0\n1 3.498407 1.426469 86.0\n2 -0.150790 -0.416203 46.0\n3 0.724380 1.139976 212.0\n4 -1.203087 -1.193477 26.0\n5 1.346474 0.096706 7.0\n6 -0.052601 -1.956850 184.0\n7 -0.756419 -0.714337 206.0\n\nIn [379]: df3.dtypes\nOut[379]:\nA float64\nB float64\nC float64\ndtype: object\n\n# conversion of dtypes\nIn [380]: df3.astype(\"float32\").dtypes\nOut[380]:\nA float32\nB float32\nC float32\ndtype: object\nConvert a subset of columns to a specified type using astype().\nIn [381]: dft = pd.DataFrame({\"a\": [1, 2, 3], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [382]: dft[[\"a\", \"b\"]] = dft[[\"a\", \"b\"]].astype(np.uint8)\n\nIn [383]: dft\nOut[383]:\n a b c\n0 1 4 7\n1 2 5 8\n2 3 6 9\n\nIn [384]: dft.dtypes\nOut[384]:\na uint8\nb uint8\nc int64\ndtype: object\nConvert certain columns to a specific dtype by passing a dict to astype().\nIn [385]: dft1 = pd.DataFrame({\"a\": [1, 0, 1], \"b\": [4, 5, 6], \"c\": [7, 8, 9]})\n\nIn [386]: dft1 = dft1.astype({\"a\": np.bool_, \"c\": np.float",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dtypes",
+          "heading_path": "Essential basic functionality > dtypes",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dtypes"
+      ],
+      "section_id": "user_guide/basics#dtypes",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes",
+      "score": 0.6849273420513711
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.DataFrame.astype:0001",
+      "doc_id": "reference/api/pandas.DataFrame.astype",
+      "title": "pandas.DataFrame.astype",
+      "text": "pandas.DataFrame.astype\nDataFrame.astype(dtype, copy=<no_default>, errors='raise')[source]\nCast a pandas object to a specified dtype dtype.\nThis method allows the conversion of the data types of pandas objects, including DataFrames and Series, to the specified dtype. It supports casting entire objects to a single data type or applying different data types to individual columns using a mapping.\nParameters:\ndtypestr, data type, Series or Mapping of column name -> data type\nUse a str, numpy.dtype, pandas.ExtensionDtype or Python type to cast entire pandas object to the same type. Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types. The mapping may be a dict or a Series indexed by column label; columns whose labels are absent from the mapping are left unchanged. A Python type (e.g. int, float, str, bool) is mapped to the corresponding dtype; a type with no such mapping, such as datetime.datetime, raises TypeError.\ncopybool, default False\nThis keyword is now ignored; changing its value will have no impact on the method.\nDeprecated since version 3.0.0: This keyword is ignored and will be removed in pandas 4.0. Since pandas 3.0, this method always returns a new object using a lazy copy mechanism that defers copies until necessary (Copy-on-Write). See the user guide on Copy-on-Write for more details.\nerrors{‘raise’, ‘ignore’}, default ‘raise’\nControl raising of exceptions on invalid data for provided dtype.\nraise : allow exceptions to be raised\nignore : suppress exceptions. On error return original object.\nThis does not apply to keys in a dtype mapping that are not column labels (or, for a Series, not its name); those always raise KeyError.\nReturns:\nsame type as caller\nThe pandas object casted to the specified dtype.\nSee also\nto_datetime\nConvert argument to datetime.\nto_timedelta\nConvert argument to timedelta.\nto_numeric\nConvert argument to a numeric type.\nnumpy.ndarray.astype\nCast a numpy array to a specified type.\nNotes\nChanged in version 2.0.0: Using astype to convert from timezone-naive dtype to timezone-aware dtype will raise an exception. Use Series.dt.tz_localize() instead.\nExamples\nCreate a DataFrame",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.astype#page",
+          "heading_path": "pandas.DataFrame.astype",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.astype#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.astype#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.astype.html",
+      "score": 0.6832765932135242
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0078",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "667715\n6 -0.011736\n7 -0.399073\n\nIn [366]: df1.dtypes\nOut[366]:\nA float64\ndtype: object\n\nIn [367]: df2 = pd.DataFrame(\n .....: {\n .....: \"A\": pd.Series(np.random.randn(8), dtype=\"float32\"),\n .....: \"B\": pd.Series(np.random.randn(8)),\n .....: \"C\": pd.Series(np.random.randint(0, 255, size=8), dtype=\"uint8\"), # [0,255] (range of uint8)\n .....: }\n .....: )\n .....:\n\nIn [368]: df2\nOut[368]:\n A B C\n0 0.823270 0.256090 26\n1 1.607861 1.426469 86\n2 -0.333669 -0.416203 46\n3 -0.063467 1.139976 212\n4 -1.014637 -1.193477 26\n5 0.678758 0.096706 7\n6 -0.040865 -1.956850 184\n7 -0.357346 -0.714337 206\n\nIn [369]: df2.dtypes\nOut[369]:\nA float32\nB float64\nC uint8\ndtype: object\ndefaults\nBy default integer types are int64 and float types are float64, regardless of platform (32-bit or 64-bit). The following will all result in int64 dtypes.\nIn [370]: pd.DataFrame([1, 2], columns=[\"a\"]).dtypes\nOut[370]:\na int64\ndtype: object\n\nIn [371]: pd.DataFrame({\"a\": [1, 2]}).dtypes\nOut[371]:\na int64\ndtype: object\n\nIn [372]: pd.DataFrame({\"a\": 1}, index=list(range(2))).dtypes\nOut[372]:\na int64\ndtype: object\nNote that Numpy will choose platform-dependent types when creating arrays. The following WILL result in int32 on 32-bit platform.\nIn [373]: frame = pd.DataFrame(np.array([1, 2]))\nupcasting\nTypes can potentially be upcasted when combined with other types, meaning they are promoted from the current type (e.g. int to float).\nIn [374]: df3 = df1.re",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dtypes",
+          "heading_path": "Essential basic functionality > dtypes",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dtypes"
+      ],
+      "section_id": "user_guide/basics#dtypes",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes",
+      "score": 0.6721346156422137
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0084",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "timedelta64[us]', freq=None)\nIn addition to object conversion, to_numeric() provides another argument downcast, which gives the option of downcasting the newly (or already) numeric data to a smaller dtype, which can conserve memory:\nIn [413]: m = [\"1\", 2, 3]\n\nIn [414]: pd.to_numeric(m, downcast=\"integer\") # smallest signed int dtype\nOut[414]: array([1, 2, 3], dtype=int8)\n\nIn [415]: pd.to_numeric(m, downcast=\"signed\") # same as 'integer'\nOut[415]: array([1, 2, 3], dtype=int8)\n\nIn [416]: pd.to_numeric(m, downcast=\"unsigned\") # smallest unsigned int dtype\nOut[416]: array([1, 2, 3], dtype=uint8)\n\nIn [417]: pd.to_numeric(m, downcast=\"float\") # smallest float dtype\nOut[417]: array([1., 2., 3.], dtype=float32)\nAs these methods apply only to one-dimensional arrays, lists or scalars; they cannot be used directly on multi-dimensional objects such as DataFrames. However, with apply(), we can “apply” the function over each column efficiently:\nIn [418]: import datetime\n\nIn [419]: df = pd.DataFrame([[\"2016-07-09\", datetime.datetime(2016, 3, 2)]] * 2, dtype=\"O\")\n\nIn [420]: df\nOut[420]:\n 0 1\n0 2016-07-09 2016-03-02 00:00:00\n1 2016-07-09 2016-03-02 00:00:00\n\nIn [421]: df.apply(pd.to_datetime)\nOut[421]:\n 0 1\n0 2016-07-09 2016-03-02\n1 2016-07-09 2016-03-02\n\nIn [422]: df = pd.DataFrame([[\"1.1\", 2, 3]] * 2, dtype=\"O\")\n\nIn [423]: df\nOut[423]:\n 0 1 2\n0 1.1 2 3\n1 1.1 2 3\n\nIn [424]: df.apply(pd.to_numeric)\nOut[424]:\n 0",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dtypes",
+          "heading_path": "Essential basic functionality > dtypes",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dtypes"
+      ],
+      "section_id": "user_guide/basics#dtypes",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dtypes",
+      "score": 0.6708850076824798
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 66242
+}

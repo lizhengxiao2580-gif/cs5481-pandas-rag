@@ -1,0 +1,189 @@
+{
+  "question_id": "Q20",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:10:09.515825+00:00",
+  "answer": "In grouped data, aggregation reduces each group to a single summary row/value, such as `sum` by group [1][2]. Transformation returns a result indexed the same as the object being grouped, so the computed group value is broadcast back to the original rows [3][2]. Transform does not include the grouping keys in the result, and a common use is adding the result back into the original DataFrame [3]. When you pass a built-in aggregation method to `transform()`, the aggregate is broadcast across each group [4].\n\nTo add each group’s mean back to every original row, use `transform`, not aggregation [1][3][4]. For example, assuming a numeric column such as `total_bill`:\n\n```python\ngb = tips.groupby(\"smoker\")[\"total_bill\"]\n\n# Attach each group's mean to every original row\ntips[\"group_mean\"] = gb.transform(\"mean\")\n\n# Or use it in arithmetic with the original values\ntips[\"total_bill_plus_group_mean\"] = tips[\"total_bill\"] + gb.transform(\"mean\")\n```\n\nThis follows the same transform pattern shown with `gb.transform(\"mean\")` in the grouped-data example [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_stata:0020",
+      "doc_id": "getting_started/comparison/comparison_with_stata",
+      "title": "Comparison with Stata",
+      "text": "Aggregation\nStata’s collapse can be used to group by one or more key variables and compute aggregations on numeric columns.\ncollapse (sum) total_bill tip, by(sex smoker)\npandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples.\nIn [65]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()\n\nIn [66]: tips_summed\nOut[66]:\n total_bill tip\nsex smoker\nFemale No 869.68 149.77\n Yes 527.27 96.74\nMale No 1725.75 302.00\n Yes 1217.07 183.07\nTransformation\nIn Stata, if the group aggregations need to be used with the original data set, one would usually use bysort with egen(). For example, to subtract the mean for each observation by smoker group.\nbysort sex smoker: egen group_bill = mean(total_bill)\ngenerate adj_total_bill = total_bill - group_bill\npandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation.\nIn [67]: gb = tips.groupby(\"smoker\")[\"total_bill\"]\n\nIn [68]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")\n\nIn [69]: tips\nOut[69]:\n total_bill tip sex smoker day time size adj_total_bill\n67 1.07 1.00 Female Yes Sat Dinner 1 -17.686344\n92 3.75 1.00 Female Yes Fri Dinner 2 -15.006344\n111 5.25 1.00 Female No Sat Dinner 1 -11.938278\n145 6.35 1.50 Female No Thur Lunch 2 -10.838278\n135 6.51 1.25 Female No Thur Lunch 2 -10.678278\n.. ... ... ... ... ... ... ... ...\n182 43.35 3.50 Male Yes Sun Dinner 3 24.593656\n156 46.17 5.00 Male No Sun Dinner 6 28.981722\n59 46.27 6.73 Male No Sat Dinner 4 29.081722\n212 46.33 9.00 Male No Sat Dinner 4",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_stata#groupby",
+          "heading_path": "Comparison with Stata > GroupBy",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#groupby"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_stata#groupby"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_stata#groupby",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#groupby",
+      "score": 0.775484513606614
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:user_guide/user_defined_functions:0008",
+      "doc_id": "user_guide/user_defined_functions",
+      "title": "User-Defined Functions (UDFs)",
+      "text": "you can read more about filter in groupby operations in Filtration.\nSeries.agg() and DataFrame.agg()\nThe agg method is used to aggregate a set of data points into a single one. The most common aggregation functions such as min, max, mean, sum, etc. are already implemented in pandas. agg allows to implement other custom aggregate functions.\nIn [28]: temperature = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31],\n ....: })\n ....:\n\nIn [29]: def highest_jump(column):\n ....: return column.pct_change().max()\n ....:\n\nIn [30]: temperature.agg(highest_jump)\nOut[30]:\nNYC 0.500000\nLos Angeles 0.272727\ndtype: float64\nWhen to use: Use agg() for performing custom aggregations, where the operation returns a scalar value on each input.\nSeries.transform() and DataFrame.transform()\nThe transform method is similar to an aggregation, with the difference that the result is broadcasted to the original data.\nIn [31]: temperature = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31]},\n ....: index=pd.date_range(\"2000-01-01\", \"2000-01-03\"))\n ....:\n\nIn [32]: def warm_up_all_days(column):\n ....: return pd.Series(column.max(), index=column.index)\n ....:\n\nIn [33]: temperature.transform(warm_up_all_days)\nOut[33]:\n NYC Los Angeles\n2000-01-01 23 31\n2000-01-02 23 31\n2000-01-03 23 31\nIn the example, the warm_up_all_days function computes the max like an aggregation, but instead of returning just the maximum value, it returns a DataFrame with the same shape as the original one with the values of each day replaced by the maximum temperature of the city.\ntransform is also available for SeriesGroupBy.transform(), DataFrameGroupBy.transform() and Resampler.transform(), where it’s more common. You can read more about transform in groupby operations in Transformation.\nWhen to use: When you need to perform an aggregation that will be returned in the original structure of the DataFrame.",
+      "sources": [
+        {
+          "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+          "heading_path": "User-Defined Functions (UDFs) > Methods that support User-Defined Functions",
+          "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions"
+        }
+      ],
+      "section_ids": [
+        "user_guide/user_defined_functions#methods-that-support-user-defined-functions"
+      ],
+      "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+      "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions",
+      "score": 0.7447697747181861
+    },
+    {
+      "n": 3,
+      "chunk_id": "structure_aware:user_guide/groupby:0025",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "A transformation is a GroupBy operation whose result is indexed the same as the one being grouped. Common examples include cumsum() and diff().\nIn [116]: speeds\nOut[116]:\n class order max_speed\nfalcon bird Falconiformes 389.0\nparrot bird Psittaciformes 24.0\nlion mammal Carnivora 80.2\nmonkey mammal Primates NaN\nleopard mammal Carnivora 58.0\n\nIn [117]: grouped = speeds.groupby(\"class\")[\"max_speed\"]\n\nIn [118]: grouped.cumsum()\nOut[118]:\nfalcon 389.0\nparrot 413.0\nlion 80.2\nmonkey NaN\nleopard 138.2\nName: max_speed, dtype: float64\n\nIn [119]: grouped.diff()\nOut[119]:\nfalcon NaN\nparrot -365.0\nlion NaN\nmonkey NaN\nleopard NaN\nName: max_speed, dtype: float64\nUnlike aggregations, the groupings that are used to split the original object are not included in the result.\nNote\nSince transformations do not include the groupings that are used to split the result, the arguments as_index and sort in DataFrame.groupby() and Series.groupby() have no effect.\nA common use of a transformation is to add the result back into the original DataFrame.\nIn [120]: result = speeds.copy()\n\nIn [121]: result[\"cumsum\"] = grouped.cumsum()\n\nIn [122]: result[\"diff\"] = grouped.diff()\n\nIn [123]: result\nOut[123]:\n class order max_speed cumsum diff\nfalcon bird Falconiformes 389.0 389.0 NaN\nparrot bird Psittaciformes 24.0 413.0 -365.0\nlion mammal Carnivora 80.2 80.2 NaN\nmonkey mammal Primates NaN NaN NaN\nleopard mammal Carnivora 58.0 138.2 NaN\nBuilt-in transformation methods\nThe following methods on GroupBy act as transformations.\nMethod\nDescription\nbfill()\nBack fill NA values within each group\ncumcount()\nCompute the cumulative count within each group\ncummax()\nCompute the cumulative max within each group\ncummin()\nCompute the cumulative min within each group\ncumprod()\nCompute the cumulative product within each group\ncumsum()\nCompute the cumulative sum within each group\ndiff()",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#transformation",
+          "heading_path": "Group by: split-apply-combine > Transformation",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#transformation"
+      ],
+      "section_id": "user_guide/groupby#transformation",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation",
+      "score": 0.7747301328007348
+    },
+    {
+      "n": 4,
+      "chunk_id": "structure_aware:user_guide/groupby:0026",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "Carnivora 58.0 138.2 NaN\nBuilt-in transformation methods\nThe following methods on GroupBy act as transformations.\nMethod\nDescription\nbfill()\nBack fill NA values within each group\ncumcount()\nCompute the cumulative count within each group\ncummax()\nCompute the cumulative max within each group\ncummin()\nCompute the cumulative min within each group\ncumprod()\nCompute the cumulative product within each group\ncumsum()\nCompute the cumulative sum within each group\ndiff()\nCompute the difference between adjacent values within each group\nffill()\nForward fill NA values within each group\npct_change()\nCompute the percent change between adjacent values within each group\nrank()\nCompute the rank of each value within each group\nshift()\nShift values up or down within each group\nIn addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result. If the aggregation method has an efficient implementation, this will be performant as well.\nThe transform() method\nSimilar to the aggregation method, the transform() method can accept string aliases to the built-in transformation methods in the previous section. It can also accept string aliases to the built-in aggregation methods. When an aggregation method is provided, the result will be broadcast across the group.\nIn [124]: speeds\nOut[124]:\n class order max_speed\nfalcon bird Falconiformes 389.0\nparrot bird Psittaciformes 24.0\nlion mammal Carnivora 80.2\nmonkey mammal Primates NaN\nleopard mammal Carnivora 58.0\n\nIn [125]: grouped = speeds.groupby(\"class\")[[\"max_speed\"]]\n\nIn [126]: grouped.transform(\"cumsum\")\nOut[126]:\n max_speed\nfalcon 389.0\nparrot 413.0\nlion 80.2\nmonkey NaN\nleopard 138.2\n\nIn [127]: grouped.transform(\"sum\")\nOut[127]:\n max_speed\nfalcon 413.0\nparrot 413.0\nlion 138.2\nmonkey 138.2\nleopard 138.2\nIn addition to string aliases, the transform() method can also accept User-Defined Functions (UDFs). The UDF must:\nReturn a result that is either the same size as the group chunk or broadcastable to the size of the group chunk (",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#transformation",
+          "heading_path": "Group by: split-apply-combine > Transformation",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#transformation"
+      ],
+      "section_id": "user_guide/groupby#transformation",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation",
+      "score": 0.7413318236114291
+    }
+  ],
+  "latency_ms": 34484,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_stata:0020",
+      "doc_id": "getting_started/comparison/comparison_with_stata",
+      "title": "Comparison with Stata",
+      "text": "Aggregation\nStata’s collapse can be used to group by one or more key variables and compute aggregations on numeric columns.\ncollapse (sum) total_bill tip, by(sex smoker)\npandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples.\nIn [65]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()\n\nIn [66]: tips_summed\nOut[66]:\n total_bill tip\nsex smoker\nFemale No 869.68 149.77\n Yes 527.27 96.74\nMale No 1725.75 302.00\n Yes 1217.07 183.07\nTransformation\nIn Stata, if the group aggregations need to be used with the original data set, one would usually use bysort with egen(). For example, to subtract the mean for each observation by smoker group.\nbysort sex smoker: egen group_bill = mean(total_bill)\ngenerate adj_total_bill = total_bill - group_bill\npandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation.\nIn [67]: gb = tips.groupby(\"smoker\")[\"total_bill\"]\n\nIn [68]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")\n\nIn [69]: tips\nOut[69]:\n total_bill tip sex smoker day time size adj_total_bill\n67 1.07 1.00 Female Yes Sat Dinner 1 -17.686344\n92 3.75 1.00 Female Yes Fri Dinner 2 -15.006344\n111 5.25 1.00 Female No Sat Dinner 1 -11.938278\n145 6.35 1.50 Female No Thur Lunch 2 -10.838278\n135 6.51 1.25 Female No Thur Lunch 2 -10.678278\n.. ... ... ... ... ... ... ... ...\n182 43.35 3.50 Male Yes Sun Dinner 3 24.593656\n156 46.17 5.00 Male No Sun Dinner 6 28.981722\n59 46.27 6.73 Male No Sat Dinner 4 29.081722\n212 46.33 9.00 Male No Sat Dinner 4",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_stata#groupby",
+          "heading_path": "Comparison with Stata > GroupBy",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#groupby"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_stata#groupby"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_stata#groupby",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#groupby",
+      "score": 0.775484513606614
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/groupby:0025",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "A transformation is a GroupBy operation whose result is indexed the same as the one being grouped. Common examples include cumsum() and diff().\nIn [116]: speeds\nOut[116]:\n class order max_speed\nfalcon bird Falconiformes 389.0\nparrot bird Psittaciformes 24.0\nlion mammal Carnivora 80.2\nmonkey mammal Primates NaN\nleopard mammal Carnivora 58.0\n\nIn [117]: grouped = speeds.groupby(\"class\")[\"max_speed\"]\n\nIn [118]: grouped.cumsum()\nOut[118]:\nfalcon 389.0\nparrot 413.0\nlion 80.2\nmonkey NaN\nleopard 138.2\nName: max_speed, dtype: float64\n\nIn [119]: grouped.diff()\nOut[119]:\nfalcon NaN\nparrot -365.0\nlion NaN\nmonkey NaN\nleopard NaN\nName: max_speed, dtype: float64\nUnlike aggregations, the groupings that are used to split the original object are not included in the result.\nNote\nSince transformations do not include the groupings that are used to split the result, the arguments as_index and sort in DataFrame.groupby() and Series.groupby() have no effect.\nA common use of a transformation is to add the result back into the original DataFrame.\nIn [120]: result = speeds.copy()\n\nIn [121]: result[\"cumsum\"] = grouped.cumsum()\n\nIn [122]: result[\"diff\"] = grouped.diff()\n\nIn [123]: result\nOut[123]:\n class order max_speed cumsum diff\nfalcon bird Falconiformes 389.0 389.0 NaN\nparrot bird Psittaciformes 24.0 413.0 -365.0\nlion mammal Carnivora 80.2 80.2 NaN\nmonkey mammal Primates NaN NaN NaN\nleopard mammal Carnivora 58.0 138.2 NaN\nBuilt-in transformation methods\nThe following methods on GroupBy act as transformations.\nMethod\nDescription\nbfill()\nBack fill NA values within each group\ncumcount()\nCompute the cumulative count within each group\ncummax()\nCompute the cumulative max within each group\ncummin()\nCompute the cumulative min within each group\ncumprod()\nCompute the cumulative product within each group\ncumsum()\nCompute the cumulative sum within each group\ndiff()",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#transformation",
+          "heading_path": "Group by: split-apply-combine > Transformation",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#transformation"
+      ],
+      "section_id": "user_guide/groupby#transformation",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation",
+      "score": 0.7747301328007348
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_sas:0020",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "Aggregation\nSAS’s PROC SUMMARY can be used to group by one or more key variables and compute aggregations on numeric columns.\nproc summary data=tips nway;\n class sex smoker;\n var total_bill tip;\n output out=tips_summed sum=;\nrun;\npandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples.\nIn [1]: tips_summed = tips.groupby([\"sex\", \"smoker\"])[[\"total_bill\", \"tip\"]].sum()\n\nIn [2]: tips_summed\nOut[2]:\n total_bill tip\nsex smoker\nFemale No 869.68 149.77\n Yes 527.27 96.74\nMale No 1725.75 302.00\n Yes 1217.07 183.07\nTransformation\nIn SAS, if the group aggregations need to be used with the original frame, it must be merged back together. For example, to subtract the mean for each observation by smoker group.\nproc summary data=tips missing nway;\n class smoker;\n var total_bill;\n output out=smoker_means mean(total_bill)=group_bill;\nrun;\n\nproc sort data=tips;\n by smoker;\nrun;\n\ndata tips;\n merge tips(in=a) smoker_means(in=b);\n by smoker;\n adj_total_bill = total_bill - group_bill;\n if a and b;\nrun;\npandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation.\nIn [1]: gb = tips.groupby(\"smoker\")[\"total_bill\"]\n\nIn [2]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")\n\nIn [3]: tips\nOut[3]:\n total_bill tip sex smoker day time size adj_total_bill\n67 1.07 1.00 Female Yes Sat Dinner 1 -17.686344\n92 3.75 1.00 Female Yes Fri Dinner 2 -15.006344\n111 5.25 1.00 Female No Sat Dinner 1 -11.938278\n145 6.35 1.50 Female No Thur Lunch 2 -10.838278\n135 6.51 1.25 Female No Thur Lunch 2 -10.678278\n.. ... ... ... ... ... ... ... ...\n182 43.35 3.50 Male Yes Sun Dinner 3 24.593",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+          "heading_path": "Comparison with SAS > GroupBy",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#groupby"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby",
+      "score": 0.7595532598325989
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/user_defined_functions:0008",
+      "doc_id": "user_guide/user_defined_functions",
+      "title": "User-Defined Functions (UDFs)",
+      "text": "you can read more about filter in groupby operations in Filtration.\nSeries.agg() and DataFrame.agg()\nThe agg method is used to aggregate a set of data points into a single one. The most common aggregation functions such as min, max, mean, sum, etc. are already implemented in pandas. agg allows to implement other custom aggregate functions.\nIn [28]: temperature = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31],\n ....: })\n ....:\n\nIn [29]: def highest_jump(column):\n ....: return column.pct_change().max()\n ....:\n\nIn [30]: temperature.agg(highest_jump)\nOut[30]:\nNYC 0.500000\nLos Angeles 0.272727\ndtype: float64\nWhen to use: Use agg() for performing custom aggregations, where the operation returns a scalar value on each input.\nSeries.transform() and DataFrame.transform()\nThe transform method is similar to an aggregation, with the difference that the result is broadcasted to the original data.\nIn [31]: temperature = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31]},\n ....: index=pd.date_range(\"2000-01-01\", \"2000-01-03\"))\n ....:\n\nIn [32]: def warm_up_all_days(column):\n ....: return pd.Series(column.max(), index=column.index)\n ....:\n\nIn [33]: temperature.transform(warm_up_all_days)\nOut[33]:\n NYC Los Angeles\n2000-01-01 23 31\n2000-01-02 23 31\n2000-01-03 23 31\nIn the example, the warm_up_all_days function computes the max like an aggregation, but instead of returning just the maximum value, it returns a DataFrame with the same shape as the original one with the values of each day replaced by the maximum temperature of the city.\ntransform is also available for SeriesGroupBy.transform(), DataFrameGroupBy.transform() and Resampler.transform(), where it’s more common. You can read more about transform in groupby operations in Transformation.\nWhen to use: When you need to perform an aggregation that will be returned in the original structure of the DataFrame.",
+      "sources": [
+        {
+          "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+          "heading_path": "User-Defined Functions (UDFs) > Methods that support User-Defined Functions",
+          "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions"
+        }
+      ],
+      "section_ids": [
+        "user_guide/user_defined_functions#methods-that-support-user-defined-functions"
+      ],
+      "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+      "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions",
+      "score": 0.7447697747181861
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/groupby:0026",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "Carnivora 58.0 138.2 NaN\nBuilt-in transformation methods\nThe following methods on GroupBy act as transformations.\nMethod\nDescription\nbfill()\nBack fill NA values within each group\ncumcount()\nCompute the cumulative count within each group\ncummax()\nCompute the cumulative max within each group\ncummin()\nCompute the cumulative min within each group\ncumprod()\nCompute the cumulative product within each group\ncumsum()\nCompute the cumulative sum within each group\ndiff()\nCompute the difference between adjacent values within each group\nffill()\nForward fill NA values within each group\npct_change()\nCompute the percent change between adjacent values within each group\nrank()\nCompute the rank of each value within each group\nshift()\nShift values up or down within each group\nIn addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result. If the aggregation method has an efficient implementation, this will be performant as well.\nThe transform() method\nSimilar to the aggregation method, the transform() method can accept string aliases to the built-in transformation methods in the previous section. It can also accept string aliases to the built-in aggregation methods. When an aggregation method is provided, the result will be broadcast across the group.\nIn [124]: speeds\nOut[124]:\n class order max_speed\nfalcon bird Falconiformes 389.0\nparrot bird Psittaciformes 24.0\nlion mammal Carnivora 80.2\nmonkey mammal Primates NaN\nleopard mammal Carnivora 58.0\n\nIn [125]: grouped = speeds.groupby(\"class\")[[\"max_speed\"]]\n\nIn [126]: grouped.transform(\"cumsum\")\nOut[126]:\n max_speed\nfalcon 389.0\nparrot 413.0\nlion 80.2\nmonkey NaN\nleopard 138.2\n\nIn [127]: grouped.transform(\"sum\")\nOut[127]:\n max_speed\nfalcon 413.0\nparrot 413.0\nlion 138.2\nmonkey 138.2\nleopard 138.2\nIn addition to string aliases, the transform() method can also accept User-Defined Functions (UDFs). The UDF must:\nReturn a result that is either the same size as the group chunk or broadcastable to the size of the group chunk (",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#transformation",
+          "heading_path": "Group by: split-apply-combine > Transformation",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#transformation"
+      ],
+      "section_id": "user_guide/groupby#transformation",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#transformation",
+      "score": 0.7413318236114291
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 34484
+}

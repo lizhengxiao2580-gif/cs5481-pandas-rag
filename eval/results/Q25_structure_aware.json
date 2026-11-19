@@ -1,0 +1,108 @@
+{
+  "question_id": "Q25",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:19.249026+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 5446,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0005",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nNote\nWhen combining multiple conditional statements, each condition must be surrounded by parentheses (). Moreover, you can not use or/and but need to use the or operator | and the and operator &.\nSee the dedicated section in the user guide about boolean indexing or about the isin function.\nI want to work with passenger data for which the age is known.\nIn [20]: age_no_na = titanic[titanic[\"Age\"].notna()]\n\nIn [21]: age_no_na.head()\nOut[21]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n1 2 1 1 ... 71.2833 C85 C\n2 3 1 3 ... 7.9250 NaN S\n3 4 1 1 ... 53.1000 C123 S\n4 5 0 3 ... 8.0500 NaN S\n\n[5 rows x 12 columns]\nThe notna() conditional function returns a True for each row the values are not a Null value. As such, this can be combined with the selection brackets [] to filter the data table.\nYou might wonder what actually changed, as the first 5 lines are still the same values. One way to verify is to check if the shape has changed:\nIn [22]: age_no_na.shape\nOut[22]: (714, 12)\nFor more dedicated functions on missing values, see the user guide section about handling missing data.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6502946475610116
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.read_csv:0005",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "lines to skip (int) at the start of the file.\nIf callable, the callable function will be evaluated against the row indices, returning True if the row should be skipped and False otherwise. An example of a valid callable argument would be lambda x: x in [0, 2].\nskipfooterint, default 0\nNumber of lines at bottom of file to skip (Unsupported with engine='c').\nnrowsint, optional\nNumber of rows of file to read. Useful for reading pieces of large files. Refers to the number of data rows in the returned DataFrame, excluding:\nThe header row containing column names.\nRows before the header row, if header=1 or larger.\nExample usage:\nTo read the first 999,999 (non-header) rows: read_csv(..., nrows=999999)\nTo read rows 1,000,000 through 1,999,999: read_csv(..., skiprows=1000000, nrows=999999)\nna_valuesHashable, Iterable of Hashable or dict of {HashableIterable},\noptional Additional strings to recognize as NA/NaN. If dict passed, specific per-column NA values. By default the following values are interpreted as NaN: empty string, “NaN”, “N/A”, “NULL”, and other common representations of missing data.\nkeep_default_nabool, default True\nWhether or not to include the default NaN values when parsing the data. Depending on whether na_values is passed in, the behavior is as follows:\nIf keep_default_na is True, and na_values are specified, na_values is appended to the default NaN values used for parsing.\nIf keep_default_na is True, and na_values are not specified, only the default NaN values are used for parsing.\nIf keep_default_na is False, and na_values are specified, only the NaN values specified na_values are used for parsing.\nIf keep_default_na is False, and na_values are not specified, no strings will be parsed as NaN.\nNote that if na_filter is passed in as False, the keep_default_na and na_values parameters will be ignored.\nna_filterbool, default True\nDetect missing value markers (empty strings and the value of na_values). In data without any NA values, passing na_filter=False can improve the performance of reading a large file.\nskip_blank_linesbool, default True\nIf True, skip over blank lines rather than interpreting as NaN values.\nparse_datesbool, None, list of Hashable,",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.611703880864385
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0029",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": ") = self._engine.read( # type: ignore[attr-defined]\n 3062 nrows\n 3063 )\n 3064 except Exception:\n 3065 self.close()\n\nFile ~/work/pandas/pandas/pandas/io/parsers/c_parser_wrapper.py:297, in CParserWrapper.read(self, nrows)\n 295 try:\n 296 if self.low_memory:\n--> 297 chunks = self._reader.read_low_memory(nrows)\n 298 # destructive to chunks\n 299 data = _concatenate_chunks(\n 300 chunks, self._low_memory_column_labels(chunks)\n 301 )\n\nFile pandas/_libs/parsers.pyx:1041, in pandas._libs.parsers.TextReader.read_low_memory()\n-> 1041 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1182, in pandas._libs.parsers.TextReader._read_rows()\n-> 1182 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1149, in pandas._libs.parsers.TextReader._tokenize_rows()\n-> 1149 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:1170, in pandas._libs.parsers.TextReader._check_tokenize_status()\n-> 1170 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx:4400, in pandas._libs.parsers.raise_parser_error()\n-> 4400 'Could not get source, probably due dynamically evaluated source code.'\nParserError: Error tokenizing data. C error: Expected 3 fields in line 3, saw 4\nYou can elect to skip bad lines:\nIn [145]: data = \"a,b,c\\n1,2,3\\n4,5,6,7\\n8,9,10\"\n\nIn [146]: pd.read_csv(StringIO(data), on_bad_lines=\"skip\")\nOut[146]:\n a b c\n0 1 2 3\n1 8 9 10\nOr pass a callable function to handle the bad line if engine=\"python\". The bad line will be a list of strings that was split by the sep:\nIn [147]: external_list = []\n\nIn [148]: def bad_lines_func(line):\n .....: external_list.append(line)\n .....: return line[-3:]\n .....:\n\nIn [149]: external_list\nOut[149]:",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.6072301685640428
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/index:0003",
+      "doc_id": "user_guide/index",
+      "title": "User Guide",
+      "text": "Basic data structures in pandas\nObject creation\nViewing data\nSelection\nMissing data\nOperations\nMerge\nGrouping\nReshaping\nTime series\nCategoricals\nPlotting\nImporting and exporting data\nGotchas\nSeries\nDataFrame\nHead and tail\nAttributes and underlying data\nAccelerated operations\nFlexible binary operations\nDescriptive statistics\nFunction application\nReindexing and altering labels\nIteration\n.dt accessor\nVectorized string methods\nSorting\nCopying\ndtypes\nSelecting columns based on dtype\nCSV & text files\nJSON\nHTML\nLaTeX\nXML\nExcel files\nOpenDocument Spreadsheets\nBinary Excel (.xlsb) files\nCalamine (Excel and ODS files)\nClipboard\nPickling\nmsgpack\nHDF5 (PyTables)\nFeather\nParquet\nIceberg\nORC\nSQL queries\nGoogle BigQuery\nSTATA format\nSAS formats\nSPSS formats\nOther file formats\nPerformance considerations\nData Structure Integration\nOperations\nI/O Reading\nDifferent choices for indexing\nBasics\nAttribute access\nSlicing ranges\nSelection by label\nSelection by position\nSelection by callable\nCombining positional and label-based indexing\nSelecting random samples\nSetting with enlargement\nFast scalar value getting and setting\nBoolean indexing\nIndexing with isin\nThe where() Method and Masking\nSetting with enlargement conditionally using numpy()\nThe query() Method\nDuplicate data\nDictionary-like get() method\nLooking up values by index/column labels\nIndex objects\nSet / reset index\nSeries Assignment and Index Alignment\nColumn assignment vs. in-place setting\nHierarchical indexing (MultiIndex)\nAdvanced indexing with hierarchical index\nSorting a MultiIndex\nTake methods\nIndex types\nMiscellaneous indexing FAQ\nconcat()\nmerge()\nDataFrame.join()\nmerge_ordered()\nmerge_asof()\ncompare()\npivot() and pivot_table()\nstack() and unstack()\nmelt() and wide_to_long()\nget_dummies() and from_dummies()\nexplode()\ncrosstab()\ncut()\nfactorize()\nText data types\nSpecifying StringDtype explicitly\nString methods\nSplitting and replacing strings\nConcatenation\nIndexing with .str\nExtracting substrings\nTesting for strings that match or contain a pattern\nCreating indicator variables\nBehavior differences\nThe four StringDtype variants\nMethod summary\nValues considered “missing”\nNA semantics\nInserting missing data\nCalculations with missing data\nDropping missing data",
+      "sources": [
+        {
+          "section_id": "user_guide/index#guides",
+          "heading_path": "User Guide > Guides",
+          "url": "https://pandas.pydata.org/docs/user_guide/index.html#guides"
+        }
+      ],
+      "section_ids": [
+        "user_guide/index#guides"
+      ],
+      "section_id": "user_guide/index#guides",
+      "url": "https://pandas.pydata.org/docs/user_guide/index.html#guides",
+      "score": 0.5982679244952565
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0032",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "/io/parsers/c_parser_wrapper.py:162, in CParserWrapper.__init__(self, src, **kwds)\n 155 self.names = [\n 156 n\n 157 for i, n in enumerate(self.names)\n 158 if (i in usecols or n in usecols)\n 159 ]\n 161 if len(self.names) < len(usecols):\n--> 162 self._validate_usecols_names(\n 163 usecols,\n 164 self.names,\n 165 )\n 167 validate_parse_dates_presence(self.parse_dates, self.names)\n 168 self._set_noconvert_columns()\n\nFile ~/work/pandas/pandas/pandas/io/parsers/base_parser.py:674, in ParserBase._validate_usecols_names(self, usecols, names)\n 672 missing = [c for c in usecols if c not in names]\n 673 if len(missing) > 0:\n--> 674 raise ValueError(\n 675 f\"Usecols do not match columns, columns expected but not found: \"\n 676 f\"{missing}\"\n 677 )\n 679 return usecols\n\nValueError: Usecols do not match columns, columns expected but not found: [0, 1, 2]\nIn case you want to keep all data including the lines with too many fields, you can specify a sufficient number of names. This ensures that lines with not enough fields are filled with NaN.\nIn [155]: pd.read_csv(StringIO(data), names=['a', 'b', 'c', 'd'])\nOut[155]:\n a b c d\n0 name type NaN NaN\n1 name a a is of type a NaN NaN\n2 name b b is of type b\" NaN NaN\nDialect\nThe dialect keyword gives greater flexibility in specifying the file format. By default it uses the Excel dialect but you can specify either the dialect name or a csv.Dialect instance.\nSuppose you had data with unenclosed quotes:\nIn [156]: data = \"label1,label2,label3\\n\" 'index1,\"a,c,e\\n' \"index2,b,d,f\"\n\nIn [157]: print(data)\nlabel1,label2,label3\nindex1,\"a,c,e\nindex2,b,d,f\nBy default, read_csv uses the Excel dialect and treats the double quote as the quote character, which causes it to fail when it finds a newline before it finds the closing double quote.\nWe can get around this using dialect:\nIn [158]:",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.5945469989052365
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 5446
+}

@@ -1,0 +1,179 @@
+{
+  "question_id": "Q12",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:07:00.813127+00:00",
+  "answer": "With a nullable Boolean indexing mask, rows where the mask is `pd.NA` are **not selected**. pandas treats `NA` values in a boolean array as `False` [1]. For example:\n\n```python\ns[mask]  # where mask = pd.array([True, False, pd.NA], dtype=\"boolean\")\n```\n\nreturns only the row where the mask is `True` [1].\n\nTo retain those rows, fill the mask with `True` before indexing:\n\n```python\ns[mask.fillna(True)]\n```\n\nThis keeps the rows where the mask was `pd.NA` [1].\n\nAlternatively, if you are using `DataFrame.filter` with `cond=`, missing values in the mask are treated as `False` by default, but you can pass `na=True` to keep the corresponding rows [2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/boolean:0001",
+      "doc_id": "user_guide/boolean",
+      "title": "Nullable Boolean data type",
+      "text": "pandas allows indexing with NA values in a boolean array, which are treated as False.\nIn [1]: s = pd.Series([1, 2, 3])\n\nIn [2]: mask = pd.array([True, False, pd.NA], dtype=\"boolean\")\n\nIn [3]: s[mask]\nOut[3]:\n0 1\ndtype: int64\nIf you would prefer to keep the NA values you can manually fill them with fillna(True).\nIn [4]: s[mask.fillna(True)]\nOut[4]:\n0 1\n2 3\ndtype: int64\nIf you create a column of NA values (for example to fill them later) with df['new_col'] = pd.NA, the dtype would be set to object in the new column. The performance on this column will be worse than with the appropriate type. It’s better to use df['new_col'] = pd.Series(pd.NA, dtype=\"boolean\") (or another dtype that supports NA).\nIn [5]: df = pd.DataFrame()\n\nIn [6]: df['objects'] = pd.NA\n\nIn [7]: df.dtypes\nOut[7]:\nobjects object\ndtype: object\n\narrays.BooleanArray implements Kleene Logic (sometimes called three-value logic) for logical operations like & (and), | (or) and ^ (exclusive-or).\nThis table demonstrates the results for every combination. These operations are symmetrical, so flipping the left- and right-hand side makes no difference in the result.\nExpression\nResult\nTrue & True\nTrue\nTrue & False\nFalse\nTrue & NA\nNA\nFalse & False\nFalse\nFalse & NA\nFalse\nNA & NA\nNA\nTrue | True\nTrue\nTrue | False\nTrue\nTrue | NA\nTrue\nFalse | False\nFalse\nFalse | NA\nNA\nNA | NA\nNA\nTrue ^ True\nFalse\nTrue ^ False\nTrue\nTrue ^ NA\nNA\nFalse ^ False\nFalse\nFalse ^ NA\nNA\nNA ^ NA\nNA\nWhen an NA is present in an operation, the output value is NA only if the result cannot be determined solely based on the other input. For example, True | NA is True, because both True | True and True | False are True. In that case, we don’t actually need to consider the value of the NA.\nOn the other hand, True & NA is NA. The result depends",
+      "sources": [
+        {
+          "section_id": "user_guide/boolean#indexing-with-na-values",
+          "heading_path": "Nullable Boolean data type > Indexing with NA values",
+          "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#indexing-with-na-values"
+        },
+        {
+          "section_id": "user_guide/boolean#kleene-logical-operations",
+          "heading_path": "Nullable Boolean data type > Kleene logical operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#kleene-logical-operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/boolean#indexing-with-na-values",
+        "user_guide/boolean#kleene-logical-operations"
+      ],
+      "section_id": "user_guide/boolean#indexing-with-na-values",
+      "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#indexing-with-na-values",
+      "score": 0.813697920729467
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/indexing:0045",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "5\nc 3 6\ncond may also be a callable that returns a boolean mask, or an expression created with pandas.col(). These two forms may be passed positionally, which is convenient in a method chain where the intermediate object has no name:\nIn [191]: df.filter(pd.col('A') > 1)\nOut[191]:\n A B\nb 2 5\nc 3 6\n\nIn [192]: df.assign(C=pd.col('A') + pd.col('B')).filter(lambda df: df['C'] > 5)\nOut[192]:\n A B C\nb 2 5 7\nc 3 6 9\nPass axis=1 to filter columns instead of rows:\nIn [193]: df.filter(cond=df.columns.str.startswith('A'), axis=1)\nOut[193]:\n A\na 1\nb 2\nc 3\nMissing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead, or na=\"raise\" to raise an error:\nIn [194]: mask = pd.array([True, None, False], dtype=\"boolean\")\n\nIn [195]: df.filter(cond=mask)\nOut[195]:\n A B\na 1 4\n\nIn [196]: df.filter(cond=mask, na=True)\nOut[196]:\n A B\na 1 4\nb 2 5\n\nConsider the isin() method of Series, which returns a boolean vector that is true wherever the Series elements exist in the passed list. This allows you to select rows where one or more columns have values you want:\nIn [197]: s = pd.Series(np.arange(5), index=np.arange(5)[::-1], dtype='int64')\n\nIn [198]: s\nOut[198]:\n4 0\n3 1\n2 2\n1 3\n0 4\ndtype: int64\n\nIn [199]: s.isin([2, 4, 6])\nOut[199]:\n4 False\n3 False\n2 True\n1 False\n0 True\ndtype: bool\n\nIn [200]: s[s.isin([2, 4, 6])]\nOut[200]:\n2 2\n0 4\ndtype: int64\nThe same method is available for Index objects and is useful for the cases when you don",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#boolean-indexing",
+          "heading_path": "Indexing and selecting data > Boolean indexing",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing"
+        },
+        {
+          "section_id": "user_guide/indexing#indexing-with-isin",
+          "heading_path": "Indexing and selecting data > Indexing with isin",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-with-isin"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#boolean-indexing",
+        "user_guide/indexing#indexing-with-isin"
+      ],
+      "section_id": "user_guide/indexing#boolean-indexing",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing",
+      "score": 0.7960873107110327
+    }
+  ],
+  "latency_ms": 12978,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/boolean:0001",
+      "doc_id": "user_guide/boolean",
+      "title": "Nullable Boolean data type",
+      "text": "pandas allows indexing with NA values in a boolean array, which are treated as False.\nIn [1]: s = pd.Series([1, 2, 3])\n\nIn [2]: mask = pd.array([True, False, pd.NA], dtype=\"boolean\")\n\nIn [3]: s[mask]\nOut[3]:\n0 1\ndtype: int64\nIf you would prefer to keep the NA values you can manually fill them with fillna(True).\nIn [4]: s[mask.fillna(True)]\nOut[4]:\n0 1\n2 3\ndtype: int64\nIf you create a column of NA values (for example to fill them later) with df['new_col'] = pd.NA, the dtype would be set to object in the new column. The performance on this column will be worse than with the appropriate type. It’s better to use df['new_col'] = pd.Series(pd.NA, dtype=\"boolean\") (or another dtype that supports NA).\nIn [5]: df = pd.DataFrame()\n\nIn [6]: df['objects'] = pd.NA\n\nIn [7]: df.dtypes\nOut[7]:\nobjects object\ndtype: object\n\narrays.BooleanArray implements Kleene Logic (sometimes called three-value logic) for logical operations like & (and), | (or) and ^ (exclusive-or).\nThis table demonstrates the results for every combination. These operations are symmetrical, so flipping the left- and right-hand side makes no difference in the result.\nExpression\nResult\nTrue & True\nTrue\nTrue & False\nFalse\nTrue & NA\nNA\nFalse & False\nFalse\nFalse & NA\nFalse\nNA & NA\nNA\nTrue | True\nTrue\nTrue | False\nTrue\nTrue | NA\nTrue\nFalse | False\nFalse\nFalse | NA\nNA\nNA | NA\nNA\nTrue ^ True\nFalse\nTrue ^ False\nTrue\nTrue ^ NA\nNA\nFalse ^ False\nFalse\nFalse ^ NA\nNA\nNA ^ NA\nNA\nWhen an NA is present in an operation, the output value is NA only if the result cannot be determined solely based on the other input. For example, True | NA is True, because both True | True and True | False are True. In that case, we don’t actually need to consider the value of the NA.\nOn the other hand, True & NA is NA. The result depends",
+      "sources": [
+        {
+          "section_id": "user_guide/boolean#indexing-with-na-values",
+          "heading_path": "Nullable Boolean data type > Indexing with NA values",
+          "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#indexing-with-na-values"
+        },
+        {
+          "section_id": "user_guide/boolean#kleene-logical-operations",
+          "heading_path": "Nullable Boolean data type > Kleene logical operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#kleene-logical-operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/boolean#indexing-with-na-values",
+        "user_guide/boolean#kleene-logical-operations"
+      ],
+      "section_id": "user_guide/boolean#indexing-with-na-values",
+      "url": "https://pandas.pydata.org/docs/user_guide/boolean.html#indexing-with-na-values",
+      "score": 0.813697920729467
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/indexing:0045",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "5\nc 3 6\ncond may also be a callable that returns a boolean mask, or an expression created with pandas.col(). These two forms may be passed positionally, which is convenient in a method chain where the intermediate object has no name:\nIn [191]: df.filter(pd.col('A') > 1)\nOut[191]:\n A B\nb 2 5\nc 3 6\n\nIn [192]: df.assign(C=pd.col('A') + pd.col('B')).filter(lambda df: df['C'] > 5)\nOut[192]:\n A B C\nb 2 5 7\nc 3 6 9\nPass axis=1 to filter columns instead of rows:\nIn [193]: df.filter(cond=df.columns.str.startswith('A'), axis=1)\nOut[193]:\n A\na 1\nb 2\nc 3\nMissing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead, or na=\"raise\" to raise an error:\nIn [194]: mask = pd.array([True, None, False], dtype=\"boolean\")\n\nIn [195]: df.filter(cond=mask)\nOut[195]:\n A B\na 1 4\n\nIn [196]: df.filter(cond=mask, na=True)\nOut[196]:\n A B\na 1 4\nb 2 5\n\nConsider the isin() method of Series, which returns a boolean vector that is true wherever the Series elements exist in the passed list. This allows you to select rows where one or more columns have values you want:\nIn [197]: s = pd.Series(np.arange(5), index=np.arange(5)[::-1], dtype='int64')\n\nIn [198]: s\nOut[198]:\n4 0\n3 1\n2 2\n1 3\n0 4\ndtype: int64\n\nIn [199]: s.isin([2, 4, 6])\nOut[199]:\n4 False\n3 False\n2 True\n1 False\n0 True\ndtype: bool\n\nIn [200]: s[s.isin([2, 4, 6])]\nOut[200]:\n2 2\n0 4\ndtype: int64\nThe same method is available for Index objects and is useful for the cases when you don",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#boolean-indexing",
+          "heading_path": "Indexing and selecting data > Boolean indexing",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing"
+        },
+        {
+          "section_id": "user_guide/indexing#indexing-with-isin",
+          "heading_path": "Indexing and selecting data > Indexing with isin",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#indexing-with-isin"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#boolean-indexing",
+        "user_guide/indexing#indexing-with-isin"
+      ],
+      "section_id": "user_guide/indexing#boolean-indexing",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing",
+      "score": 0.7960873107110327
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/missing_data:0006",
+      "doc_id": "user_guide/missing_data",
+      "title": "Working with missing data",
+      "text": "and not cannot be used with NA: these keywords always call bool() on their operands and cannot be overridden, so they will raise the same TypeError. This manifests as an asymmetry depending on operand position, since and and or only call bool() on the left operand:\nIn [46]: True and pd.NA\nOut[46]: <NA>\n\nIn [47]: pd.NA and True\n---------------------------------------------------------------------------\nTypeError Traceback (most recent call last)\nCell In[47], line 1\n----> 1 pd.NA and True\n\nFile pandas/_libs/missing.pyx:462, in pandas._libs.missing.NAType.__bool__()\n--> 462 'Could not get source, probably due dynamically evaluated source code.'\nTypeError: boolean value of NA is ambiguous\nUse the bitwise operators &, |, and ~ instead, which dispatch to __and__, __or__, and __invert__ and follow Kleene logic as described above.\nA similar situation occurs when using Series or DataFrame objects in if statements, see Using if/truth statements with pandas.\nConverting a nullable array to NumPy keeps NA in the resulting object-dtype array, so NumPy operations that must produce a boolean result hit the same TypeError. Elementwise comparison is the common case: NumPy compares each pair of elements, gets NA back for the missing entries, and then fails when casting the result to bool dtype.\nIn [48]: arr = pd.array([\"a\", \"b\", None], dtype=\"string\")\n\nIn [49]: np.asarray(arr)\nOut[49]: array(['a', 'b', <NA>], dtype=object)\n\nIn [50]: np.asarray(arr) == np.array([\"a\", \"z\"])[:, None]\n---------------------------------------------------------------------------\nTypeError Traceback (most recent call last)\nCell In[50], line 1\n----> 1 np.asarray(arr) == np.array([\"a\", \"z\"])[:, None]\n\nFile pandas/_libs/missing.pyx:462, in pandas._libs.missing.NAType.__bool__()\n--> 462 'Could not get source, probably due dynamically evaluated source code.'\nTypeError: boolean value of NA is ambiguous\nPass an explicit na_value to to_numpy() to substitute a value NumPy can compare, such as None or np.nan:\nIn [51]: arr.to_numpy(dtype=object, na_value=None) == np.array([\"a\", \"z\"])[:, None]\nOut[51]:\narray([[ True, False,",
+      "sources": [
+        {
+          "section_id": "user_guide/missing_data#na-semantics",
+          "heading_path": "Working with missing data > NA semantics",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics"
+        }
+      ],
+      "section_ids": [
+        "user_guide/missing_data#na-semantics"
+      ],
+      "section_id": "user_guide/missing_data#na-semantics",
+      "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics",
+      "score": 0.7445942048835875
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/missing_data:0005",
+      "doc_id": "user_guide/missing_data",
+      "title": "Working with missing data",
+      "text": "]: pd.NA | True\nOut[35]: True\nOn the other hand, if one of the operands is False, the result depends on the value of the other operand. Therefore, in this case NA propagates:\nIn [36]: False | True\nOut[36]: True\n\nIn [37]: False | False\nOut[37]: False\n\nIn [38]: False | pd.NA\nOut[38]: <NA>\nThe behaviour of the logical “and” operation (&) can be derived using similar logic (where now NA will not propagate if one of the operands is already False):\nIn [39]: False & True\nOut[39]: False\n\nIn [40]: False & False\nOut[40]: False\n\nIn [41]: False & pd.NA\nOut[41]: False\nIn [42]: True & True\nOut[42]: True\n\nIn [43]: True & False\nOut[43]: False\n\nIn [44]: True & pd.NA\nOut[44]: <NA>\nNA in a boolean context\nSince the actual value of an NA is unknown, it is ambiguous to convert NA to a boolean value.\nIn [45]: bool(pd.NA)\n---------------------------------------------------------------------------\nTypeError Traceback (most recent call last)\nCell In[45], line 1\n----> 1 bool(pd.NA)\n\nFile pandas/_libs/missing.pyx:462, in pandas._libs.missing.NAType.__bool__()\n--> 462 'Could not get source, probably due dynamically evaluated source code.'\nTypeError: boolean value of NA is ambiguous\nThis also means that NA cannot be used in a context where it is evaluated to a boolean, such as if condition: ... where condition can potentially be NA. In such cases, isna() can be used to check for NA or condition being NA can be avoided, for example by filling missing values beforehand.\nFor the same reason, the Python keywords and, or, and not cannot be used with NA: these keywords always call bool() on their operands and cannot be overridden, so they will raise the same TypeError. This manifests as an asymmetry depending on operand position, since and and or only call bool() on the left operand:\nIn [46]: True and pd.NA\nOut[46]: <NA>\n\nIn [47]: pd.NA and True\n---------------------------------------------------------------------------\nTypeError Traceback (most recent call last)\nCell In[47], line 1",
+      "sources": [
+        {
+          "section_id": "user_guide/missing_data#na-semantics",
+          "heading_path": "Working with missing data > NA semantics",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics"
+        }
+      ],
+      "section_ids": [
+        "user_guide/missing_data#na-semantics"
+      ],
+      "section_id": "user_guide/missing_data#na-semantics",
+      "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics",
+      "score": 0.7374851531758317
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/missing_data:0007",
+      "doc_id": "user_guide/missing_data",
+      "title": "Working with missing data",
+      "text": ", in pandas._libs.missing.NAType.__bool__()\n--> 462 'Could not get source, probably due dynamically evaluated source code.'\nTypeError: boolean value of NA is ambiguous\nPass an explicit na_value to to_numpy() to substitute a value NumPy can compare, such as None or np.nan:\nIn [51]: arr.to_numpy(dtype=object, na_value=None) == np.array([\"a\", \"z\"])[:, None]\nOut[51]:\narray([[ True, False, False],\n [False, False, False]])\nNumPy ufuncs\npandas.NA implements NumPy’s __array_ufunc__ protocol. Most ufuncs work with NA, and generally return NA:\nIn [52]: np.log(pd.NA)\nOut[52]: <NA>\n\nIn [53]: np.add(pd.NA, 1)\nOut[53]: <NA>\nWarning\nCurrently, ufuncs involving an ndarray and NA will return an object-dtype filled with NA values.\nIn [54]: a = np.array([1, 2, 3])\n\nIn [55]: np.greater(a, pd.NA)\nOut[55]: array([<NA>, <NA>, <NA>], dtype=object)\nThe return type here may change to return a different array type in the future.\nSee DataFrame interoperability with NumPy functions for more on ufuncs.\nConversion\nIf you have a DataFrame or Series using np.nan, DataFrame.convert_dtypes() and Series.convert_dtypes(), respectively, will convert your data to use the nullable data types supporting NA, such as Int64Dtype or ArrowDtype. This is especially helpful after reading in data sets from IO methods where data types were inferred.\nIn [56]: import io\n\nIn [57]: data = io.StringIO(\"a,b\\n,True\\n2,\")\n\nIn [58]: df = pd.read_csv(data)\n\nIn [59]: df.dtypes\nOut[59]:\na float64\nb object\ndtype: object\n\nIn [60]: df_conv = df.convert_dtypes()\n\nIn [61]: df_conv\nOut[61]:\n a b\n0 <NA> True\n1 2 <NA>\n\nIn [62]: df_conv.dtypes\nOut[62]:\na Int64\nb boolean\ndtype: object\n\nYou can insert missing values by simply assigning to a Series or DataFrame. The missing value sentinel used will be chosen based on the dtype.\nIn [63",
+      "sources": [
+        {
+          "section_id": "user_guide/missing_data#na-semantics",
+          "heading_path": "Working with missing data > NA semantics",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics"
+        },
+        {
+          "section_id": "user_guide/missing_data#inserting-missing-data",
+          "heading_path": "Working with missing data > Inserting missing data",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#inserting-missing-data"
+        }
+      ],
+      "section_ids": [
+        "user_guide/missing_data#na-semantics",
+        "user_guide/missing_data#inserting-missing-data"
+      ],
+      "section_id": "user_guide/missing_data#na-semantics",
+      "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#na-semantics",
+      "score": 0.7264148979092483
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 12978
+}

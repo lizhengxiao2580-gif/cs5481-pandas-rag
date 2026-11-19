@@ -1,0 +1,155 @@
+{
+  "question_id": "Q02",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:03:44.452974+00:00",
+  "answer": "To write a DataFrame to CSV without the row index, pass `index=False` to `DataFrame.to_csv` [1].\n\n```python\ndf.to_csv(\"out.csv\", index=False)\n```\n\nThis creates a CSV file without row indices [2]. The `index` parameter defaults to `True`, which is why row names are written unless you disable it [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.to_csv:0001",
+      "doc_id": "reference/api/pandas.DataFrame.to_csv",
+      "title": "pandas.DataFrame.to_csv",
+      "text": "pandas.DataFrame.to_csv\nDataFrame.to_csv(path_or_buf=None, *, sep=',', na_rep='', float_format=None, columns=None, header=True, index=True, index_label=None, mode='w', encoding=None, compression='infer', quoting=None, quotechar='\"', lineterminator=None, chunksize=None, date_format=None, doublequote=True, escapechar=None, decimal='.', errors='strict', storage_options=None)[source]\nWrite object to a comma-separated values (csv) file.\nBy default, the resulting file includes row index and column headers. Supports customization of delimiter, encoding, compression, and more. The output can be written to a file path, file-like buffer, or returned as a string.\nParameters:\npath_or_bufstr, path object, file-like object, or None, default None\nString, path object (implementing os.PathLike[str]), or file-like object implementing a write() function. If None, the result is returned as a string. If a non-binary file object is passed, it should be opened with newline=’’, disabling universal newlines. If a binary file object is passed, mode might need to contain a ‘b’.\nsepstr, default ‘,’\nString of length 1. Field delimiter for the output file.\nna_repstr, default ‘’\nMissing data representation.\nfloat_formatstr, Callable, default None\nFormat string for floating point numbers. If a Callable is given, it takes precedence over other numeric formatting parameters, like decimal.\ncolumnssequence, optional\nColumns to write.\nheaderbool or list of str, default True\nWrite out the column names. If a list of strings is given it is assumed to be aliases for the column names.\nindexbool, default True\nWrite row names (index).\nindex_labelstr or sequence, or False, default None\nColumn label for index column(s) if desired. If None is given, and header and index are True, then the index names are used. A sequence should be given if the object uses MultiIndex. If False do not print fields for index names. Use index_label=False for easier importing in R.\nmode{‘w’, ‘x’, ‘a’}, default ‘w’\nForwarded to either open(mode=) or fsspec.open(mode=) to control the file opening. Typical values include:\n‘w’, truncate the file first.\n‘x’, exclusive creation, failing if the file already exists.\n‘",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+          "heading_path": "pandas.DataFrame.to_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.to_csv#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html",
+      "score": 0.7931948781067792
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.to_csv:0004",
+      "doc_id": "reference/api/pandas.DataFrame.to_csv",
+      "title": "pandas.DataFrame.to_csv",
+      "text": "also\nread_csv\nLoad a CSV file into a DataFrame.\nto_excel\nWrite DataFrame to an Excel file.\nExamples\nCreate ‘out.csv’ containing ‘df’ without indices\n>>> df = pd.DataFrame(\n... [[\"Raphael\", \"red\", \"sai\"], [\"Donatello\", \"purple\", \"bo staff\"]],\n... columns=[\"name\", \"mask\", \"weapon\"],\n... )\n>>> df.to_csv(\"out.csv\", index=False)\nCreate ‘out.zip’ containing ‘out.csv’\n>>> df.to_csv(index=False)\n'name,mask,weapon\\nRaphael,red,sai\\nDonatello,purple,bo staff\\n'\n>>> compression_opts = dict(\n... method=\"zip\", archive_name=\"out.csv\"\n... )\n>>> df.to_csv(\n... \"out.zip\", index=False, compression=compression_opts\n... )\nTo write a csv file to a new folder or nested folder you will first need to create it using either Pathlib or os:\n>>> from pathlib import Path\n>>> filepath = Path(\"folder/subfolder/out.csv\")\n>>> filepath.parent.mkdir(parents=True, exist_ok=True)\n>>> df.to_csv(filepath)\n>>> import os\n>>> os.makedirs(\"folder/subfolder\", exist_ok=True)\n>>> df.to_csv(\"folder/subfolder/out.csv\")\nFormat floats to two decimal places:\n>>> df.to_csv(\"out1.csv\", float_format=\"%.2f\")\nFormat floats using scientific notation:\n>>> df.to_csv(\"out2.csv\", float_format=\"{:.2e}\".format)",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+          "heading_path": "pandas.DataFrame.to_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.to_csv#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html",
+      "score": 0.7371414627356059
+    }
+  ],
+  "latency_ms": 11082,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.to_csv:0001",
+      "doc_id": "reference/api/pandas.DataFrame.to_csv",
+      "title": "pandas.DataFrame.to_csv",
+      "text": "pandas.DataFrame.to_csv\nDataFrame.to_csv(path_or_buf=None, *, sep=',', na_rep='', float_format=None, columns=None, header=True, index=True, index_label=None, mode='w', encoding=None, compression='infer', quoting=None, quotechar='\"', lineterminator=None, chunksize=None, date_format=None, doublequote=True, escapechar=None, decimal='.', errors='strict', storage_options=None)[source]\nWrite object to a comma-separated values (csv) file.\nBy default, the resulting file includes row index and column headers. Supports customization of delimiter, encoding, compression, and more. The output can be written to a file path, file-like buffer, or returned as a string.\nParameters:\npath_or_bufstr, path object, file-like object, or None, default None\nString, path object (implementing os.PathLike[str]), or file-like object implementing a write() function. If None, the result is returned as a string. If a non-binary file object is passed, it should be opened with newline=’’, disabling universal newlines. If a binary file object is passed, mode might need to contain a ‘b’.\nsepstr, default ‘,’\nString of length 1. Field delimiter for the output file.\nna_repstr, default ‘’\nMissing data representation.\nfloat_formatstr, Callable, default None\nFormat string for floating point numbers. If a Callable is given, it takes precedence over other numeric formatting parameters, like decimal.\ncolumnssequence, optional\nColumns to write.\nheaderbool or list of str, default True\nWrite out the column names. If a list of strings is given it is assumed to be aliases for the column names.\nindexbool, default True\nWrite row names (index).\nindex_labelstr or sequence, or False, default None\nColumn label for index column(s) if desired. If None is given, and header and index are True, then the index names are used. A sequence should be given if the object uses MultiIndex. If False do not print fields for index names. Use index_label=False for easier importing in R.\nmode{‘w’, ‘x’, ‘a’}, default ‘w’\nForwarded to either open(mode=) or fsspec.open(mode=) to control the file opening. Typical values include:\n‘w’, truncate the file first.\n‘x’, exclusive creation, failing if the file already exists.\n‘",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+          "heading_path": "pandas.DataFrame.to_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.to_csv#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html",
+      "score": 0.7931948781067792
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.to_csv:0004",
+      "doc_id": "reference/api/pandas.DataFrame.to_csv",
+      "title": "pandas.DataFrame.to_csv",
+      "text": "also\nread_csv\nLoad a CSV file into a DataFrame.\nto_excel\nWrite DataFrame to an Excel file.\nExamples\nCreate ‘out.csv’ containing ‘df’ without indices\n>>> df = pd.DataFrame(\n... [[\"Raphael\", \"red\", \"sai\"], [\"Donatello\", \"purple\", \"bo staff\"]],\n... columns=[\"name\", \"mask\", \"weapon\"],\n... )\n>>> df.to_csv(\"out.csv\", index=False)\nCreate ‘out.zip’ containing ‘out.csv’\n>>> df.to_csv(index=False)\n'name,mask,weapon\\nRaphael,red,sai\\nDonatello,purple,bo staff\\n'\n>>> compression_opts = dict(\n... method=\"zip\", archive_name=\"out.csv\"\n... )\n>>> df.to_csv(\n... \"out.zip\", index=False, compression=compression_opts\n... )\nTo write a csv file to a new folder or nested folder you will first need to create it using either Pathlib or os:\n>>> from pathlib import Path\n>>> filepath = Path(\"folder/subfolder/out.csv\")\n>>> filepath.parent.mkdir(parents=True, exist_ok=True)\n>>> df.to_csv(filepath)\n>>> import os\n>>> os.makedirs(\"folder/subfolder\", exist_ok=True)\n>>> df.to_csv(\"folder/subfolder/out.csv\")\nFormat floats to two decimal places:\n>>> df.to_csv(\"out1.csv\", float_format=\"%.2f\")\nFormat floats using scientific notation:\n>>> df.to_csv(\"out2.csv\", float_format=\"{:.2e}\".format)",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+          "heading_path": "pandas.DataFrame.to_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.to_csv#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.to_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html",
+      "score": 0.7371414627356059
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0047",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "index are True, then the index names are used. (A sequence should be given if the DataFrame uses MultiIndex).\nmode : Python write mode, default ‘w’\nencoding: a string representing the encoding to use if the contents are non-ASCII, for Python versions prior to 3\nlineterminator: Character sequence denoting line end (default os.linesep)\nquoting: Set quoting rules as in csv module (default csv.QUOTE_MINIMAL). Note that if you have set a float_format then floats are converted to strings and csv.QUOTE_NONNUMERIC will treat them as non-numeric\nquotechar: Character used to quote fields (default ‘”’)\ndoublequote: Control quoting of quotechar in fields (default True)\nescapechar: Character used to escape sep and quotechar when appropriate (default None)\nchunksize: Number of rows to write at a time\ndate_format: Format string for datetime objects\nWriting a formatted string\nThe DataFrame object has an instance method to_string which allows control over the string representation of the object. All arguments are optional:\nbuf default None, for example a StringIO object\ncolumns default None, which columns to write\ncol_space default None, minimum width of each column.\nna_rep default NaN, representation of NA value\nformatters default None, a dictionary (by column) of functions each of which takes a single argument and returns a formatted string\nfloat_format default None, a function which takes a single (float) argument and returns a formatted string; to be applied to floats in the DataFrame.\nsparsify default True, set to False for a DataFrame with a hierarchical index to print every MultiIndex key at each row.\nindex_names default True, will print the names of the indices\nindex default True, will print the index (ie, row labels)\nheader default True, will print the column labels\njustify default left, will print column headers left- or right-justified\nThe Series object also has a to_string method, but with only the buf, na_rep, float_format arguments. There is also a length argument which, if set to True, will additionally output the length of the Series.\n\nRead and write JSON format files and strings.\nWriting JSON\nA Series or DataFrame can be converted to a valid JSON string. Use to_json with optional parameters:\npath_or_buf : the pathname or buffer to write the output. This can be None in which case a JSON string is returned.\norient :",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        },
+        {
+          "section_id": "user_guide/io#json",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > JSON",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#json"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files",
+        "user_guide/io#json"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.6876205936875941
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0154",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": ".dtypes\nOut[602]:\na str\nb int64\ndtype: object\nHandling indexes\nSerializing a DataFrame to parquet may include the implicit index as one or more columns in the output file. For example, this code:\nIn [603]: df = pd.DataFrame({\"a\": [1, 2], \"b\": [3, 4]}, index=[1, 2])\n\nIn [604]: df.to_parquet(\"test.parquet\")\ncreates a parquet file with three columns (a, b, and __index_level_0__ when using the pyarrow engine, or index, a, and b when using the fastparquet engine) because the index in this case is not a default range index. In general, the index may or may not be written to the file (see the preserve_index keyword for pyarrow or the write_index keyword for fastparquet to check the default behaviour).\nThis unexpected extra column causes some databases like Amazon Redshift to reject the file, because that column doesn’t exist in the target table.\nIf you want to omit a dataframe’s indexes when writing, pass index=False to to_parquet():\nIn [605]: df.to_parquet(\"test.parquet\", index=False)\nThis creates a parquet file with just the two expected columns, a and b. If your DataFrame has a custom index, you won’t get it back when you load this file into a DataFrame.\nPassing index=True will always write the index, even if that’s not the underlying engine’s default behavior.\nPartitioning Parquet files\nParquet supports partitioning of data based on the values of one or more columns.\nIn [606]: df = pd.DataFrame({\"a\": [0, 0, 1, 1], \"b\": [0, 1, 0, 1]})\n\nIn [607]: df.to_parquet(path=\"test\", partition_cols=[\"a\"], compression=None)\nThe path specifies the parent directory to which data will be saved. The partition_cols are the column names by which the dataset will be partitioned. Columns are partitioned in the order they are given. The partition splits are determined by the unique values in the partition columns. The above example creates a partitioned dataset that may look like:\ntest\n├── a=0\n│ ├── 0bac803e32dc42ae83fddfd029cbdebc.parquet\n│ └── ...\n└",
+      "sources": [
+        {
+          "section_id": "user_guide/io#parquet",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > Parquet",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#parquet"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#parquet"
+      ],
+      "section_id": "user_guide/io#parquet",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#parquet",
+      "score": 0.6800604658741326
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.to_excel:0001",
+      "doc_id": "reference/api/pandas.DataFrame.to_excel",
+      "title": "pandas.DataFrame.to_excel",
+      "text": "pandas.DataFrame.to_excel\nDataFrame.to_excel(excel_writer, *, sheet_name='Sheet1', na_rep='', float_format=None, columns=None, header=True, index=True, index_label=None, startrow=0, startcol=0, engine=None, merge_cells=True, inf_rep='inf', freeze_panes=None, storage_options=None, engine_kwargs=None, autofilter=False)[source]\nWrite object to an Excel sheet.\nTo write a single object to an Excel .xlsx file it is only necessary to specify a target file name. To write to multiple sheets it is necessary to create an ExcelWriter object with a target file name, and specify a sheet in the file to write to.\nMultiple sheets may be written to by specifying unique sheet_name. With all data written to the file it is necessary to save the changes. Note that creating an ExcelWriter object with a file name that already exists will overwrite the existing file because the default mode is write.\nParameters:\nexcel_writerpath-like, file-like, or ExcelWriter object\nFile path or existing ExcelWriter.\nsheet_namestr, default ‘Sheet1’\nName of sheet which will contain DataFrame.\nna_repstr, default ‘’\nMissing data representation.\nfloat_formatstr, optional\nFormat string for floating point numbers. For example float_format=\"%.2f\" will format 0.1234 to 0.12.\ncolumnssequence or list of str, optional\nColumns to write.\nheaderbool or list of str, default True\nWrite out the column names. If a list of string is given it is assumed to be aliases for the column names.\nindexbool, default True\nWrite row names (index).\nindex_labelstr or sequence, optional\nColumn label for index column(s) if desired. If not specified, and header and index are True, then the index names are used. A sequence should be given if the DataFrame uses MultiIndex.\nstartrowint, default 0\nUpper left cell row to dump data frame.\nstartcolint, default 0\nUpper left cell column to dump data frame.\nenginestr, optional\nWrite engine to use, ‘openpyxl’ or ‘xlsxwriter’. You can also set this via the options io.excel.xlsx.writer or io.excel.xlsm.writer.\nmerge_cellsbool or ‘columns’, default True\nIf True, write MultiIndex index and columns as merged cells. If ‘columns’, merge MultiIndex column cells only.\ninf",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.to_excel#page",
+          "heading_path": "pandas.DataFrame.to_excel",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_excel.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.to_excel#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.to_excel#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_excel.html",
+      "score": 0.6738908467377142
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 11082
+}

@@ -1,0 +1,169 @@
+{
+  "question_id": "Q16",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:08:16.097040+00:00",
+  "answer": "No. `low_memory=True` is the default value and does not by itself make `read_csv` return an iterator of chunks; the signature shows `low_memory=True` with `iterator=False` and `chunksize=None` [1]. To process 1000 rows at a time, use `chunksize=1000`. Passing `chunksize` makes `read_csv` return an iterable `TextFileReader`, which can be used as a context manager and iterated in chunks [2][3]. Alternatively, `iterator=True` also returns a `TextFileReader`, whose `get_chunk(n)` method can retrieve chunks [2].\n\n```python\nwith pd.read_csv(\"file.csv\", chunksize=1000) as reader:\n    for chunk in reader:\n        ...\n```",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:reference/api/pandas.read_csv:0001",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "pandas.read_csv\npandas.read_csv(filepath_or_buffer, *, sep=<no_default>, delimiter=<no_default>, header='infer', names=<no_default>, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, skip_blank_lines=True, parse_dates=None, date_format=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal='.', lineterminator=None, quotechar='\"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors='strict', dialect=None, on_bad_lines='error', low_memory=True, memory_map=False, float_precision=None, storage_options=None, dtype_backend=<no_default>)[source]\nRead a comma-separated values (csv) file into DataFrame.\nAlso supports optionally iterating or breaking of the file into chunks.\nAdditional help can be found in the online docs for IO Tools.\nParameters:\nfilepath_or_bufferstr, path object or file-like object\nAny valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.\nCertain URL schemes may require additional packages. For example, S3 URLs require the s3fs library. See Optional dependencies for a full list.\nIf you want to pass in a path object, pandas accepts any os.PathLike.\nBy file-like object, we refer to objects with a read() method that accepts an optional size argument, such as a file handle (e.g. via builtin open function) or StringIO.\nsepstr, default ‘,’\nCharacter or regex pattern to treat as the delimiter. sep=None detects the separator from the first valid row of the file with Python’s builtin sniffer tool, csv.Sniffer; it is supported only by the Python parsing engine, which will be used automatically. In addition, separators longer than 1 character and different from '\\s+' will be interpreted as regular expressions and will force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: '\\r\\t'.\ndelimiterstr, optional\nAlias for sep.\nheaderint",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.7059532050749604
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:user_guide/io:0042",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "372 0.974466 -2.006747\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nBy specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:\nIn [213]: with pd.read_csv(\"tmp.csv\", chunksize=4) as reader:\n .....: print(reader)\n .....: for chunk in reader:\n .....: print(chunk)\n .....:\n<pandas.io.parsers.readers.TextFileReader object at 0x7fa21127ae10>\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.206412 2.565646\n3 1.431256 1.340309 -1.170299 -0.226169\n 0 1 2 3\n4 0.410835 0.813850 0.132003 -0.827317\n5 -0.076467 -1.187678 1.130127 -1.436737\n6 -1.413681 1.607920 1.024180 0.569605\n7 0.875906 -2.211372 0.974466 -2.006747\n 0 1 2 3\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nSpecifying iterator=True will also return the TextFileReader object:\nIn [214]: with pd.read_csv(\"tmp.csv\", iterator=True) as reader:\n .....: print(reader.get_chunk(5))\n .....:\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7992459676327612
+    },
+    {
+      "n": 3,
+      "chunk_id": "structure_aware:user_guide/io:0041",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "673690 0.113648 -1.478427 0.524988\n6 0.404705 0.577046 -1.715002 -1.039268\n7 -0.370647 -1.157892 -1.344312 0.844885\n8 1.075770 -0.109050 1.643563 -1.469388\n9 0.357021 -0.674600 -1.776904 -0.968914\nReading multiple files to create a single DataFrame\nIt’s best to use concat() to combine multiple files. See the cookbook for an example.\nIterating through files chunk by chunk\nSuppose you wish to iterate through a (potentially very large) file lazily rather than reading the entire file into memory, such as the following:\nIn [209]: df = pd.DataFrame(np.random.randn(10, 4))\n\nIn [210]: df.to_csv(\"tmp.csv\", index=False)\n\nIn [211]: table = pd.read_csv(\"tmp.csv\")\n\nIn [212]: table\nOut[212]:\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.206412 2.565646\n3 1.431256 1.340309 -1.170299 -0.226169\n4 0.410835 0.813850 0.132003 -0.827317\n5 -0.076467 -1.187678 1.130127 -1.436737\n6 -1.413681 1.607920 1.024180 0.569605\n7 0.875906 -2.211372 0.974466 -2.006747\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nBy specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:\nIn [213]: with pd.read_csv(\"tmp.csv\", chunksize=4",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7524045375157411
+    }
+  ],
+  "latency_ms": 27433,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:user_guide/io:0042",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "372 0.974466 -2.006747\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nBy specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:\nIn [213]: with pd.read_csv(\"tmp.csv\", chunksize=4) as reader:\n .....: print(reader)\n .....: for chunk in reader:\n .....: print(chunk)\n .....:\n<pandas.io.parsers.readers.TextFileReader object at 0x7fa21127ae10>\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.206412 2.565646\n3 1.431256 1.340309 -1.170299 -0.226169\n 0 1 2 3\n4 0.410835 0.813850 0.132003 -0.827317\n5 -0.076467 -1.187678 1.130127 -1.436737\n6 -1.413681 1.607920 1.024180 0.569605\n7 0.875906 -2.211372 0.974466 -2.006747\n 0 1 2 3\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nSpecifying iterator=True will also return the TextFileReader object:\nIn [214]: with pd.read_csv(\"tmp.csv\", iterator=True) as reader:\n .....: print(reader.get_chunk(5))\n .....:\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7992459676327612
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/cookbook:0039",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "Performance comparison of SQL vs HDF5\nCSV\nThe CSV docs\nread_csv in action\nappending to a csv\nReading a csv chunk-by-chunk\nReading only rows matching a condition, chunk-by-chunk, so that only chunksize rows of the file are read at a time rather than the whole file GH 32072\nIn [219]: from io import StringIO\n\nIn [220]: data = \"col_1,col_2\\n940,45\\n1040,52\\n1530,46\\n753,43\\n890,32\\n\"\n\nIn [221]: pd.concat(\n .....: (chunk.query(\"col_1 >= 1000\") for chunk in pd.read_csv(StringIO(data), chunksize=2)),\n .....: ignore_index=True,\n .....: )\n .....:\nOut[221]:\n col_1 col_2\n0 1040 52\n1 1530 46\nReading the first few lines of a frame\nReading a file that is compressed but not by gzip/bz2 (the native compressed formats which read_csv understands). This example shows a WinZipped file, but is a general application of opening the file within a context manager and using that handle to read. See here\nInferring dtypes from a file\nDealing with bad lines GH 2886\nFields containing the read_csv comment character are truncated when read back unless they are quoted; write with quoting=csv.QUOTE_NONNUMERIC to quote all strings. Note that only the default C engine honors the quoting when reading; engine=\"python\" strips the comment regardless GH 27637\nIn [222]: import csv\n\nIn [223]: from io import StringIO\n\nIn [224]: df = pd.DataFrame({\"strings\": [\"a#b\", \"plain\"], \"value\": [1, 2]})\n\nIn [225]: out = df.to_csv(index=False, quoting=csv.QUOTE_NONNUMERIC)\n\nIn [226]: print(out)\n\"strings\",\"value\"\n\"a#b\",1\n\"plain\",2\n\nIn [227]: pd.read_csv(StringIO(out), comment=\"#\")\nOut[227]:\n strings value\n0 a#b 1\n1 plain 2\nWrite a multi-row index CSV without writing duplicates\nReading multiple files to create a single DataFrame\nThe best way to combine multiple files into a single DataFrame is to read the individual frames one by one, put all of the individual frames into a list, and then",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#data-in-out",
+          "heading_path": "Cookbook > Data in/out",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#data-in-out"
+      ],
+      "section_id": "user_guide/cookbook#data-in-out",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out",
+      "score": 0.7566101893395668
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0041",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "673690 0.113648 -1.478427 0.524988\n6 0.404705 0.577046 -1.715002 -1.039268\n7 -0.370647 -1.157892 -1.344312 0.844885\n8 1.075770 -0.109050 1.643563 -1.469388\n9 0.357021 -0.674600 -1.776904 -0.968914\nReading multiple files to create a single DataFrame\nIt’s best to use concat() to combine multiple files. See the cookbook for an example.\nIterating through files chunk by chunk\nSuppose you wish to iterate through a (potentially very large) file lazily rather than reading the entire file into memory, such as the following:\nIn [209]: df = pd.DataFrame(np.random.randn(10, 4))\n\nIn [210]: df.to_csv(\"tmp.csv\", index=False)\n\nIn [211]: table = pd.read_csv(\"tmp.csv\")\n\nIn [212]: table\nOut[212]:\n 0 1 2 3\n0 -1.294524 0.413738 0.276662 -0.472035\n1 -0.013960 -0.362543 -0.006154 -0.923061\n2 0.895717 0.805244 -1.206412 2.565646\n3 1.431256 1.340309 -1.170299 -0.226169\n4 0.410835 0.813850 0.132003 -0.827317\n5 -0.076467 -1.187678 1.130127 -1.436737\n6 -1.413681 1.607920 1.024180 0.569605\n7 0.875906 -2.211372 0.974466 -2.006747\n8 -0.410001 -0.078638 0.545952 -1.219217\n9 -1.226825 0.769804 -1.281247 -0.727707\nBy specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:\nIn [213]: with pd.read_csv(\"tmp.csv\", chunksize=4",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.7524045375157411
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0141",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "print(df)\n .....:\n A B C\n2000-01-01 0.858644 -0.851236 1.058006\n2000-01-02 -0.080372 -1.268121 1.561967\n2000-01-03 0.816983 1.965656 -1.169408\n A B C\n2000-01-04 0.712795 -0.062433 0.736755\n2000-01-05 -0.298721 -1.988045 1.475308\n2000-01-06 1.103675 1.382242 -0.650762\n A B C\n2000-01-07 -0.729161 -0.142928 -1.063038\n2000-01-08 -1.005977 0.465222 -0.094517\nNote\nYou can also use the iterator with read_hdf which will open, then automatically close the store when finished iterating.\nfor df in pd.read_hdf(\"store.h5\", \"df\", chunksize=3):\n print(df)\nNote, that the chunksize keyword applies to the source rows. So if you are doing a query, then the chunksize will subdivide the total rows in the table and the query applied, returning an iterator on potentially unequal sized chunks.\nHere is a recipe for generating a query and using it to create equal sized return chunks.\nIn [537]: dfeq = pd.DataFrame({\"number\": np.arange(1, 11)})\n\nIn [538]: dfeq\nOut[538]:\n number\n0 1\n1 2\n2 3\n3 4\n4 5\n5 6\n6 7\n7 8\n8 9\n9 10\n\nIn [539]: store.append(\"dfeq\", dfeq, data_columns=[\"number\"])\n\nIn [540]: def chunks(l, n):\n .....: return [l[i: i + n] for i in range(0, len(l), n)]\n .....:\n\nIn [541]: evens = [2, 4, 6, 8, 10]\n\nIn [542]: coordinates = store.select_as_coordinates(\"dfeq\", \"number=evens\")\n\nIn [543]: for c in chunks(coordinates, 2):\n .....: print(store.select(\"",
+      "sources": [
+        {
+          "section_id": "user_guide/io#hdf5-pytables",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > HDF5 (PyTables)",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#hdf5-pytables"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#hdf5-pytables"
+      ],
+      "section_id": "user_guide/io#hdf5-pytables",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#hdf5-pytables",
+      "score": 0.7425775163431076
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.read_csv:0001",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "pandas.read_csv\npandas.read_csv(filepath_or_buffer, *, sep=<no_default>, delimiter=<no_default>, header='infer', names=<no_default>, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, skip_blank_lines=True, parse_dates=None, date_format=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal='.', lineterminator=None, quotechar='\"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors='strict', dialect=None, on_bad_lines='error', low_memory=True, memory_map=False, float_precision=None, storage_options=None, dtype_backend=<no_default>)[source]\nRead a comma-separated values (csv) file into DataFrame.\nAlso supports optionally iterating or breaking of the file into chunks.\nAdditional help can be found in the online docs for IO Tools.\nParameters:\nfilepath_or_bufferstr, path object or file-like object\nAny valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.\nCertain URL schemes may require additional packages. For example, S3 URLs require the s3fs library. See Optional dependencies for a full list.\nIf you want to pass in a path object, pandas accepts any os.PathLike.\nBy file-like object, we refer to objects with a read() method that accepts an optional size argument, such as a file handle (e.g. via builtin open function) or StringIO.\nsepstr, default ‘,’\nCharacter or regex pattern to treat as the delimiter. sep=None detects the separator from the first valid row of the file with Python’s builtin sniffer tool, csv.Sniffer; it is supported only by the Python parsing engine, which will be used automatically. In addition, separators longer than 1 character and different from '\\s+' will be interpreted as regular expressions and will force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: '\\r\\t'.\ndelimiterstr, optional\nAlias for sep.\nheaderint",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.7059532050749604
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 27433
+}

@@ -1,0 +1,108 @@
+{
+  "question_id": "Q28",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:12:29.421202+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 7433,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/io:0028",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "/io/parsers/readers.py:1866, in read_csv(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, skip_blank_lines, parse_dates, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, low_memory, memory_map, float_precision, storage_options, dtype_backend)\n 1853 kwds_defaults = _refine_defaults_read(\n 1854 dialect,\n 1855 delimiter,\n (...) 1862 lineterminator=lineterminator,\n 1863 )\n 1864 kwds.update(kwds_defaults)\n-> 1866 return _read(filepath_or_buffer, kwds)\n\nFile ~/work/pandas/pandas/pandas/io/parsers/readers.py:429, in _read(filepath_or_buffer, kwds)\n 426 return parser\n 428 with parser:\n--> 429 return parser.read(nrows)\n\nFile ~/work/pandas/pandas/pandas/io/parsers/readers.py:3061, in TextFileReader.read(self, nrows)\n 3054 nrows = validate_integer(\"nrows\", nrows)\n 3055 try:\n 3056 # error: \"ParserBase\" has no attribute \"read\"\n 3057 (\n 3058 index,\n 3059 columns,\n 3060 col_dict,\n-> 3061 ) = self._engine.read( # type: ignore[attr-defined]\n 3062 nrows\n 3063 )\n 3064 except Exception:\n 3065 self.close()\n\nFile ~/work/pandas/pandas/pandas/io/parsers/c_parser_wrapper.py:297, in CParserWrapper.read(self, nrows)\n 295 try:\n 296 if self.low_memory:\n--> 297 chunks = self._reader.read_low_memory(nrows)\n 298 # destructive to chunks\n 299 data = _concatenate_chunks(\n 300 chunks, self._low_memory_column_labels(chunks)\n 301 )\n\nFile pandas/_libs/parsers.pyx:1041, in pandas._libs.parsers.TextReader.read_low_memory()\n-> 1041 'Could not get source, probably due dynamically evaluated source code.'\nFile pandas/_libs/parsers.pyx",
+      "sources": [
+        {
+          "section_id": "user_guide/io#csv-text-files",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > CSV & text files",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#csv-text-files"
+      ],
+      "section_id": "user_guide/io#csv-text-files",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files",
+      "score": 0.606165511418115
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.read_csv:0001",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "pandas.read_csv\npandas.read_csv(filepath_or_buffer, *, sep=<no_default>, delimiter=<no_default>, header='infer', names=<no_default>, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, skip_blank_lines=True, parse_dates=None, date_format=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal='.', lineterminator=None, quotechar='\"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors='strict', dialect=None, on_bad_lines='error', low_memory=True, memory_map=False, float_precision=None, storage_options=None, dtype_backend=<no_default>)[source]\nRead a comma-separated values (csv) file into DataFrame.\nAlso supports optionally iterating or breaking of the file into chunks.\nAdditional help can be found in the online docs for IO Tools.\nParameters:\nfilepath_or_bufferstr, path object or file-like object\nAny valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.\nCertain URL schemes may require additional packages. For example, S3 URLs require the s3fs library. See Optional dependencies for a full list.\nIf you want to pass in a path object, pandas accepts any os.PathLike.\nBy file-like object, we refer to objects with a read() method that accepts an optional size argument, such as a file handle (e.g. via builtin open function) or StringIO.\nsepstr, default ‘,’\nCharacter or regex pattern to treat as the delimiter. sep=None detects the separator from the first valid row of the file with Python’s builtin sniffer tool, csv.Sniffer; it is supported only by the Python parsing engine, which will be used automatically. In addition, separators longer than 1 character and different from '\\s+' will be interpreted as regular expressions and will force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: '\\r\\t'.\ndelimiterstr, optional\nAlias for sep.\nheaderint",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.6048031297048589
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sas:0020",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "=(total_bill=tbill));\n * xport variable names limited to 6 characters;\nrun;\ndf = pd.read_sas(\"transport-file.xpt\")\ndf = pd.read_sas(\"binary-file.sas7bdat\")\nYou can also specify the file format directly. By default, pandas will try to infer the file format based on its extension.\ndf = pd.read_sas(\"transport-file.xpt\", format=\"xport\")\ndf = pd.read_sas(\"binary-file.sas7bdat\", format=\"sas7bdat\")\nXPORT is a relatively limited format and the parsing of it is not as optimized as some of the other pandas readers. An alternative way to interop data between SAS and pandas is to serialize to csv.\n# version 0.17, 10M rows\n\nIn [8]: %time df = pd.read_sas('big.xpt')\nWall time: 14.6 s\n\nIn [9]: %time df = pd.read_csv('big.csv')\nWall time: 4.86 s",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#other-considerations",
+          "heading_path": "Comparison with SAS > Other considerations",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#other-considerations"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#other-considerations"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#other-considerations",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#other-considerations",
+      "score": 0.6033135703510102
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0179",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "(in bytes).\n29519500 Oct 10 06:45 test.csv\n16000248 Oct 10 06:45 test.feather\n8281983 Oct 10 06:49 test.parquet\n16000857 Oct 10 06:47 test.pkl\n7552144 Oct 10 06:48 test.pkl.compress\n34816000 Oct 10 06:42 test.sql\n24009288 Oct 10 06:43 test_fixed.hdf\n24009288 Oct 10 06:43 test_fixed_compress.hdf\n24458940 Oct 10 06:44 test_table.hdf\n24458940 Oct 10 06:44 test_table_compress.hdf",
+      "sources": [
+        {
+          "section_id": "user_guide/io#performance-considerations",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > Performance considerations",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#performance-considerations"
+      ],
+      "section_id": "user_guide/io#performance-considerations",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations",
+      "score": 0.6002170229140242
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0178",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "mean ± std. dev. of 7 runs, 1 loop each)\n\nIn [15]: %timeit test_hdf_fixed_read()\n19.4 ms ± 436 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)\n\nIn [16]: %timeit test_hdf_fixed_read_compress()\n19.5 ms ± 222 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)\n\nIn [17]: %timeit test_hdf_table_read()\n38.6 ms ± 857 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)\n\nIn [18]: %timeit test_hdf_table_read_compress()\n38.8 ms ± 1.49 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)\n\nIn [19]: %timeit test_csv_read()\n452 ms ± 9.04 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)\n\nIn [20]: %timeit test_feather_read()\n12.4 ms ± 99.7 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)\n\nIn [21]: %timeit test_pickle_read()\n18.4 ms ± 191 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)\n\nIn [22]: %timeit test_pickle_read_compress()\n915 ms ± 7.48 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)\n\nIn [23]: %timeit test_parquet_read()\n24.4 ms ± 146 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)\nThe files test.pkl.compress, test.parquet and test.feather took the least space on disk (in bytes).\n29519500 Oct 10 06:45 test.csv\n16000248 Oct 10 06:45 test.feather\n8281983 Oct 10 06:49 test.parquet\n16000857 Oct 10 06:47 test.pkl\n7552144 Oct 10 06:48 test.pkl.compress\n34816000 Oct 10 06:42 test.sql\n24009288 Oct 10 06:43 test_fixed.hdf",
+      "sources": [
+        {
+          "section_id": "user_guide/io#performance-considerations",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > Performance considerations",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#performance-considerations"
+      ],
+      "section_id": "user_guide/io#performance-considerations",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations",
+      "score": 0.5972958494650094
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 7433
+}

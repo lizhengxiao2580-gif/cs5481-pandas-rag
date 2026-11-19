@@ -1,0 +1,15 @@
+{
+  "pandas_version": "3.1.1",
+  "Q14_nan_key_mapping": {
+    "code": "pd.Series([np.nan]).map({np.nan: 7}).tolist()",
+    "observed": [
+      7
+    ],
+    "meaning": "A plain dictionary can contain a missing-value key; existing missing values do not universally stay NaN."
+  },
+  "Q18_invalid_iloc_label": {
+    "code": "pd.Series([1], index=['a']).iloc['a']",
+    "observed_exception": "TypeError",
+    "meaning": "The cited user-guide sentence says IndexError, while the installed version raises TypeError for this scalar string label."
+  }
+}

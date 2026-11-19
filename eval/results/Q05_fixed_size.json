@@ -1,0 +1,169 @@
+{
+  "question_id": "Q05",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:04:52.756230+00:00",
+  "answer": "Use `DataFrame.fillna` with a dictionary mapping column names to fill values [1][2]. The `value` parameter accepts a dict specifying which value to use for each column, and values not in the dict are not filled, so other columns remain unchanged [2].\n\n```python\ndf = df.fillna(value={\"A\": 0, \"B\": \"unknown\"})\n```\n\nOr modify in place:\n\n```python\ndf.fillna(value={\"A\": 0, \"B\": \"unknown\"}, inplace=True)\n```\n\nThis assumes column B can accept the string `\"unknown\"` [2][3].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0003",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "along the same column names and same indices\n>>> df2 = pd.DataFrame(np.zeros((4, 4)), columns=list(\"ABCE\"))\n>>> df.fillna(df2)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 NaN\n3 0.0 3.0 0.0 4.0\nNote that column D is not affected since it is not present in df2.",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.7686848093374876
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0001",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "pandas.DataFrame.fillna\nDataFrame.fillna(value, *, axis=None, inplace=False, limit=None)[source]\nFill NA/NaN values with value.\nThis method replaces missing values with a specified value.\nParameters:\nvaluescalar, dict, Series, or DataFrame\nValue to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled. This value cannot be a list.\naxis{0 or ‘index’} for Series, {0 or ‘index’, 1 or ‘columns’} for DataFrame\nAxis along which to fill missing values. For Series this parameter is unused and defaults to 0.\ninplacebool, default False\nIf True, fill in-place. Note: this will modify any other views on this object (e.g., a no-copy slice for a column in a DataFrame).\nlimitint, default None\nThis is the maximum number of entries along the entire axis where NaNs will be filled. Must be greater than 0 if not None.\nReturns:\nSeries/DataFrame\nObject with missing values filled.\nSee also\nffill\nFill values by propagating the last valid observation to next valid.\nbfill\nFill values by using the next valid observation to fill the gap.\ninterpolate\nFill NaN values using interpolation.\nreindex\nConform object to new index.\nasfreq\nConvert TimeSeries to specified frequency.\nNotes\nFor non-object dtype, value=None will use the NA value of the dtype. See more details in the Filling missing data section.\nExamples\n>>> df = pd.DataFrame(\n... [\n... [np.nan, 2, np.nan, 0],\n... [3, 4, np.nan, 1],\n... [np.nan, np.nan, np.nan, np.nan],\n... [np.nan, 3, np.nan, 4],\n... ],\n... columns=list(\"ABCD\"),\n... )\n>>> df\n A B C D\n0 NaN 2.0 NaN 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN NaN NaN NaN\n3 NaN 3.0 NaN 4.0\nReplace all NaN elements with 0s.\n>>> df.fillna(0)\n A B C D\n0 0.0 2",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.7406016762085028
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0002",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "3, np.nan, 4],\n... ],\n... columns=list(\"ABCD\"),\n... )\n>>> df\n A B C D\n0 NaN 2.0 NaN 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN NaN NaN NaN\n3 NaN 3.0 NaN 4.0\nReplace all NaN elements with 0s.\n>>> df.fillna(0)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 0.0\n3 0.0 3.0 0.0 4.0\nReplace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.\n>>> values = {\"A\": 0, \"B\": 1, \"C\": 2, \"D\": 3}\n>>> df.fillna(value=values)\n A B C D\n0 0.0 2.0 2.0 0.0\n1 3.0 4.0 2.0 1.0\n2 0.0 1.0 2.0 3.0\n3 0.0 3.0 2.0 4.0\nOnly replace the first NaN element.\n>>> df.fillna(value=values, limit=1)\n A B C D\n0 0.0 2.0 2.0 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN 1.0 NaN 3.0\n3 NaN 3.0 NaN 4.0\nWhen filling using a DataFrame, replacement happens along the same column names and same indices\n>>> df2 = pd.DataFrame(np.zeros((4, 4)), columns=list(\"ABCE\"))\n>>> df.fillna(df2)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 NaN\n3 0.0 3.",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.6937398629465609
+    }
+  ],
+  "latency_ms": 18110,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0003",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "along the same column names and same indices\n>>> df2 = pd.DataFrame(np.zeros((4, 4)), columns=list(\"ABCE\"))\n>>> df.fillna(df2)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 NaN\n3 0.0 3.0 0.0 4.0\nNote that column D is not affected since it is not present in df2.",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.7686848093374876
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0001",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "pandas.DataFrame.fillna\nDataFrame.fillna(value, *, axis=None, inplace=False, limit=None)[source]\nFill NA/NaN values with value.\nThis method replaces missing values with a specified value.\nParameters:\nvaluescalar, dict, Series, or DataFrame\nValue to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled. This value cannot be a list.\naxis{0 or ‘index’} for Series, {0 or ‘index’, 1 or ‘columns’} for DataFrame\nAxis along which to fill missing values. For Series this parameter is unused and defaults to 0.\ninplacebool, default False\nIf True, fill in-place. Note: this will modify any other views on this object (e.g., a no-copy slice for a column in a DataFrame).\nlimitint, default None\nThis is the maximum number of entries along the entire axis where NaNs will be filled. Must be greater than 0 if not None.\nReturns:\nSeries/DataFrame\nObject with missing values filled.\nSee also\nffill\nFill values by propagating the last valid observation to next valid.\nbfill\nFill values by using the next valid observation to fill the gap.\ninterpolate\nFill NaN values using interpolation.\nreindex\nConform object to new index.\nasfreq\nConvert TimeSeries to specified frequency.\nNotes\nFor non-object dtype, value=None will use the NA value of the dtype. See more details in the Filling missing data section.\nExamples\n>>> df = pd.DataFrame(\n... [\n... [np.nan, 2, np.nan, 0],\n... [3, 4, np.nan, 1],\n... [np.nan, np.nan, np.nan, np.nan],\n... [np.nan, 3, np.nan, 4],\n... ],\n... columns=list(\"ABCD\"),\n... )\n>>> df\n A B C D\n0 NaN 2.0 NaN 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN NaN NaN NaN\n3 NaN 3.0 NaN 4.0\nReplace all NaN elements with 0s.\n>>> df.fillna(0)\n A B C D\n0 0.0 2",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.7406016762085028
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.fillna:0002",
+      "doc_id": "reference/api/pandas.DataFrame.fillna",
+      "title": "pandas.DataFrame.fillna",
+      "text": "3, np.nan, 4],\n... ],\n... columns=list(\"ABCD\"),\n... )\n>>> df\n A B C D\n0 NaN 2.0 NaN 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN NaN NaN NaN\n3 NaN 3.0 NaN 4.0\nReplace all NaN elements with 0s.\n>>> df.fillna(0)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 0.0\n3 0.0 3.0 0.0 4.0\nReplace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.\n>>> values = {\"A\": 0, \"B\": 1, \"C\": 2, \"D\": 3}\n>>> df.fillna(value=values)\n A B C D\n0 0.0 2.0 2.0 0.0\n1 3.0 4.0 2.0 1.0\n2 0.0 1.0 2.0 3.0\n3 0.0 3.0 2.0 4.0\nOnly replace the first NaN element.\n>>> df.fillna(value=values, limit=1)\n A B C D\n0 0.0 2.0 2.0 0.0\n1 3.0 4.0 NaN 1.0\n2 NaN 1.0 NaN 3.0\n3 NaN 3.0 NaN 4.0\nWhen filling using a DataFrame, replacement happens along the same column names and same indices\n>>> df2 = pd.DataFrame(np.zeros((4, 4)), columns=list(\"ABCE\"))\n>>> df.fillna(df2)\n A B C D\n0 0.0 2.0 0.0 0.0\n1 3.0 4.0 0.0 1.0\n2 0.0 0.0 0.0 NaN\n3 0.0 3.",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.fillna#page",
+          "heading_path": "pandas.DataFrame.fillna",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.fillna#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.fillna#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.fillna.html",
+      "score": 0.6937398629465609
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/missing_data:0012",
+      "doc_id": "user_guide/missing_data",
+      "title": "Working with missing data",
+      "text": "will all be replaced with the proper NA value for the dtype.\nIn [109]: data = {\"np\": [1.0, np.nan, np.nan, 2], \"arrow\": pd.array([1.0, pd.NA, pd.NA, 2], dtype=\"float64[pyarrow]\")}\n\nIn [110]: df = pd.DataFrame(data)\n\nIn [111]: df\nOut[111]:\n np arrow\n0 1.0 1.0\n1 NaN <NA>\n2 NaN <NA>\n3 2.0 2.0\n\nIn [112]: df.fillna(None)\nOut[112]:\n np arrow\n0 1.0 1.0\n1 NaN <NA>\n2 NaN <NA>\n3 2.0 2.0\n\nIn [113]: df.fillna(np.nan)\nOut[113]:\n np arrow\n0 1.0 1.0\n1 NaN <NA>\n2 NaN <NA>\n3 2.0 2.0\n\nIn [114]: df.fillna(pd.NA)\nOut[114]:\n np arrow\n0 1.0 1.0\n1 NaN <NA>\n2 NaN <NA>\n3 2.0 2.0\nFill gaps forward or backward\nIn [115]: df.ffill()\nOut[115]:\n np arrow\n0 1.0 1.0\n1 1.0 1.0\n2 1.0 1.0\n3 2.0 2.0\n\nIn [116]: df.bfill()\nOut[116]:\n np arrow\n0 1.0 1.0\n1 2.0 2.0\n2 2.0 2.0\n3 2.0 2.0\nLimit the number of NA values filled\nIn [117]: df.ffill(limit=1)\nOut[117]:\n np arrow\n0 1.0 1.0\n1 1.0 1.0\n2 NaN <NA>\n3 2.0 2.0\nNA values can be replaced with corresponding value from a Series or DataFrame where the index and column aligns between the original object and the filled object.\nIn [118]: dff = pd.DataFrame(np.arange(30, dtype=np.float64).reshape(10, 3), columns=list(\"ABC\"))\n\nIn [119",
+      "sources": [
+        {
+          "section_id": "user_guide/missing_data#filling-missing-data",
+          "heading_path": "Working with missing data > Filling missing data",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#filling-missing-data"
+        }
+      ],
+      "section_ids": [
+        "user_guide/missing_data#filling-missing-data"
+      ],
+      "section_id": "user_guide/missing_data#filling-missing-data",
+      "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#filling-missing-data",
+      "score": 0.669912195509382
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/basics:0009",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "1\n4 1\n5 1\n6 1\n7 1\n8 1\n9 1\ndtype: int64\n\nIn [41]: rem\nOut[41]:\n0 0\n1 1\n2 2\n3 0\n4 0\n5 1\n6 1\n7 2\n8 2\n9 3\ndtype: int64\nMissing data / operations with fill values\nIn Series and DataFrame, the arithmetic functions have the option of inputting a fill_value, namely a value to substitute when at most one of the values at a location are missing. For example, when adding two DataFrame objects, you may wish to treat NaN as 0 unless both DataFrames are missing that value, in which case the result will be NaN (you can later replace NaN with some other value using fillna if you wish).\nIn [42]: df2 = df.copy()\n\nIn [43]: df2.loc[\"a\", \"three\"] = 1.0\n\nIn [44]: df\nOut[44]:\n one two three\na 1.394981 1.772517 NaN\nb 0.343054 1.912123 -0.050390\nc 0.695246 1.478369 1.227435\nd NaN 0.279344 -0.613172\n\nIn [45]: df2\nOut[45]:\n one two three\na 1.394981 1.772517 1.000000\nb 0.343054 1.912123 -0.050390\nc 0.695246 1.478369 1.227435\nd NaN 0.279344 -0.613172\n\nIn [46]: df + df2\nOut[46]:\n one two three\na 2.789963 3.545034 NaN\nb 0.686107 3.824246 -0.100780\nc 1.390491 2.956737 2.454870\nd NaN 0.558688 -1.226343\n\nIn [47]: df.add(df2, fill_value=0)\nOut[47]:\n one two three\na 2.789963 3.545034 1.000000\nb 0.686107 3.824246 -0.100780\nc 1",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#flexible-binary-operations",
+          "heading_path": "Essential basic functionality > Flexible binary operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#flexible-binary-operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#flexible-binary-operations"
+      ],
+      "section_id": "user_guide/basics#flexible-binary-operations",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#flexible-binary-operations",
+      "score": 0.6694959600195782
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 18111
+}

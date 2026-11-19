@@ -1,0 +1,92 @@
+{
+  "question_id": "Q09",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Indexes, including time indexes are ignored.",
+          "reason": "Directly supports required point 2 that index labels are ignored."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Duplicates in the index are not considered.",
+          "reason": "Supports required point 2 that index labels are not compared."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "df2.drop_duplicates('a', keep=False)",
+          "reason": "Shows keep=False usage, supporting required point 1."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "If you want to remove all occurrences of duplicated labels, you can use keep=False",
+          "reason": "Supports the concept of removing all duplicates, relevant to required point 1."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "keep=False: mark / drop all duplicates.",
+          "reason": "Directly supports required point 1."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses subset='id' with keep=False and states index labels are ignored. All claims are supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Indexes, including time indexes are ignored.",
+          "reason": "Directly supports required point 2."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Duplicates in the index are not considered.",
+          "reason": "Supports required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "df2.drop_duplicates('a', keep=False)",
+          "reason": "Shows keep=False usage, supporting required point 1."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "If you want to remove all occurrences of duplicated labels, you can use keep=False",
+          "reason": "Supports required point 1."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "df3[~df3.index.duplicated(keep=False)]",
+          "reason": "Shows keep=False for index duplicates, relevant to required point 1."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses subset=['id'] with keep=False and states index labels are ignored. All claims are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

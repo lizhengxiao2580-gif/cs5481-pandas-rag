@@ -1,0 +1,409 @@
+﻿question_id,strategy,rank,chunk_id,relevant,quote,reason
+Q01,fixed_size,1,fixed_size:user_guide/io:0015,True,"The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",Directly supports selecting columns by name with usecols.
+Q01,fixed_size,2,fixed_size:getting_started/intro_tutorials/03_subset_data:0001,False,,"Passage is about selecting columns from a DataFrame, not reading CSV with usecols."
+Q01,fixed_size,3,fixed_size:reference/api/pandas.read_csv:0001,False,,"Only function signature and general parameters, no specific usecols explanation."
+Q01,fixed_size,4,fixed_size:user_guide/cookbook:0039,False,,Unrelated CSV parsing examples.
+Q01,fixed_size,5,fixed_size:getting_started/intro_tutorials/01_table_oriented:0001,False,,"Introductory DataFrame creation, not relevant."
+Q01,structure_aware,1,structure_aware:user_guide/io:0015,False,,"Passage discusses header behavior and duplicate names, not usecols."
+Q01,structure_aware,2,structure_aware:user_guide/io:0016,True,"The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",Directly supports selecting columns by name with usecols.
+Q01,structure_aware,3,structure_aware:user_guide/io:0003,True,"usecolslist-like or callable, default None
+Return a subset of the columns. If list-like, all elements must either be positional (i.e. integer indices into the document columns) or strings that correspond to column names provided either by the user in names or inferred from the document header row(s).",Explains usecols accepts column names.
+Q01,structure_aware,4,structure_aware:reference/api/pandas.read_csv:0001,False,,"Only function signature and general parameters, no specific usecols explanation."
+Q01,structure_aware,5,structure_aware:getting_started/intro_tutorials/03_subset_data:0001,False,,"Title only, no substantive content."
+Q02,fixed_size,1,fixed_size:reference/api/pandas.DataFrame.to_csv:0001,True,"indexbool, default True
+Write row names (index).","Directly documents the index parameter and its default, supporting the required point."
+Q02,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.to_csv:0004,True,"Create ‘out.csv’ containing ‘df’ without indices
+>>> df = pd.DataFrame(
+... [[""Raphael"", ""red"", ""sai""], [""Donatello"", ""purple"", ""bo staff""]],
+... columns=[""name"", ""mask"", ""weapon""],
+... )
+>>> df.to_csv(""out.csv"", index=False)",Provides an example of using index=False to omit row indices.
+Q02,fixed_size,3,fixed_size:user_guide/io:0047,False,,"Text discusses to_string and JSON writing, not CSV index control."
+Q02,fixed_size,4,fixed_size:user_guide/io:0154,False,,"Text is about Parquet serialization, not CSV."
+Q02,fixed_size,5,fixed_size:reference/api/pandas.DataFrame.to_excel:0001,False,,"Text is about Excel writing, not CSV."
+Q02,structure_aware,1,structure_aware:reference/api/pandas.DataFrame.to_csv:0001,True,"indexbool, default True
+Write row names (index).","Directly documents the index parameter and its default, supporting the required point."
+Q02,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.to_csv:0004,True,"Create ‘out.csv’ containing ‘df’ without indices
+>>> df = pd.DataFrame(
+... [[""Raphael"", ""red"", ""sai""], [""Donatello"", ""purple"", ""bo staff""]],
+... columns=[""name"", ""mask"", ""weapon""],
+... )
+>>> df.to_csv(""out.csv"", index=False)",Provides an example of using index=False to omit row indices.
+Q02,structure_aware,3,structure_aware:reference/api/pandas.DataFrame.to_excel:0001,False,,"Text is about Excel writing, not CSV."
+Q02,structure_aware,4,structure_aware:user_guide/io:0047,True,index: whether to write row (index) names (default True),Contains a concise description of the index parameter relevant to the required point.
+Q02,structure_aware,5,structure_aware:user_guide/10min:0032,False,,Text shows CSV writing without index=False and does not explain how to omit the index.
+Q03,fixed_size,1,fixed_size:user_guide/indexing:0045,True,"Consider the isin() method of Series, which returns a boolean vector that is true wherever the Series elements exist in the passed list.","Directly explains isin returning a boolean mask for filtering, supporting the required point."
+Q03,fixed_size,2,fixed_size:getting_started/intro_tutorials/03_subset_data:0003,True,"Similar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list.","Shows isin used to filter rows and explains its boolean output, supporting the required point."
+Q03,fixed_size,3,fixed_size:user_guide/10min:0011,True,Using isin() method for filtering:,"Indicates isin is used for filtering, though the excerpt is brief; still relevant to the required point."
+Q03,fixed_size,4,fixed_size:user_guide/io:0126,False,,"Passage discusses HDFStore query syntax, not relevant to isin filtering."
+Q03,fixed_size,5,fixed_size:user_guide/indexing:0048,True,row_mask = df.isin(values).all(axis=1),"Shows DataFrame.isin used to create a boolean mask for row selection, supporting the required point."
+Q03,structure_aware,1,structure_aware:getting_started/intro_tutorials/03_subset_data:0001,False,,Passage only contains a heading 'How do I select a subset of a DataFrame?' with no substantive evidence about isin or filtering.
+Q03,structure_aware,2,structure_aware:getting_started/intro_tutorials/03_subset_data:0003,True,"In [16]: class_23 = titanic[titanic[""Pclass""].isin([2, 3])]","Shows isin used inside selection brackets to filter rows, supporting the required point."
+Q03,structure_aware,3,structure_aware:getting_started/intro_tutorials/03_subset_data:0004,True,"Similar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list.","Explains isin returns a boolean mask and can be used to filter rows, supporting the required point."
+Q03,structure_aware,4,structure_aware:user_guide/indexing:0046,True,Using a boolean vector to index a Series works exactly as in a NumPy ndarray:,"Describes boolean vector indexing, which is the mechanism for filtering with isin's mask."
+Q03,structure_aware,5,structure_aware:user_guide/io:0131,False,,"Passage discusses HDFStore query syntax, not relevant to isin filtering."
+Q04,fixed_size,1,fixed_size:reference/api/pandas.DataFrame.dropna:0002,True,"Define in which columns to look for missing values.
+>>> df.dropna(subset=[""name"", ""toy""])","Passage contains an example using subset to restrict missing-value checks, supporting required point 1."
+Q04,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.dropna:0001,True,"how{‘any’, ‘all’}, default ‘any’
+Determine if row or column is removed from DataFrame, when we have at least one NA or all NA.
+‘any’ : If any NA values are present, drop that row or column.","Passage documents how='any' default behavior, supporting required point 2."
+Q04,fixed_size,3,fixed_size:getting_started/intro_tutorials/03_subset_data:0004,False,,"Passage discusses notna() and boolean indexing, not dropna with subset."
+Q04,fixed_size,4,fixed_size:user_guide/indexing:0045,False,,"Passage discusses DataFrame.filter, unrelated to dropna."
+Q04,fixed_size,5,fixed_size:user_guide/10min:0015,True,DataFrame.dropna() drops any rows that have missing data:,The how='any' example supports the second required point even without illustrating subset; one supported required point is sufficient for relevance.
+Q04,structure_aware,1,structure_aware:reference/api/pandas.DataFrame.dropna:0002,True,"Define in which columns to look for missing values.
+>>> df.dropna(subset=[""name"", ""toy""])","Passage contains an example using subset to restrict missing-value checks, supporting required point 1."
+Q04,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.dropna:0001,True,"how{‘any’, ‘all’}, default ‘any’
+Determine if row or column is removed from DataFrame, when we have at least one NA or all NA.
+‘any’ : If any NA values are present, drop that row or column.","Passage documents how='any' default behavior, supporting required point 2."
+Q04,structure_aware,3,structure_aware:user_guide/missing_data:0012,False,,Passage only shows basic dropna usage without subset or how='any' explanation relevant to the required points.
+Q04,structure_aware,4,structure_aware:getting_started/intro_tutorials/03_subset_data:0005,False,,"Passage discusses notna() and boolean indexing, not dropna with subset."
+Q04,structure_aware,5,structure_aware:user_guide/indexing:0049,False,,"Passage discusses DataFrame.filter, unrelated to dropna."
+Q05,fixed_size,1,fixed_size:reference/api/pandas.DataFrame.fillna:0003,False,,"Passage discusses filling with a DataFrame and notes column D is not affected, but does not mention per-column dictionary filling or that unspecified columns remain unfilled."
+Q05,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.fillna:0001,True,"Value to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled.",Directly supports both required points: per-column dictionary and unspecified columns not filled.
+Q05,fixed_size,3,fixed_size:reference/api/pandas.DataFrame.fillna:0002,True,"Replace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.
+>>> values = {""A"": 0, ""B"": 1, ""C"": 2, ""D"": 3}
+>>> df.fillna(value=values)","Provides an example of using a dict to fill specific columns, supporting the first required point."
+Q05,fixed_size,4,fixed_size:user_guide/missing_data:0012,False,,"Passage discusses filling with None, np.nan, pd.NA, and ffill/bfill, not per-column dictionary filling."
+Q05,fixed_size,5,fixed_size:user_guide/basics:0009,False,,"Passage discusses arithmetic fill_value and missing data operations, not per-column dictionary filling."
+Q05,structure_aware,1,structure_aware:reference/api/pandas.DataFrame.fillna:0003,False,,"Passage discusses filling with a DataFrame and notes column D is not affected, but does not mention per-column dictionary filling or that unspecified columns remain unfilled."
+Q05,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.fillna:0001,True,"Value to use to fill holes (e.g. 0), alternately a dict/Series/DataFrame of values specifying which value to use for each index (for a Series) or column (for a DataFrame). Values not in the dict/Series/DataFrame will not be filled.",Directly supports both required points: per-column dictionary and unspecified columns not filled.
+Q05,structure_aware,3,structure_aware:user_guide/missing_data:0013,True,"Replace NA with column-specific values using a dict
+In [103]: df.fillna({""np"": 0, ""arrow"": 1})","Shows an example of using a dict for column-specific filling, supporting the first required point."
+Q05,structure_aware,4,structure_aware:getting_started/comparison/comparison_with_stata:0019,False,,"Passage discusses dropna, ffill, and filling with mean, not per-column dictionary filling."
+Q05,structure_aware,5,structure_aware:reference/api/pandas.DataFrame.fillna:0002,True,"Replace all NaN elements in column ‘A’, ‘B’, ‘C’, and ‘D’, with 0, 1, 2, and 3 respectively.
+>>> values = {""A"": 0, ""B"": 1, ""C"": 2, ""D"": 3}
+>>> df.fillna(value=values)","Provides an example of using a dict to fill specific columns, supporting the first required point."
+Q06,fixed_size,1,fixed_size:user_guide/groupby:0050,True,"df.groupby([""Store"", ""Product""]).pipe(mean)","Shows grouping by multiple columns and computing mean for each combination, supporting the required point."
+Q06,fixed_size,2,fixed_size:getting_started/comparison/comparison_with_sql:0008,True,Grouping by more than one column is done by passing a list of columns to the groupby() method.,Directly supports grouping by multiple columns using a list.
+Q06,fixed_size,3,fixed_size:user_guide/cookbook:0024,False,,"Passage discusses pivot_table with sum and margins, not mean for multiple column combinations."
+Q06,fixed_size,4,fixed_size:getting_started/comparison/comparison_with_sas:0018,False,,"Passage shows groupby with sum and transformation, not mean for multiple columns."
+Q06,fixed_size,5,fixed_size:reference/api/pandas.DataFrame.pivot_table:0004,True,">>> table = pd.pivot_table(
+... df,
+... values=[""D"", ""E""],
+... index=[""A"", ""C""],
+... aggfunc={""D"": ""mean"", ""E"": [""min"", ""max"", ""mean""]},
+... )","Shows pivot_table with multiple index columns and mean aggregation, supporting an alternative method."
+Q06,structure_aware,1,structure_aware:getting_started/intro_tutorials/09_timeseries:0004,False,,"Passage discusses grouping by datetime hour and computing mean, but does not mention grouping by multiple columns or selecting a specific column for mean."
+Q06,structure_aware,2,structure_aware:getting_started/comparison/comparison_with_sql:0010,True,Grouping by more than one column is done by passing a list of columns to the groupby() method.,Directly supports the required point of grouping by both columns using a list.
+Q06,structure_aware,3,structure_aware:user_guide/io:0054,False,,Passage contains unrelated JSON data and no evidence about grouping or mean calculation.
+Q06,structure_aware,4,structure_aware:reference/api/pandas.DataFrame.pivot_table:0004,True,">>> table = pd.pivot_table(
+... df,
+... values=[""D"", ""E""],
+... index=[""A"", ""C""],
+... aggfunc={""D"": ""mean"", ""E"": [""min"", ""max"", ""mean""]},
+... )","Shows pivot_table with multiple index columns and mean aggregation, supporting an alternative method for combination means."
+Q06,structure_aware,5,structure_aware:getting_started/comparison/comparison_with_sas:0020,False,,"Passage shows groupby with multiple columns and sum, not mean, and does not directly support the required mean calculation."
+Q07,fixed_size,1,fixed_size:reference/api/pandas.melt:0001,True,"id_varsscalar, tuple, list, or ndarray, optional Column(s) to use as identifier variables.","Contains API documentation for id_vars parameter, supporting required point 1."
+Q07,fixed_size,2,fixed_size:getting_started/intro_tutorials/07_reshape_table_layout:0005,True,"value_vars=[""BETR801"", ""FR04014"", ""London Westminster""]","Contains an example of value_vars parameter, supporting required point 2."
+Q07,fixed_size,3,fixed_size:user_guide/reshaping:0013,True,"cheese.melt(id_vars=[""first"", ""last""])","The full example preserves first/last identifier columns; it supports id_vars, not just the optional output-column renaming described in the initial judge quote."
+Q07,fixed_size,4,fixed_size:user_guide/io:0053,False,,Passage contains unrelated JSON data and does not provide evidence for the required points.
+Q07,fixed_size,5,fixed_size:user_guide/reshaping:0001,False,,Passage is a general overview of reshaping methods and does not specifically support id_vars or value_vars for Jan/Feb.
+Q07,structure_aware,1,structure_aware:getting_started/intro_tutorials/07_reshape_table_layout:0005,True,The method will melt all columns NOT mentioned in id_vars together into two columns:,The full passage uses id_vars to retain date.utc and shows it in the long-format output. Identifier names need not literally be id; this supports the first required point.
+Q07,structure_aware,2,structure_aware:reference/api/pandas.melt:0001,True,"id_varsscalar, tuple, list, or ndarray, optional Column(s) to use as identifier variables.","Contains API documentation for id_vars parameter, supporting required point 1."
+Q07,structure_aware,3,structure_aware:user_guide/reshaping:0016,False,,"Passage is about wide_to_long, not melt, and does not mention id_vars or value_vars for Jan/Feb."
+Q07,structure_aware,4,structure_aware:user_guide/reshaping:0002,False,,"Passage is about pivot, not melt, and does not contain evidence for the required points."
+Q07,structure_aware,5,structure_aware:getting_started/intro_tutorials/07_reshape_table_layout:0006,True,value_vars defines which columns to melt together,"Contains explanation of value_vars parameter, supporting required point 2."
+Q08,fixed_size,1,fixed_size:user_guide/basics:0076,True,Convert certain columns to a specific dtype by passing a dict to astype().,Directly supports the required point of passing a mapping to astype.
+Q08,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.astype:0001,True,"Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types.",Explicitly documents the mapping parameter for column-specific casting.
+Q08,fixed_size,3,fixed_size:user_guide/basics:0080,False,,"Discusses apply and to_numeric, not the astype mapping."
+Q08,fixed_size,4,fixed_size:user_guide/basics:0074,False,,"Discusses default dtypes and upcasting, not the mapping to astype."
+Q08,fixed_size,5,fixed_size:user_guide/basics:0082,False,,"Discusses select_dtypes and other topics, not the astype mapping."
+Q08,structure_aware,1,structure_aware:user_guide/basics:0081,True,Convert certain columns to a specific dtype by passing a dict to astype().,Directly supports the required point of passing a mapping to astype.
+Q08,structure_aware,2,structure_aware:user_guide/basics:0080,True,Convert a subset of columns to a specified type using astype().,"Shows astype usage for subset columns, supporting the mapping approach."
+Q08,structure_aware,3,structure_aware:reference/api/pandas.DataFrame.astype:0001,True,"Alternatively, use a mapping, e.g. {col: dtype, …}, where col is a column label and dtype is a numpy.dtype or Python type to cast one or more of the DataFrame’s columns to column-specific types.",Explicitly documents the mapping parameter for column-specific casting.
+Q08,structure_aware,4,structure_aware:user_guide/basics:0078,False,,"Discusses default dtypes and upcasting, not the mapping to astype."
+Q08,structure_aware,5,structure_aware:user_guide/basics:0084,False,,"Covers to_numeric and apply, not the astype mapping."
+Q09,fixed_size,1,fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0001,True,"Indexes, including time indexes are ignored.",Directly supports required point 2.
+Q09,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.drop_duplicates:0002,True,Duplicates in the index are not considered.,Supports required point 2.
+Q09,fixed_size,3,fixed_size:user_guide/indexing:0067,True,"df2.drop_duplicates('a', keep=False)","Shows keep=False usage, supporting required point 1."
+Q09,fixed_size,4,fixed_size:user_guide/duplicates:0004,True,"If you want to remove all occurrences of duplicated labels, you can use keep=False",Supports required point 1.
+Q09,fixed_size,5,fixed_size:user_guide/indexing:0068,True,df3[~df3.index.duplicated(keep=False)],"Shows keep=False for index duplicates, relevant to required point 1."
+Q09,structure_aware,1,structure_aware:reference/api/pandas.DataFrame.drop_duplicates:0001,True,"Indexes, including time indexes are ignored.",Directly supports required point 2 that index labels are ignored.
+Q09,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.drop_duplicates:0002,True,Duplicates in the index are not considered.,Supports required point 2 that index labels are not compared.
+Q09,structure_aware,3,structure_aware:user_guide/indexing:0073,True,"df2.drop_duplicates('a', keep=False)","Shows keep=False usage, supporting required point 1."
+Q09,structure_aware,4,structure_aware:user_guide/duplicates:0005,True,"If you want to remove all occurrences of duplicated labels, you can use keep=False","Supports the concept of removing all duplicates, relevant to required point 1."
+Q09,structure_aware,5,structure_aware:user_guide/indexing:0072,True,keep=False: mark / drop all duplicates.,Directly supports required point 1.
+Q10,fixed_size,1,fixed_size:reference/api/pandas.Series.value_counts:0001,True,"normalizebool, default False
+If True then the object returned will contain the relative frequencies of the unique values.",Directly supports required point 1 (normalize=True returns relative frequencies).
+Q10,fixed_size,2,fixed_size:reference/api/pandas.Series.value_counts:0002,True,"With dropna set to False we can also see NaN index values.
+>>> s.value_counts(dropna=False)
+3.0 2
+1.0 1
+2.0 1
+4.0 1
+NaN 1",Directly supports required point 2 (dropna=False includes NA values).
+Q10,fixed_size,3,fixed_size:user_guide/reshaping:0022,False,,"Passage discusses crosstab, not Series.value_counts; no evidence for required points."
+Q10,fixed_size,4,fixed_size:user_guide/basics:0023,False,,"Passage discusses value_counts on DataFrames and mode, not the normalize/dropna parameters for Series."
+Q10,fixed_size,5,fixed_size:getting_started/intro_tutorials/06_calculate_statistics:0004,False,,Passage mentions dropna argument in a note but does not provide substantive evidence for the required points.
+Q10,structure_aware,1,structure_aware:reference/api/pandas.Series.value_counts:0001,True,"normalizebool, default False
+If True then the object returned will contain the relative frequencies of the unique values.",Directly supports required point 1 (normalize=True returns relative frequencies).
+Q10,structure_aware,2,structure_aware:user_guide/categorical:0019,False,,"Passage discusses categorical data and value_counts showing unused categories, not the dropna parameter for missing values."
+Q10,structure_aware,3,structure_aware:user_guide/reshaping:0023,False,,"Passage discusses crosstab, not Series.value_counts; no evidence for required points."
+Q10,structure_aware,4,structure_aware:reference/api/pandas.Series.value_counts:0002,True,"With dropna set to False we can also see NaN index values.
+>>> s.value_counts(dropna=False)
+3.0 2
+1.0 1
+2.0 1
+4.0 1
+NaN 1",Directly supports required point 2 (dropna=False includes NA values).
+Q10,structure_aware,5,structure_aware:getting_started/intro_tutorials/06_calculate_statistics:0004,False,,Passage mentions dropna argument in a note but does not provide substantive evidence for the required points.
+Q11,fixed_size,1,fixed_size:getting_started/comparison/comparison_with_sql:0009,True,"If both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.",Contains the exact warning supporting both required points.
+Q11,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.merge:0001,True,"If both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.",Contains the exact warning supporting both required points.
+Q11,fixed_size,3,fixed_size:getting_started/comparison/comparison_with_sql:0011,False,,No mention of null key matching or SQL difference.
+Q11,fixed_size,4,fixed_size:getting_started/comparison/comparison_with_sas:0015,False,,No mention of null key matching or SQL difference.
+Q11,fixed_size,5,fixed_size:getting_started/comparison/comparison_with_stata:0016,False,,No mention of null key matching or SQL difference.
+Q11,structure_aware,1,structure_aware:getting_started/comparison/comparison_with_sql:0011,True,"If both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.",Contains the exact warning supporting both required points.
+Q11,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.merge:0001,True,"If both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.",Contains the exact warning supporting both required points.
+Q11,structure_aware,3,structure_aware:user_guide/merging:0010,False,,No mention of null key matching or SQL difference.
+Q11,structure_aware,4,structure_aware:getting_started/comparison/comparison_with_spreadsheets:0015,False,,No mention of null key matching or SQL difference.
+Q11,structure_aware,5,structure_aware:getting_started/comparison/comparison_with_sql:0013,False,,No mention of null key matching or SQL difference.
+Q12,fixed_size,1,fixed_size:user_guide/boolean:0001,True,"pandas allows indexing with NA values in a boolean array, which are treated as False.
+In [1]: s = pd.Series([1, 2, 3])
+
+In [2]: mask = pd.array([True, False, pd.NA], dtype=""boolean"")
+
+In [3]: s[mask]
+Out[3]:
+0 1
+dtype: int64
+If you would prefer to keep the NA values you can manually fill them with fillna(True).",Directly supports both required points: NA treated as False and fillna(True) to retain rows.
+Q12,fixed_size,2,fixed_size:user_guide/indexing:0045,True,"Missing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead","Supports the alternative DataFrame.filter method with na=True, which is a valid way to retain rows."
+Q12,fixed_size,3,fixed_size:user_guide/missing_data:0006,False,,"Discusses NA in boolean context and TypeError, not indexing mask behavior or retaining rows."
+Q12,fixed_size,4,fixed_size:user_guide/missing_data:0005,False,,"Discusses Kleene logic and NA propagation, not indexing mask behavior or retaining rows."
+Q12,fixed_size,5,fixed_size:user_guide/missing_data:0007,False,,"Discusses NumPy ufuncs and conversion, not indexing mask behavior or retaining rows."
+Q12,structure_aware,1,structure_aware:user_guide/boolean:0001,True,"pandas allows indexing with NA values in a boolean array, which are treated as False.
+In [1]: s = pd.Series([1, 2, 3])
+
+In [2]: mask = pd.array([True, False, pd.NA], dtype=""boolean"")
+
+In [3]: s[mask]
+Out[3]:
+0 1
+dtype: int64
+If you would prefer to keep the NA values you can manually fill them with fillna(True).",Directly supports both required points: NA treated as False and fillna(True) to retain rows.
+Q12,structure_aware,2,structure_aware:user_guide/missing_data:0006,False,,"Discusses NA in boolean context and TypeError, not indexing mask behavior or retaining rows."
+Q12,structure_aware,3,structure_aware:user_guide/10min:0017,False,,"Discusses isna() and missing data, not indexing mask behavior or retaining rows."
+Q12,structure_aware,4,structure_aware:user_guide/indexing:0049,True,"Missing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead","Supports the alternative DataFrame.filter method with na=True, which is a valid way to retain rows."
+Q12,structure_aware,5,structure_aware:user_guide/missing_data:0007,False,,"Discusses NumPy ufuncs and conversion, not indexing mask behavior or retaining rows."
+Q13,fixed_size,1,fixed_size:user_guide/integer_na:0001,True,"Or the string alias ""Int64"" (note the capital ""I"") to differentiate from NumPy’s 'int64' dtype:",Directly supports required point 1 about capital I and differentiation from NumPy int64.
+Q13,fixed_size,2,fixed_size:user_guide/gotchas:0010,True,"If you need to represent integers with possibly missing values, use one of the nullable-integer extension dtypes provided by pandas or pyarrow",Supports required point 1 by recommending nullable integer extension dtypes.
+Q13,fixed_size,3,fixed_size:user_guide/integer_na:0002,True,"In [11]: pd.Series([1, None], dtype=""Int64"")
+Out[11]:
+0 1
+1 <NA>
+dtype: Int64","Shows explicit Int64 usage and missing value as <NA>, supporting both required points."
+Q13,fixed_size,4,fixed_size:user_guide/integer_na:0003,True,"In [15]: s = pd.Series([1, 2, None], dtype=""Int64"")","Demonstrates constructing a Series with Int64 dtype, supporting required point 1."
+Q13,fixed_size,5,fixed_size:user_guide/missing_data:0001,True,"NA for StringDtype, Int64Dtype (and other bit widths), Float64Dtype (and other bit widths), BooleanDtype and ArrowDtype.",Supports required point 2 by indicating NA is used for Int64Dtype.
+Q13,structure_aware,1,structure_aware:user_guide/integer_na:0002,True,"Or the string alias ""Int64"" (note the capital ""I"") to differentiate from NumPy’s 'int64' dtype:",Directly supports required point 1 about capital I and differentiation from NumPy int64.
+Q13,structure_aware,2,structure_aware:user_guide/integer_na:0004,True,"In [15]: s = pd.Series([1, 2, None], dtype=""Int64"")","Demonstrates constructing a Series with Int64 dtype, supporting required point 1."
+Q13,structure_aware,3,structure_aware:user_guide/gotchas:0012,True,"If you need to represent integers with possibly missing values, use one of the nullable-integer extension dtypes provided by pandas or pyarrow",Supports required point 1 by recommending nullable integer extension dtypes.
+Q13,structure_aware,4,structure_aware:user_guide/integer_na:0001,True,arrays.IntegerArray uses pandas.NA as its missing value.,Directly supports required point 2 that missing values are pandas.NA.
+Q13,structure_aware,5,structure_aware:user_guide/integer_na:0003,True,"In [11]: pd.Series([1, None], dtype=""Int64"")
+Out[11]:
+0 1
+1 <NA>
+dtype: Int64","Shows explicit Int64 usage and missing value as <NA>, supporting both required points."
+Q14,fixed_size,1,fixed_size:reference/api/pandas.Series.map:0002,True,"Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict)",Directly supports required point 1 about unmatched values becoming NaN.
+Q14,fixed_size,2,fixed_size:reference/api/pandas.Series.map:0001,True,"If ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.",Directly supports required point 2 about na_action='ignore' skipping missing values.
+Q14,fixed_size,3,fixed_size:user_guide/gotchas:0007,False,,"Passage is a traceback from DataFrame.apply, unrelated to Series.map dictionary behavior or na_action."
+Q14,fixed_size,4,fixed_size:user_guide/dsintro:0002,False,,"Passage discusses Series construction from dict, not Series.map behavior."
+Q14,fixed_size,5,fixed_size:user_guide/basics:0042,False,,"Passage discusses DataFrame.transform, not Series.map dictionary behavior or na_action."
+Q14,structure_aware,1,structure_aware:reference/api/pandas.Series.map:0002,True,"Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict)",Directly supports required point 1 about unmatched values becoming NaN.
+Q14,structure_aware,2,structure_aware:reference/api/pandas.Series.map:0001,True,"If ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.",Directly supports required point 2 about na_action='ignore' skipping missing values.
+Q14,structure_aware,3,structure_aware:user_guide/basics:0047,False,,"Passage discusses Series.map with a function and linking series, but does not mention unmatched dictionary values or na_action."
+Q14,structure_aware,4,structure_aware:user_guide/gotchas:0008,False,,"Passage is a traceback from DataFrame.apply, unrelated to Series.map dictionary behavior or na_action."
+Q14,structure_aware,5,structure_aware:user_guide/basics:0045,False,,"Passage discusses DataFrame.transform, not Series.map dictionary behavior or na_action."
+Q15,fixed_size,1,fixed_size:user_guide/groupby:0005,True,"By default NA values are excluded from group keys during the groupby operation. However, in case you want to include NA values in group keys, you could pass dropna=False to achieve it.",Directly states default exclusion and dropna=False inclusion.
+Q15,fixed_size,2,fixed_size:user_guide/groupby:0006,True,The default setting of dropna argument is True which means NA are not included in group keys.,Confirms default dropna=True excludes NA.
+Q15,fixed_size,3,fixed_size:user_guide/groupby:0041,True,any “NA group” will be dropped. You can include NA groups by specifying dropna=False.,Explains NA types and default exclusion with dropna=False option.
+Q15,fixed_size,4,fixed_size:reference/api/pandas.DataFrame.groupby:0004,True,"df.groupby(by=[""b""], dropna=False).sum()",Shows example of using dropna=False to include NA.
+Q15,fixed_size,5,fixed_size:reference/api/pandas.DataFrame.groupby:0003,True,"We can also choose to include NA in group keys or not by setting dropna parameter, the default setting is True.",States default dropna=True and option to include NA.
+Q15,structure_aware,1,structure_aware:user_guide/groupby:0005,True,"By default NA values are excluded from group keys during the groupby operation. However, in case you want to include NA values in group keys, you could pass dropna=False to achieve it.",Directly states default exclusion and dropna=False inclusion.
+Q15,structure_aware,2,structure_aware:user_guide/groupby:0006,True,The default setting of dropna argument is True which means NA are not included in group keys.,Confirms default dropna=True excludes NA.
+Q15,structure_aware,3,structure_aware:user_guide/groupby:0043,True,any “NA group” will be dropped. You can include NA groups by specifying dropna=False.,Explains NA types and default exclusion with dropna=False option.
+Q15,structure_aware,4,structure_aware:user_guide/groupby:0042,True,"If there are any NA values in the grouping key, by default these will be excluded. In other words, any “NA group” will be dropped. You can include NA groups by specifying dropna=False.",Reiterates default exclusion and inclusion method.
+Q15,structure_aware,5,structure_aware:reference/api/pandas.DataFrame.groupby:0004,True,"df.groupby(by=[""b""], dropna=False).sum()",Shows example of using dropna=False to include NA.
+Q16,fixed_size,1,fixed_size:user_guide/io:0041,True,"By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",Supports required point 2: chunksize yields an iterable TextFileReader.
+Q16,fixed_size,2,fixed_size:user_guide/io:0042,True,Specifying iterator=True will also return the TextFileReader object:,"Supports required point 2: iterator=True returns TextFileReader, relevant to chunk iteration."
+Q16,fixed_size,3,fixed_size:user_guide/io:0005,True,"low_memoryboolean, default True
+Internally process the file in chunks, resulting in lower memory use while parsing, but possibly mixed type inference. To ensure no mixed types either set False, or specify the type with the dtype parameter. Note that the entire file is read into a single DataFrame regardless, use the chunksize or iterator parameter to return the data in chunks.",Supports required point 1: low_memory does not produce output chunks; entire file read into single DataFrame.
+Q16,fixed_size,4,fixed_size:user_guide/io:0136,False,,"Passage discusses read_hdf and HDF5 chunking, not read_csv low_memory or chunksize."
+Q16,fixed_size,5,fixed_size:reference/api/pandas.read_csv:0001,False,,"A signature listing low_memory=True, iterator=False and chunksize=None plus a general introduction does not establish the output behavior of the options; substantive explanatory evidence is required."
+Q16,structure_aware,1,structure_aware:user_guide/io:0042,True,"By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",Supports required point 2: chunksize yields an iterable TextFileReader.
+Q16,structure_aware,2,structure_aware:user_guide/cookbook:0039,True,"pd.concat(
+ .....: (chunk.query(""col_1 >= 1000"") for chunk in pd.read_csv(StringIO(data), chunksize=2)),
+ .....: ignore_index=True,
+ .....: )",Demonstrates chunksize usage returning an iterable for chunk-by-chunk processing.
+Q16,structure_aware,3,structure_aware:user_guide/io:0041,True,"By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",Supports required point 2: chunksize yields an iterable TextFileReader.
+Q16,structure_aware,4,structure_aware:user_guide/io:0141,False,,"Passage discusses read_hdf and HDF5 chunking, not read_csv low_memory or chunksize."
+Q16,structure_aware,5,structure_aware:reference/api/pandas.read_csv:0001,False,,The identical API-signature passage is not substantive evidence of low_memory/chunksize return behavior; apply the same relevance criterion to both strategies.
+Q17,fixed_size,1,fixed_size:user_guide/reshaping:0002,True,"pivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().",Supports required point 1 and the recommendation to use pivot_table for duplicates.
+Q17,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.pivot:0003,True,A ValueError is raised if there are any duplicates.,Directly supports required point 1 that pivot raises ValueError for duplicate index/column combinations.
+Q17,fixed_size,3,fixed_size:reference/api/pandas.DataFrame.pivot:0001,True,"When there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.",Supports required point 1 and indicates pivot_table for aggregation.
+Q17,fixed_size,4,fixed_size:user_guide/reshaping:0005,False,,Contains pivot_table examples but no explicit statement about aggregation or handling duplicates.
+Q17,fixed_size,5,fixed_size:reference/api/pandas.DataFrame.pivot_table:0001,True,"aggfuncfunction, list of functions, dict, default “mean”",Supports required point 2 by showing pivot_table has an aggfunc parameter with default mean.
+Q17,structure_aware,1,structure_aware:reference/api/pandas.DataFrame.pivot:0003,True,A ValueError is raised if there are any duplicates.,Directly supports required point 1 that pivot raises ValueError for duplicate index/column combinations.
+Q17,structure_aware,2,structure_aware:user_guide/reshaping:0003,True,"pivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().",Supports required point 1 and the recommendation to use pivot_table for duplicates.
+Q17,structure_aware,3,structure_aware:user_guide/10min:0026,False,,Contains pivot_table examples but no explicit statement about aggregation or handling duplicates.
+Q17,structure_aware,4,structure_aware:user_guide/10min:0027,False,,Contains pivot_table examples but no explicit statement about aggregation or handling duplicates.
+Q17,structure_aware,5,structure_aware:reference/api/pandas.DataFrame.pivot:0001,True,"When there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.",Supports required point 1 and indicates pivot_table for aggregation.
+Q18,fixed_size,1,fixed_size:user_guide/indexing:0022,True,"When using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned",Supports required point 1 about .loc inclusive endpoints.
+Q18,fixed_size,2,fixed_size:user_guide/indexing:0021,True,"When using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned",Supports required point 1 about .loc inclusive endpoints.
+Q18,fixed_size,3,fixed_size:user_guide/indexing:0019,True,"When slicing, both the start bound AND the stop bound are included, if present in the index.",Supports required point 1 about .loc inclusive endpoints.
+Q18,fixed_size,4,fixed_size:user_guide/cookbook:0007,True,Positional-oriented (Python slicing style : exclusive of end),Supports required point 2 about .iloc exclusive stop.
+Q18,fixed_size,5,fixed_size:user_guide/indexing:0024,True,"When slicing, the start bound is included, while the upper bound is excluded.",Supports required point 2 about .iloc exclusive stop.
+Q18,structure_aware,1,structure_aware:user_guide/indexing:0021,True,"Note that contrary to usual Python slices, both the start and the stop are included, when present in the index!",Directly supports required point 1 about .loc inclusive endpoints.
+Q18,structure_aware,2,structure_aware:user_guide/indexing:0024,True,"s.loc[3:5]
+Out[75]:
+3 b
+2 c
+5 d","The actual example includes both endpoint labels, substantiating inclusive label slicing. Replace the initial heading-only quote with this substantive example."
+Q18,structure_aware,3,structure_aware:user_guide/cookbook:0008,True,Positional-oriented (Python slicing style : exclusive of end),Supports required point 2 about .iloc exclusive stop.
+Q18,structure_aware,4,structure_aware:user_guide/indexing:0023,True,"When using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned",Supports required point 1 about .loc inclusive endpoints.
+Q18,structure_aware,5,structure_aware:user_guide/10min:0011,True,Integer slices act similar to NumPy/Python,Supports required point 2 about .iloc Python-style slicing.
+Q19,fixed_size,1,fixed_size:getting_started/comparison/comparison_with_sql:0009,True,"By default, join() will join the DataFrames on their indices.",Supports required point 1 (join defaults to index-on-index).
+Q19,fixed_size,2,fixed_size:reference/api/pandas.DataFrame.merge:0001,True,"how{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},
+default ‘inner’ Type of merge to be performed.",Supports required point 2 (merge defaults to inner).
+Q19,fixed_size,3,fixed_size:reference/api/pandas.DataFrame.join:0001,True,"onstr, list of str, or array-like, optional
+Column or index level name(s) in the caller to join on the index in other, otherwise joins index-on-index.",Supports required point 1 (join defaults to index-on-index).
+Q19,fixed_size,4,fixed_size:user_guide/merging:0018,False,,Passage contains examples but no substantive evidence for required points.
+Q19,fixed_size,5,fixed_size:reference/api/pandas.DataFrame.merge:0002,True,If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.,Supports required point 2 (merge defaults to common columns when no keys/index flags).
+Q19,structure_aware,1,structure_aware:getting_started/comparison/comparison_with_sql:0011,True,"By default, join() will join the DataFrames on their indices.",Supports required point 1 (join defaults to index-on-index).
+Q19,structure_aware,2,structure_aware:reference/api/pandas.DataFrame.merge:0001,True,"how{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},
+default ‘inner’ Type of merge to be performed.",Supports required point 2 (merge defaults to inner).
+Q19,structure_aware,3,structure_aware:reference/api/pandas.DataFrame.join:0001,True,"onstr, list of str, or array-like, optional
+Column or index level name(s) in the caller to join on the index in other, otherwise joins index-on-index.",Supports required point 1 (join defaults to index-on-index).
+Q19,structure_aware,4,structure_aware:reference/api/pandas.DataFrame.merge:0002,True,If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.,Supports required point 2 (merge defaults to common columns when no keys/index flags).
+Q19,structure_aware,5,structure_aware:getting_started/comparison/comparison_with_stata:0016,False,,"Passage discusses Stata merge examples, not relevant to required points."
+Q20,fixed_size,1,fixed_size:getting_started/comparison/comparison_with_sas:0018,True,"pandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation. In [1]: gb = tips.groupby(""smoker"")[""total_bill""] In [2]: tips[""adj_total_bill""] = tips[""total_bill""] - gb.transform(""mean"")","Shows transform broadcasting group mean back to original rows, supporting required point 2."
+Q20,fixed_size,2,fixed_size:user_guide/cookbook:0019,False,,"Text discusses expanding, replacing values, sorting groups, and creating multiple aggregated columns; no substantive evidence for aggregation vs transform or broadcasting group mean."
+Q20,fixed_size,3,fixed_size:getting_started/comparison/comparison_with_stata:0018,True,"pandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples. In [65]: tips_summed = tips.groupby([""sex"", ""smoker""])[[""total_bill"", ""tip""]].sum()","Shows aggregation reducing groups to summary rows, supporting required point 1."
+Q20,fixed_size,4,fixed_size:user_guide/groupby:0024,True,"Unlike aggregations, the groupings that are used to split the original object are not included in the result. Note Since transformations do not include the groupings that are used to split the result, the arguments as_index and sort in DataFrame.groupby() and Series.groupby() have no effect. A common use of a transformation is to add the result back into the original DataFrame.","Explains transform result excludes grouping keys and can be added back to original DataFrame, supporting required point 2."
+Q20,fixed_size,5,fixed_size:user_guide/groupby:0025,True,"In addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result.","States that passing aggregation method to transform broadcasts result across group, supporting required point 2."
+Q20,structure_aware,1,structure_aware:getting_started/comparison/comparison_with_stata:0020,True,"pandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation. In [67]: gb = tips.groupby(""smoker"")[""total_bill""] In [68]: tips[""adj_total_bill""] = tips[""total_bill""] - gb.transform(""mean"")","Shows transform broadcasting group mean back to original rows, supporting required point 2."
+Q20,structure_aware,2,structure_aware:user_guide/groupby:0025,True,A transformation is a GroupBy operation whose result is indexed the same as the one being grouped. Common examples include cumsum() and diff().,"Defines transformation as preserving original index, supporting required point 2."
+Q20,structure_aware,3,structure_aware:getting_started/comparison/comparison_with_sas:0020,True,"pandas provides a flexible groupby mechanism that allows similar aggregations. See the groupby documentation for more details and examples. In [1]: tips_summed = tips.groupby([""sex"", ""smoker""])[[""total_bill"", ""tip""]].sum()","Shows aggregation reducing groups to summary rows, supporting required point 1."
+Q20,structure_aware,4,structure_aware:user_guide/user_defined_functions:0008,True,"The transform method is similar to an aggregation, with the difference that the result is broadcasted to the original data.","States transform broadcasts result to original data, supporting required point 2."
+Q20,structure_aware,5,structure_aware:user_guide/groupby:0026,True,"In addition, passing any built-in aggregation method as a string to transform() (see the next section) will broadcast the result across the group, producing a transformed result.","States that passing aggregation method to transform broadcasts result across group, supporting required point 2."
+Q21,fixed_size,1,fixed_size:user_guide/merging:0005,True,The keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.,Supports required point about keys constructing an outer hierarchical level.
+Q21,fixed_size,2,fixed_size:reference/api/pandas.concat:0001,True,"ignore_indexbool, default False
+If True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1.",Supports required point about ignore_index renumbering from 0 to n-1.
+Q21,fixed_size,3,fixed_size:reference/api/pandas.concat:0003,True,"Clear the existing index and reset it in the result by setting the ignore_index option to True.
+>>> pd.concat([s1, s2], ignore_index=True)
+0 a
+1 b
+2 c
+3 d",Supports ignore_index renumbering with example.
+Q21,fixed_size,4,fixed_size:user_guide/merging:0004,True,"For DataFrame objects which don’t have a meaningful index, the ignore_index ignores overlapping indexes.","Supports ignore_index behavior, though not the exact renumbering point."
+Q21,fixed_size,5,fixed_size:user_guide/merging:0002,False,,Passage discusses general concatenation and index preservation but does not contain substantive evidence for either required point.
+Q21,structure_aware,1,structure_aware:user_guide/merging:0006,True,The keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.,Supports required point about keys constructing an outer hierarchical level.
+Q21,structure_aware,2,structure_aware:reference/api/pandas.concat:0001,True,"ignore_indexbool, default False
+If True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1.",Supports required point about ignore_index renumbering from 0 to n-1.
+Q21,structure_aware,3,structure_aware:reference/api/pandas.concat:0003,True,"Clear the existing index and reset it in the result by setting the ignore_index option to True.
+>>> pd.concat([s1, s2], ignore_index=True)
+0 a
+1 b
+2 c
+3 d",Supports ignore_index renumbering with example.
+Q21,structure_aware,4,structure_aware:user_guide/merging:0008,True,The MultiIndex created has levels that are constructed from the passed keys and the index of the DataFrame pieces:,Supports keys creating hierarchical index with outer level.
+Q21,structure_aware,5,structure_aware:user_guide/10min:0021,False,,Passage discusses general concatenation but does not contain substantive evidence for either required point.
+Q22,fixed_size,1,fixed_size:user_guide/basics:0060,True,"s.dt.tz_localize(""UTC"").dt.tz_convert(""US/Eastern"")","Shows chaining tz_localize then tz_convert, supporting both required points."
+Q22,fixed_size,2,fixed_size:user_guide/timeseries:0105,True,"dti.tz_localize(""Europe/Warsaw"", nonexistent=""shift_forward"")","Example of tz_localize with nonexistent argument, supporting optional DST handling."
+Q22,fixed_size,3,fixed_size:user_guide/timeseries:0102,True,Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.,Directly supports required point 1.
+Q22,fixed_size,4,fixed_size:user_guide/10min:0025,True,Series.tz_convert() converts a timezone aware time series to another time zone:,Directly supports required point 2.
+Q22,fixed_size,5,fixed_size:user_guide/timeseries:0099,True,"To remove time zone information, use tz_localize(None) or tz_convert(None). tz_localize(None) will remove the time zone yielding the local time representation. tz_convert(None) will remove the time zone after converting to UTC time.",Supports optional special case about removing timezone.
+Q22,structure_aware,1,structure_aware:user_guide/timeseries:0108,True,Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.,Directly supports required point 1: tz_localize assigns timezone to naive timestamps.
+Q22,structure_aware,2,structure_aware:user_guide/timeseries:0105,True,rng_hourly.tz_localize('US/Eastern'),"Example of using tz_localize on naive index, supporting required point 1."
+Q22,structure_aware,3,structure_aware:user_guide/timeseries:0103,True,"didx.tz_localize(None)
+Out[504]:
+DatetimeIndex(['2014-08-01 09:00:00', '2014-08-01 10:00:00',
+ '2014-08-01 11:00:00'],
+ dtype='datetime64[us]', freq=None)
+
+In [505]: didx.tz_convert(None)
+Out[505]:
+DatetimeIndex(['2014-08-01 13:00:00', '2014-08-01 14:00:00',
+ '2014-08-01 15:00:00'],","Shows behavior of tz_localize(None) and tz_convert(None), supporting optional special case and indirectly tz_convert."
+Q22,structure_aware,4,structure_aware:user_guide/timeseries:0106,True,"rng_hourly.tz_localize(""US/Eastern"", ambiguous=""infer"")","Example of tz_localize with ambiguous argument, supporting optional DST handling."
+Q22,structure_aware,5,structure_aware:user_guide/timeseries:0110,True,"s_naive.dt.tz_localize(""UTC"").dt.tz_convert(""US/Eastern"")","Shows chaining tz_localize then tz_convert, supporting both required points."
+Q23,fixed_size,1,fixed_size:user_guide/window:0001,True,Rolling window: Generic fixed or variable sliding window over the values.,Directly supports required point 1 (rolling uses a sliding window).
+Q23,fixed_size,2,fixed_size:user_guide/window:0005,True,Generic rolling windows support specifying windows as a fixed number of observations or variable number of observations based on an offset.,This explicitly explains the size of a rolling window and supports the first required point; evidence for expanding is not also required for relevance.
+Q23,fixed_size,3,fixed_size:user_guide/window:0009,False,,"Passage discusses custom window rolling with BaseIndexer, not the core rolling vs expanding distinction."
+Q23,fixed_size,4,fixed_size:user_guide/window:0006,True,"# Window with 2 observations
+In [25]: s.rolling(window=2).sum()","The full worked output demonstrates the moving two-observation window, providing substantive evidence for the rolling-window point."
+Q23,fixed_size,5,fixed_size:user_guide/window:0015,True,An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.,Directly supports required point 2 (expanding uses an accumulating window).
+Q23,structure_aware,1,structure_aware:user_guide/window:0018,True,An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.,Directly supports required point 2 (expanding uses an accumulating window).
+Q23,structure_aware,2,structure_aware:user_guide/window:0007,True,Generic rolling windows support specifying windows as a fixed number of observations or variable number of observations based on an offset.,Supports required point 1 (rolling uses a sliding window) by describing fixed/variable observation windows.
+Q23,structure_aware,3,structure_aware:user_guide/window:0002,True,Rolling window: Generic fixed or variable sliding window over the values.,Directly supports required point 1 (rolling uses a sliding window).
+Q23,structure_aware,4,structure_aware:user_guide/window:0008,False,,"Passage discusses rolling centering and endpoints, not the core rolling vs expanding distinction."
+Q23,structure_aware,5,structure_aware:user_guide/window:0010,False,,"Passage discusses custom window rolling with BaseIndexer, not the core rolling vs expanding distinction."
+Q24,fixed_size,1,fixed_size:reference/api/pandas.Series.apply:0001,True,"If ""compat"" and func is a callable, func will be passed each element of the Series, like Series.map. If func is a list or dict of callables, will first try to translate each func into pandas methods. If that doesn’t work, will try call to apply again with by_row=""compat"" and if that fails, will call apply again with by_row=False (backward compatible). If False, the func will be passed the whole Series at once.",Directly supports both required points.
+Q24,fixed_size,2,fixed_size:user_guide/user_defined_functions:0005,False,,"Discusses DataFrame.apply with axis=1, not Series.apply by_row."
+Q24,fixed_size,3,fixed_size:user_guide/basics:0031,False,,"Discusses DataFrame.apply vectorized alternatives, not Series.apply by_row."
+Q24,fixed_size,4,fixed_size:user_guide/user_defined_functions:0003,False,,"Discusses map and DataFrame.apply, not Series.apply by_row."
+Q24,fixed_size,5,fixed_size:user_guide/basics:0030,False,,"Discusses DataFrame.apply row/column-wise, not Series.apply by_row."
+Q24,structure_aware,1,structure_aware:reference/api/pandas.Series.apply:0001,True,"If ""compat"" and func is a callable, func will be passed each element of the Series, like Series.map. If func is a list or dict of callables, will first try to translate each func into pandas methods. If that doesn’t work, will try call to apply again with by_row=""compat"" and if that fails, will call apply again with by_row=False (backward compatible). If False, the func will be passed the whole Series at once.",Directly supports both required points.
+Q24,structure_aware,2,structure_aware:user_guide/basics:0033,False,,"Discusses DataFrame.apply, not Series.apply by_row behavior."
+Q24,structure_aware,3,structure_aware:user_guide/basics:0035,False,,"Discusses DataFrame.apply return types and examples, not Series.apply by_row."
+Q24,structure_aware,4,structure_aware:user_guide/user_defined_functions:0006,False,,"Discusses pipe and DataFrame.apply, not Series.apply by_row."
+Q24,structure_aware,5,structure_aware:user_guide/basics:0034,False,,"Discusses DataFrame.apply vectorized alternatives, not Series.apply by_row."
+Q25,fixed_size,1,fixed_size:getting_started/intro_tutorials/03_subset_data:0004,False,,"Passage discusses filtering Titanic data for known ages, not the private customers.csv missing age count."
+Q25,fixed_size,2,fixed_size:reference/api/pandas.read_csv:0005,False,,"Passage describes read_csv parameters, not the private file's missing age count."
+Q25,fixed_size,3,fixed_size:user_guide/10min:0015,False,,"Passage shows missing data operations on a sample DataFrame, not the private file's missing age count."
+Q25,fixed_size,4,fixed_size:getting_started/comparison/comparison_with_spss:0002,False,,"Passage compares SPSS and pandas operations, unrelated to the private data question."
+Q25,fixed_size,5,fixed_size:user_guide/io:0029,False,,"Passage shows parser error handling, unrelated to the private data question."
+Q25,structure_aware,1,structure_aware:getting_started/intro_tutorials/03_subset_data:0005,False,,"Passage discusses filtering Titanic data for known ages, not the private customers.csv missing age count."
+Q25,structure_aware,2,structure_aware:reference/api/pandas.read_csv:0005,False,,"Passage describes read_csv parameters, not the private file's missing age count."
+Q25,structure_aware,3,structure_aware:user_guide/io:0029,False,,"Passage shows parser error handling, unrelated to the private data question."
+Q25,structure_aware,4,structure_aware:user_guide/index:0003,False,,"Passage is a table of contents, no substantive evidence for the required answer."
+Q25,structure_aware,5,structure_aware:user_guide/io:0032,False,,"Passage shows usecols error handling, unrelated to the private data question."
+Q26,fixed_size,1,fixed_size:user_guide/style:0035,False,,Contains only numeric data; no evidence about the requested private revenue DataFrame.
+Q26,fixed_size,2,fixed_size:user_guide/dsintro:0028,False,,Contains baseball DataFrame info and to_string output; no evidence about the requested private revenue DataFrame.
+Q26,fixed_size,3,fixed_size:user_guide/dsintro:0027,False,,Contains baseball DataFrame loading and info; no evidence about the requested private revenue DataFrame.
+Q26,fixed_size,4,fixed_size:user_guide/style:0045,False,,Contains numeric data; no evidence about the requested private revenue DataFrame.
+Q26,fixed_size,5,fixed_size:user_guide/style:0040,False,,Contains numeric data; no evidence about the requested private revenue DataFrame.
+Q26,structure_aware,1,structure_aware:user_guide/indexing:0045,False,,Contains only numeric data and NaN values; no evidence about the requested private revenue DataFrame.
+Q26,structure_aware,2,structure_aware:user_guide/style:0008,False,,Contains model evaluation metrics and styling examples; no evidence about the requested private revenue DataFrame.
+Q26,structure_aware,3,structure_aware:getting_started/overview:0008,False,,Mentions Core Team members; no evidence about the requested private revenue DataFrame.
+Q26,structure_aware,4,structure_aware:getting_started/intro_tutorials/03_subset_data:0001,False,,Only a question title about selecting a subset; no substantive evidence about the requested private revenue DataFrame.
+Q26,structure_aware,5,structure_aware:user_guide/io:0054,False,,Contains JSON-like numeric data; no evidence about the requested private revenue DataFrame.
+Q27,fixed_size,1,fixed_size:reference/api/pandas.Series.apply:0001,False,,"Passage describes pandas.Series.apply, not pd.teleport_to_mars; no evidence for the unsupported API."
+Q27,fixed_size,2,fixed_size:reference/api/pandas.Series.apply:0002,False,,Continuation of Series.apply examples; no evidence for pd.teleport_to_mars.
+Q27,fixed_size,3,fixed_size:user_guide/basics:0028,False,,Passage discusses DataFrame.pipe and method chaining; no evidence for pd.teleport_to_mars.
+Q27,fixed_size,4,fixed_size:user_guide/basics:0044,False,,Passage discusses elementwise functions and map; no evidence for pd.teleport_to_mars.
+Q27,fixed_size,5,fixed_size:user_guide/options:0001,False,,Passage discusses pandas options API; no evidence for pd.teleport_to_mars.
+Q27,structure_aware,1,structure_aware:getting_started/comparison/comparison_with_spreadsheets:0001,False,,Passage is an introduction to spreadsheet comparisons; no evidence for pd.teleport_to_mars.
+Q27,structure_aware,2,structure_aware:getting_started/index:0001,False,,Passage mentions trying pandas online; no evidence for pd.teleport_to_mars.
+Q27,structure_aware,3,structure_aware:reference/api/pandas.Series.apply:0001,False,,Passage describes pandas.Series.apply; no evidence for pd.teleport_to_mars.
+Q27,structure_aware,4,structure_aware:getting_started/tutorials:0010,False,,Passage lists video tutorials; no evidence for pd.teleport_to_mars.
+Q27,structure_aware,5,structure_aware:reference/api/pandas.Series.apply:0002,False,,Continuation of Series.apply examples; no evidence for pd.teleport_to_mars.
+Q28,fixed_size,1,fixed_size:user_guide/io:0028,False,,Passage shows source code traceback from read_csv but does not provide exact runtime for the user's unspecified 10 GB CSV.
+Q28,fixed_size,2,fixed_size:reference/api/pandas.read_csv:0001,False,,Passage is the read_csv API reference; it documents parameters but does not give exact runtime for an unmeasured workload.
+Q28,fixed_size,3,fixed_size:getting_started/comparison/comparison_with_sas:0020,False,,"Passage discusses SAS interop and a specific benchmark for a 10M row CSV, not the user's unspecified 10 GB CSV."
+Q28,fixed_size,4,fixed_size:user_guide/io:0179,False,,Passage lists file sizes for various formats but does not provide runtime for reading a 10 GB CSV.
+Q28,fixed_size,5,fixed_size:user_guide/io:0178,False,,"Passage shows timing benchmarks for various formats on a specific dataset, not the user's unspecified 10 GB CSV."
+Q28,structure_aware,1,structure_aware:user_guide/cookbook:0039,False,,Passage discusses CSV usage examples and chunking but provides no evidence about exact runtime for a 10 GB CSV on unspecified hardware.
+Q28,structure_aware,2,structure_aware:getting_started/comparison/comparison_with_sas:0022,False,,"Passage compares disk vs memory and shows a benchmark for a specific 10M row CSV, but does not answer the exact runtime for the user's unspecified 10 GB CSV."
+Q28,structure_aware,3,structure_aware:getting_started/comparison/comparison_with_spss:0004,False,,Passage shows how to read CSV with read_csv but contains no timing information relevant to the user's specific hardware and data.
+Q28,structure_aware,4,structure_aware:user_guide/io:0188,False,,Passage lists file sizes for various formats but does not provide runtime for reading a 10 GB CSV.
+Q28,structure_aware,5,structure_aware:reference/api/pandas.read_csv:0001,False,,Passage is the read_csv API reference; it documents parameters but does not give exact runtime for an unmeasured workload.
+Q29,fixed_size,1,fixed_size:user_guide/style:0059,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,fixed_size,2,fixed_size:user_guide/style:0077,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,fixed_size,3,fixed_size:user_guide/style:0064,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,fixed_size,4,fixed_size:user_guide/style:0063,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,fixed_size,5,fixed_size:user_guide/style:0065,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,structure_aware,1,structure_aware:user_guide/style:0081,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,structure_aware,2,structure_aware:user_guide/style:0069,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,structure_aware,3,structure_aware:user_guide/style:0060,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,structure_aware,4,structure_aware:user_guide/style:0070,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q29,structure_aware,5,structure_aware:user_guide/style:0045,False,,Passage contains only numeric data and no substantive evidence about live exchange rates or refusal.
+Q30,fixed_size,1,fixed_size:user_guide/style:0064,False,,Passage contains numerical data and no evidence about a private policy for deleting customer data.
+Q30,fixed_size,2,fixed_size:user_guide/style:0063,False,,Passage contains numerical data and no evidence about a private policy for deleting customer data.
+Q30,fixed_size,3,fixed_size:user_guide/style:0040,False,,Passage contains numerical data and no evidence about a private policy for deleting customer data.
+Q30,fixed_size,4,fixed_size:user_guide/style:0051,False,,Passage contains numerical data and no evidence about a private policy for deleting customer data.
+Q30,fixed_size,5,fixed_size:user_guide/style:0045,False,,Passage contains numerical data and no evidence about a private policy for deleting customer data.
+Q30,structure_aware,1,structure_aware:getting_started/overview:0008,False,,Passage mentions Core Team members but provides no evidence about a private policy for deleting customer data.
+Q30,structure_aware,2,structure_aware:getting_started/overview:0009,False,,Passage mentions institutional partners but no private policy for deleting customer data.
+Q30,structure_aware,3,structure_aware:getting_started/tutorials:0007,False,,"Passage about practice exercises and resources, unrelated to the question."
+Q30,structure_aware,4,structure_aware:getting_started/tutorials:0010,False,,"Passage lists video tutorials and repos, no private policy information."
+Q30,structure_aware,5,structure_aware:getting_started/tutorials:0003,False,,"Passage about Bamboo Weekly mailing list, unrelated to the question."

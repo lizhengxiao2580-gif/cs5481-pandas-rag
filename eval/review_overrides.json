@@ -1,0 +1,275 @@
+{
+  "Q14": {
+    "fixed_size": {
+      "correct": false,
+      "faithful": false,
+      "unsupported_claims": [
+        "The additional claim that existing missing values also remain NaN because they are not dictionary keys is overgeneralized: an ordinary dictionary can contain a NaN key."
+      ],
+      "reason": "Both required points are present, but the extra statement about existing missing values being absent from dictionary keys is not generally true or established by the cited example. pandas 3.1.1 maps pd.Series([np.nan]) through {np.nan: 7} to [7]. Strict whole-answer correctness and citation faithfulness therefore fail.",
+      "review_reason": "evidence-based review of the answer, cited Series.map text, and the executable counterexample in results/local_checks.json. This records an evidence-based correction; the later project-member confirmation is stored separately in human_review.json."
+    }
+  },
+  "Q18": {
+    "fixed_size": {
+      "correct": false,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "The required label/position and slice-endpoint distinctions are correct. However, the answer also says a non-integer label raises IndexError. For pd.Series([1], index=['a']).iloc['a'], installed pandas 3.1.1 raises TypeError. The cited guide itself says IndexError, so the answer is source-faithful but fails strict whole-answer factual correctness. This is a source-versus-runtime discrepancy, not an unsupported model invention.",
+      "review_reason": "The review checked citation [3] in the saved fixed-window answer and reproduced the string-label case. See results/local_checks.json. The optional error-type claim is included under the predeclared strict no-material-error criterion."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Note that contrary to usual Python slices, both the start and the stop are included, when present in the index!",
+          "reason": "Directly supports required point 1 about .loc inclusive endpoints."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "s.loc[3:5]\nOut[75]:\n3 b\n2 c\n5 d",
+          "reason": "The actual example includes both endpoint labels, substantiating inclusive label slicing. Replace the initial heading-only quote with this substantive example."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Positional-oriented (Python slicing style : exclusive of end)",
+          "reason": "Supports required point 2 about .iloc exclusive stop."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "When using .loc with slices, if both the start and the stop labels are present in the index, then elements located between the two (including them) are returned",
+          "reason": "Supports required point 1 about .loc inclusive endpoints."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "Integer slices act similar to NumPy/Python",
+          "reason": "Supports required point 2 about .iloc Python-style slicing."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    }
+  },
+  "Q04": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Define in which columns to look for missing values.\n>>> df.dropna(subset=[\"name\", \"toy\"])",
+          "reason": "Passage contains an example using subset to restrict missing-value checks, supporting required point 1."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "how{‘any’, ‘all’}, default ‘any’\nDetermine if row or column is removed from DataFrame, when we have at least one NA or all NA.\n‘any’ : If any NA values are present, drop that row or column.",
+          "reason": "Passage documents how='any' default behavior, supporting required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses notna() and boolean indexing, not dropna with subset."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.filter, unrelated to dropna."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "DataFrame.dropna() drops any rows that have missing data:",
+          "reason": "The how='any' example supports the second required point even without illustrating subset; one supported required point is sufficient for relevance."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    }
+  },
+  "Q07": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "The method will melt all columns NOT mentioned in id_vars together into two columns:",
+          "reason": "The full passage uses id_vars to retain date.utc and shows it in the long-format output. Identifier names need not literally be id; this supports the first required point."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "id_varsscalar, tuple, list, or ndarray, optional Column(s) to use as identifier variables.",
+          "reason": "Contains API documentation for id_vars parameter, supporting required point 1."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is about wide_to_long, not melt, and does not mention id_vars or value_vars for Jan/Feb."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is about pivot, not melt, and does not contain evidence for the required points."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "value_vars defines which columns to melt together",
+          "reason": "Contains explanation of value_vars parameter, supporting required point 2."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "id_varsscalar, tuple, list, or ndarray, optional Column(s) to use as identifier variables.",
+          "reason": "Contains API documentation for id_vars parameter, supporting required point 1."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "value_vars=[\"BETR801\", \"FR04014\", \"London Westminster\"]",
+          "reason": "Contains an example of value_vars parameter, supporting required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "cheese.melt(id_vars=[\"first\", \"last\"])",
+          "reason": "The full example preserves first/last identifier columns; it supports id_vars, not just the optional output-column renaming described in the initial judge quote."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains unrelated JSON data and does not provide evidence for the required points."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is a general overview of reshaping methods and does not specifically support id_vars or value_vars for Jan/Feb."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    }
+  },
+  "Q16": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",
+          "reason": "Supports required point 2: chunksize yields an iterable TextFileReader."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Specifying iterator=True will also return the TextFileReader object:",
+          "reason": "Supports required point 2: iterator=True returns TextFileReader, relevant to chunk iteration."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "low_memoryboolean, default True\nInternally process the file in chunks, resulting in lower memory use while parsing, but possibly mixed type inference. To ensure no mixed types either set False, or specify the type with the dtype parameter. Note that the entire file is read into a single DataFrame regardless, use the chunksize or iterator parameter to return the data in chunks.",
+          "reason": "Supports required point 1: low_memory does not produce output chunks; entire file read into single DataFrame."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses read_hdf and HDF5 chunking, not read_csv low_memory or chunksize."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "A signature listing low_memory=True, iterator=False and chunksize=None plus a general introduction does not establish the output behavior of the options; substantive explanatory evidence is required."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",
+          "reason": "Supports required point 2: chunksize yields an iterable TextFileReader."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "pd.concat(\n .....: (chunk.query(\"col_1 >= 1000\") for chunk in pd.read_csv(StringIO(data), chunksize=2)),\n .....: ignore_index=True,\n .....: )",
+          "reason": "Demonstrates chunksize usage returning an iterable for chunk-by-chunk processing."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "By specifying a chunksize to read_csv() as a context manager, the return value will be an iterable object of type TextFileReader:",
+          "reason": "Supports required point 2: chunksize yields an iterable TextFileReader."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses read_hdf and HDF5 chunking, not read_csv low_memory or chunksize."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "The identical API-signature passage is not substantive evidence of low_memory/chunksize return behavior; apply the same relevance criterion to both strategies."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    }
+  },
+  "Q23": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Rolling window: Generic fixed or variable sliding window over the values.",
+          "reason": "Directly supports required point 1 (rolling uses a sliding window)."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Generic rolling windows support specifying windows as a fixed number of observations or variable number of observations based on an offset.",
+          "reason": "This explicitly explains the size of a rolling window and supports the first required point; evidence for expanding is not also required for relevance."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses custom window rolling with BaseIndexer, not the core rolling vs expanding distinction."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "# Window with 2 observations\nIn [25]: s.rolling(window=2).sum()",
+          "reason": "The full worked output demonstrates the moving two-observation window, providing substantive evidence for the rolling-window point."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.",
+          "reason": "Directly supports required point 2 (expanding uses an accumulating window)."
+        }
+      ],
+      "review_reason": "The review checked the full saved passages and corrected relevance/quote consistency; original judge labels are preserved in results/judgments/."
+    }
+  }
+}

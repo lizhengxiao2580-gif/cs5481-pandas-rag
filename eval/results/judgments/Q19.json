@@ -1,0 +1,92 @@
+{
+  "question_id": "Q19",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "By default, join() will join the DataFrames on their indices.",
+          "reason": "Supports required point 1 (join defaults to index-on-index)."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "how{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},\ndefault ‘inner’ Type of merge to be performed.",
+          "reason": "Supports required point 2 (merge defaults to inner)."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "onstr, list of str, or array-like, optional\nColumn or index level name(s) in the caller to join on the index in other, otherwise joins index-on-index.",
+          "reason": "Supports required point 1 (join defaults to index-on-index)."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage contains examples but no substantive evidence for required points."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.",
+          "reason": "Supports required point 2 (merge defaults to common columns when no keys/index flags)."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states join defaults to index-on-index left join and merge defaults to inner with common columns. All claims are supported by cited passages."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "By default, join() will join the DataFrames on their indices.",
+          "reason": "Supports required point 1 (join defaults to index-on-index)."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "how{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},\ndefault ‘inner’ Type of merge to be performed.",
+          "reason": "Supports required point 2 (merge defaults to inner)."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "onstr, list of str, or array-like, optional\nColumn or index level name(s) in the caller to join on the index in other, otherwise joins index-on-index.",
+          "reason": "Supports required point 1 (join defaults to index-on-index)."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.",
+          "reason": "Supports required point 2 (merge defaults to common columns when no keys/index flags)."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses Stata merge examples, not relevant to required points."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states join defaults to index-on-index left join and merge defaults to inner with common columns. All claims are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

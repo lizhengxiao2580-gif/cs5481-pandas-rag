@@ -1,0 +1,209 @@
+{
+  "question_id": "Q22",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:10:43.232598+00:00",
+  "answer": "Use `tz_localize` when the DatetimeIndex is tz-naive and you need to attach a timezone to the existing datetime values without changing the local/clock representation [1][2].\n\nUse `tz_convert` when the DatetimeIndex is already tz-aware and you need to change it to another timezone [3]. For example, this chain first attaches UTC, then converts to US/Eastern [2]:\n\n```python\ns.dt.tz_localize(\"UTC\").dt.tz_convert(\"US/Eastern\")\n```\n\nFor removing timezone information from an aware DatetimeIndex [4]:\n\n- `tz_localize(None)` removes the timezone and keeps the local time representation.\n- `tz_convert(None)` converts to UTC first, then removes the timezone.\n\n```python\ndidx.tz_localize(None)  # local wall time as naive\ndidx.tz_convert(None)   # UTC time as naive\n```\n\nIf localizing a naive index across DST transitions, `tz_localize` may need the `ambiguous` or `nonexistent` arguments to handle ambiguous or nonexistent times [5][1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/timeseries:0102",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": ")\n 1568 \"\"\"\n 1569 Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.\n 1570\n (...) 1706 dtype: datetime64[ns, Europe/Warsaw]\n 1707 \"\"\" # noqa: E501\n 1708 freq = self._freq\n-> 1709 arr = self._data.tz_localize(tz, ambiguous, nonexistent)\n 1710 result = type(self)._simple_new(arr, name=self.name)\n 1711 if timezones.is_utc(arr.tz) or (len(arr) == 1 and arr[0] is not NaT):\n 1712 # we can preserve freq\n 1713 # TODO: Also for fixed-offsets\n\nFile ~/work/pandas/pandas/pandas/core/arrays/_mixins.py:82, in ravel_compat.<locals>.method(self, *args, **kwargs)\n 79 @wraps(meth)\n 80 def method(self, *args, **kwargs):\n 81 if self.ndim == 1:\n---> 82 return meth(self, *args, **kwargs)\n 84 flags = self._ndarray.flags\n 85 flat = self.ravel(\"K\")\n\nFile ~/work/pandas/pandas/pandas/core/arrays/datetimes.py:1115, in DatetimeArray.tz_localize(self, tz, ambiguous, nonexistent)\n 1112 tz = timezones.maybe_get_tz(tz)\n 1113 # Convert to UTC\n-> 1115 new_dates = tzconversion.tz_localize_to_utc(\n 1116 self.asi8,\n 1117 tz,\n 1118 ambiguous=ambiguous,\n 1119 nonexistent=nonexistent,\n 1120 creso=self._creso,\n 1121 )\n 1122 new_dates_dt64 = new_dates.view(f\"M8[{self.unit}]\")\n 1123 dtype = tz_to_dtype(tz, unit=self.unit)\n\nFile pandas/_libs/tslibs/tzconversion.pyx:441, in pandas._libs.tslibs.tzconversion.tz_localize_to_utc()\n--> 441 'Could not get source, probably due dynamically evaluated source code.'\nValueError: Cannot infer dst time from 2011-11-06 01:00:00, try using the 'ambiguous' argument\nHandle these ambiguous times by specifying the following.\nIn [511]: rng_hourly.tz_localize(\"US/Eastern\",",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.807598887378735
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/basics:0060",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "3 9\ndtype: int32\n\nIn [286]: s.dt.second\nOut[286]:\n0 12\n1 12\n2 12\n3 12\ndtype: int32\n\nIn [287]: s.dt.day\nOut[287]:\n0 1\n1 2\n2 3\n3 4\ndtype: int32\nThis enables nice expressions like this:\nIn [288]: s[s.dt.day == 2]\nOut[288]:\n1 2013-01-02 09:10:12\ndtype: datetime64[us]\nYou can easily produce tz aware transformations:\nIn [289]: stz = s.dt.tz_localize(\"US/Eastern\")\n\nIn [290]: stz\nOut[290]:\n0 2013-01-01 09:10:12-05:00\n1 2013-01-02 09:10:12-05:00\n2 2013-01-03 09:10:12-05:00\n3 2013-01-04 09:10:12-05:00\ndtype: datetime64[us, US/Eastern]\n\nIn [291]: stz.dt.tz\nOut[291]: zoneinfo.ZoneInfo(key='US/Eastern')\nYou can also chain these types of operations:\nIn [292]: s.dt.tz_localize(\"UTC\").dt.tz_convert(\"US/Eastern\")\nOut[292]:\n0 2013-01-01 04:10:12-05:00\n1 2013-01-02 04:10:12-05:00\n2 2013-01-03 04:10:12-05:00\n3 2013-01-04 04:10:12-05:00\ndtype: datetime64[us, US/Eastern]\nYou can also format datetime values as strings with Series.dt.strftime() which supports the same format as the standard strftime().\n# DatetimeIndex\nIn [293]: s = pd.Series(pd.date_range(\"20130101\", periods=4))\n\nIn [294]: s\nOut[294]:\n0 2013-01-01\n1 2013-01-02\n2 2013-01-03\n3 2013-01-04\ndtype: datetime64[us]\n\nIn [",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dt-accessor",
+          "heading_path": "Essential basic functionality > .dt accessor",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dt-accessor"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dt-accessor"
+      ],
+      "section_id": "user_guide/basics#dt-accessor",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dt-accessor",
+      "score": 0.8182163456824667
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:user_guide/10min:0025",
+      "doc_id": "user_guide/10min",
+      "title": "10 minutes to pandas",
+      "text": "In [109]: rng = pd.date_range(\"3/6/2012 00:00\", periods=5, freq=\"D\")\n\nIn [110]: ts = pd.Series(np.random.randn(len(rng)), rng)\n\nIn [111]: ts\nOut[111]:\n2012-03-06 1.857704\n2012-03-07 -1.193545\n2012-03-08 0.677510\n2012-03-09 -0.153931\n2012-03-10 0.520091\nFreq: D, dtype: float64\n\nIn [112]: ts_utc = ts.tz_localize(\"UTC\")\n\nIn [113]: ts_utc\nOut[113]:\n2012-03-06 00:00:00+00:00 1.857704\n2012-03-07 00:00:00+00:00 -1.193545\n2012-03-08 00:00:00+00:00 0.677510\n2012-03-09 00:00:00+00:00 -0.153931\n2012-03-10 00:00:00+00:00 0.520091\nFreq: D, dtype: float64\nSeries.tz_convert() converts a timezone aware time series to another time zone:\nIn [114]: ts_utc.tz_convert(\"US/Eastern\")\nOut[114]:\n2012-03-05 19:00:00-05:00 1.857704\n2012-03-06 19:00:00-05:00 -1.193545\n2012-03-07 19:00:00-05:00 0.677510\n2012-03-08 19:00:00-05:00 -0.153931\n2012-03-09 19:00:00-05:00 0.520091\ndtype: float64\nAdding a non-fixed duration (BusinessDay) to a time series:\nIn [115]: rng\nOut[115]:\nDatetimeIndex(['2012-03-06', '2012-03-07', '2012-03-08', '2012-03-09',\n '2012-03-10'],\n dtype='datetime64[us]', freq='D')\n\nIn [116]:",
+      "sources": [
+        {
+          "section_id": "user_guide/10min#time-series",
+          "heading_path": "10 minutes to pandas > Time series",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#time-series"
+        }
+      ],
+      "section_ids": [
+        "user_guide/10min#time-series"
+      ],
+      "section_id": "user_guide/10min#time-series",
+      "url": "https://pandas.pydata.org/docs/user_guide/10min.html#time-series",
+      "score": 0.8023433467256419
+    },
+    {
+      "n": 4,
+      "chunk_id": "fixed_size:user_guide/timeseries:0099",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": "= ts_utc.tz_convert(\"Europe/Berlin\")\n\nIn [499]: result = eastern + berlin\n\nIn [500]: result\nOut[500]:\n2013-01-01 00:00:00+00:00 0\n2013-01-02 00:00:00+00:00 2\n2013-01-03 00:00:00+00:00 4\ndtype: int64\n\nIn [501]: result.index\nOut[501]:\nDatetimeIndex(['2013-01-01 00:00:00+00:00', '2013-01-02 00:00:00+00:00',\n '2013-01-03 00:00:00+00:00'],\n dtype='datetime64[us, UTC]', freq=None)\nTo remove time zone information, use tz_localize(None) or tz_convert(None). tz_localize(None) will remove the time zone yielding the local time representation. tz_convert(None) will remove the time zone after converting to UTC time.\nIn [502]: didx = pd.date_range(start=\"2014-08-01 09:00\", freq=\"h\", periods=3, tz=\"US/Eastern\")\n\nIn [503]: didx\nOut[503]:\nDatetimeIndex(['2014-08-01 09:00:00-04:00', '2014-08-01 10:00:00-04:00',\n '2014-08-01 11:00:00-04:00'],\n dtype='datetime64[us, US/Eastern]', freq='h')\n\nIn [504]: didx.tz_localize(None)\nOut[504]:\nDatetimeIndex(['2014-08-01 09:00:00', '2014-08-01 10:00:00',\n '2014-08-01 11:00:00'],\n dtype='datetime64[us]', freq=None)\n\nIn [505]: didx.tz_convert(None)\nOut[505]:\nDatetimeIndex(['2014-08-01 13:00:00', '2014-08-01 14:00:00',\n '2014-08-01 15:00:00'],\n dtype='datetime64[us]', freq='h')\n\n# tz_convert(None) is identical to tz_convert('UTC').tz_localize(None)",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.7992278299861626
+    },
+    {
+      "n": 5,
+      "chunk_id": "fixed_size:user_guide/timeseries:0105",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": "# we can preserve freq\n 1713 # TODO: Also for fixed-offsets\n\nFile ~/work/pandas/pandas/pandas/core/arrays/_mixins.py:82, in ravel_compat.<locals>.method(self, *args, **kwargs)\n 79 @wraps(meth)\n 80 def method(self, *args, **kwargs):\n 81 if self.ndim == 1:\n---> 82 return meth(self, *args, **kwargs)\n 84 flags = self._ndarray.flags\n 85 flat = self.ravel(\"K\")\n\nFile ~/work/pandas/pandas/pandas/core/arrays/datetimes.py:1115, in DatetimeArray.tz_localize(self, tz, ambiguous, nonexistent)\n 1112 tz = timezones.maybe_get_tz(tz)\n 1113 # Convert to UTC\n-> 1115 new_dates = tzconversion.tz_localize_to_utc(\n 1116 self.asi8,\n 1117 tz,\n 1118 ambiguous=ambiguous,\n 1119 nonexistent=nonexistent,\n 1120 creso=self._creso,\n 1121 )\n 1122 new_dates_dt64 = new_dates.view(f\"M8[{self.unit}]\")\n 1123 dtype = tz_to_dtype(tz, unit=self.unit)\n\nFile pandas/_libs/tslibs/tzconversion.pyx:530, in pandas._libs.tslibs.tzconversion.tz_localize_to_utc()\n--> 530 'Could not get source, probably due dynamically evaluated source code.'\nValueError: 2015-03-29 02:30:00 is a nonexistent time due to daylight savings time. Try using the 'nonexistent' argument.\nTransform nonexistent times to NaT or shift the times.\nIn [516]: dti\nOut[516]:\nDatetimeIndex(['2015-03-29 02:30:00', '2015-03-29 03:30:00',\n '2015-03-29 04:30:00'],\n dtype='datetime64[us]', freq='h')\n\nIn [517]: dti.tz_localize(\"Europe/Warsaw\", nonexistent=\"shift_forward\")\nOut[517]:\nDatetimeIndex(['2015-03-29 03:00:00+02:00', '2015-03-29 03:30:00+02:00',\n '2015-03-29 04:30:00+",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.810585090553161
+    }
+  ],
+  "latency_ms": 24665,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/basics:0060",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "3 9\ndtype: int32\n\nIn [286]: s.dt.second\nOut[286]:\n0 12\n1 12\n2 12\n3 12\ndtype: int32\n\nIn [287]: s.dt.day\nOut[287]:\n0 1\n1 2\n2 3\n3 4\ndtype: int32\nThis enables nice expressions like this:\nIn [288]: s[s.dt.day == 2]\nOut[288]:\n1 2013-01-02 09:10:12\ndtype: datetime64[us]\nYou can easily produce tz aware transformations:\nIn [289]: stz = s.dt.tz_localize(\"US/Eastern\")\n\nIn [290]: stz\nOut[290]:\n0 2013-01-01 09:10:12-05:00\n1 2013-01-02 09:10:12-05:00\n2 2013-01-03 09:10:12-05:00\n3 2013-01-04 09:10:12-05:00\ndtype: datetime64[us, US/Eastern]\n\nIn [291]: stz.dt.tz\nOut[291]: zoneinfo.ZoneInfo(key='US/Eastern')\nYou can also chain these types of operations:\nIn [292]: s.dt.tz_localize(\"UTC\").dt.tz_convert(\"US/Eastern\")\nOut[292]:\n0 2013-01-01 04:10:12-05:00\n1 2013-01-02 04:10:12-05:00\n2 2013-01-03 04:10:12-05:00\n3 2013-01-04 04:10:12-05:00\ndtype: datetime64[us, US/Eastern]\nYou can also format datetime values as strings with Series.dt.strftime() which supports the same format as the standard strftime().\n# DatetimeIndex\nIn [293]: s = pd.Series(pd.date_range(\"20130101\", periods=4))\n\nIn [294]: s\nOut[294]:\n0 2013-01-01\n1 2013-01-02\n2 2013-01-03\n3 2013-01-04\ndtype: datetime64[us]\n\nIn [",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#dt-accessor",
+          "heading_path": "Essential basic functionality > .dt accessor",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dt-accessor"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#dt-accessor"
+      ],
+      "section_id": "user_guide/basics#dt-accessor",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#dt-accessor",
+      "score": 0.8182163456824667
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/timeseries:0105",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": "# we can preserve freq\n 1713 # TODO: Also for fixed-offsets\n\nFile ~/work/pandas/pandas/pandas/core/arrays/_mixins.py:82, in ravel_compat.<locals>.method(self, *args, **kwargs)\n 79 @wraps(meth)\n 80 def method(self, *args, **kwargs):\n 81 if self.ndim == 1:\n---> 82 return meth(self, *args, **kwargs)\n 84 flags = self._ndarray.flags\n 85 flat = self.ravel(\"K\")\n\nFile ~/work/pandas/pandas/pandas/core/arrays/datetimes.py:1115, in DatetimeArray.tz_localize(self, tz, ambiguous, nonexistent)\n 1112 tz = timezones.maybe_get_tz(tz)\n 1113 # Convert to UTC\n-> 1115 new_dates = tzconversion.tz_localize_to_utc(\n 1116 self.asi8,\n 1117 tz,\n 1118 ambiguous=ambiguous,\n 1119 nonexistent=nonexistent,\n 1120 creso=self._creso,\n 1121 )\n 1122 new_dates_dt64 = new_dates.view(f\"M8[{self.unit}]\")\n 1123 dtype = tz_to_dtype(tz, unit=self.unit)\n\nFile pandas/_libs/tslibs/tzconversion.pyx:530, in pandas._libs.tslibs.tzconversion.tz_localize_to_utc()\n--> 530 'Could not get source, probably due dynamically evaluated source code.'\nValueError: 2015-03-29 02:30:00 is a nonexistent time due to daylight savings time. Try using the 'nonexistent' argument.\nTransform nonexistent times to NaT or shift the times.\nIn [516]: dti\nOut[516]:\nDatetimeIndex(['2015-03-29 02:30:00', '2015-03-29 03:30:00',\n '2015-03-29 04:30:00'],\n dtype='datetime64[us]', freq='h')\n\nIn [517]: dti.tz_localize(\"Europe/Warsaw\", nonexistent=\"shift_forward\")\nOut[517]:\nDatetimeIndex(['2015-03-29 03:00:00+02:00', '2015-03-29 03:30:00+02:00',\n '2015-03-29 04:30:00+",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.810585090553161
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/timeseries:0102",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": ")\n 1568 \"\"\"\n 1569 Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.\n 1570\n (...) 1706 dtype: datetime64[ns, Europe/Warsaw]\n 1707 \"\"\" # noqa: E501\n 1708 freq = self._freq\n-> 1709 arr = self._data.tz_localize(tz, ambiguous, nonexistent)\n 1710 result = type(self)._simple_new(arr, name=self.name)\n 1711 if timezones.is_utc(arr.tz) or (len(arr) == 1 and arr[0] is not NaT):\n 1712 # we can preserve freq\n 1713 # TODO: Also for fixed-offsets\n\nFile ~/work/pandas/pandas/pandas/core/arrays/_mixins.py:82, in ravel_compat.<locals>.method(self, *args, **kwargs)\n 79 @wraps(meth)\n 80 def method(self, *args, **kwargs):\n 81 if self.ndim == 1:\n---> 82 return meth(self, *args, **kwargs)\n 84 flags = self._ndarray.flags\n 85 flat = self.ravel(\"K\")\n\nFile ~/work/pandas/pandas/pandas/core/arrays/datetimes.py:1115, in DatetimeArray.tz_localize(self, tz, ambiguous, nonexistent)\n 1112 tz = timezones.maybe_get_tz(tz)\n 1113 # Convert to UTC\n-> 1115 new_dates = tzconversion.tz_localize_to_utc(\n 1116 self.asi8,\n 1117 tz,\n 1118 ambiguous=ambiguous,\n 1119 nonexistent=nonexistent,\n 1120 creso=self._creso,\n 1121 )\n 1122 new_dates_dt64 = new_dates.view(f\"M8[{self.unit}]\")\n 1123 dtype = tz_to_dtype(tz, unit=self.unit)\n\nFile pandas/_libs/tslibs/tzconversion.pyx:441, in pandas._libs.tslibs.tzconversion.tz_localize_to_utc()\n--> 441 'Could not get source, probably due dynamically evaluated source code.'\nValueError: Cannot infer dst time from 2011-11-06 01:00:00, try using the 'ambiguous' argument\nHandle these ambiguous times by specifying the following.\nIn [511]: rng_hourly.tz_localize(\"US/Eastern\",",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.807598887378735
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/10min:0025",
+      "doc_id": "user_guide/10min",
+      "title": "10 minutes to pandas",
+      "text": "In [109]: rng = pd.date_range(\"3/6/2012 00:00\", periods=5, freq=\"D\")\n\nIn [110]: ts = pd.Series(np.random.randn(len(rng)), rng)\n\nIn [111]: ts\nOut[111]:\n2012-03-06 1.857704\n2012-03-07 -1.193545\n2012-03-08 0.677510\n2012-03-09 -0.153931\n2012-03-10 0.520091\nFreq: D, dtype: float64\n\nIn [112]: ts_utc = ts.tz_localize(\"UTC\")\n\nIn [113]: ts_utc\nOut[113]:\n2012-03-06 00:00:00+00:00 1.857704\n2012-03-07 00:00:00+00:00 -1.193545\n2012-03-08 00:00:00+00:00 0.677510\n2012-03-09 00:00:00+00:00 -0.153931\n2012-03-10 00:00:00+00:00 0.520091\nFreq: D, dtype: float64\nSeries.tz_convert() converts a timezone aware time series to another time zone:\nIn [114]: ts_utc.tz_convert(\"US/Eastern\")\nOut[114]:\n2012-03-05 19:00:00-05:00 1.857704\n2012-03-06 19:00:00-05:00 -1.193545\n2012-03-07 19:00:00-05:00 0.677510\n2012-03-08 19:00:00-05:00 -0.153931\n2012-03-09 19:00:00-05:00 0.520091\ndtype: float64\nAdding a non-fixed duration (BusinessDay) to a time series:\nIn [115]: rng\nOut[115]:\nDatetimeIndex(['2012-03-06', '2012-03-07', '2012-03-08', '2012-03-09',\n '2012-03-10'],\n dtype='datetime64[us]', freq='D')\n\nIn [116]:",
+      "sources": [
+        {
+          "section_id": "user_guide/10min#time-series",
+          "heading_path": "10 minutes to pandas > Time series",
+          "url": "https://pandas.pydata.org/docs/user_guide/10min.html#time-series"
+        }
+      ],
+      "section_ids": [
+        "user_guide/10min#time-series"
+      ],
+      "section_id": "user_guide/10min#time-series",
+      "url": "https://pandas.pydata.org/docs/user_guide/10min.html#time-series",
+      "score": 0.8023433467256419
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/timeseries:0099",
+      "doc_id": "user_guide/timeseries",
+      "title": "Time series / date functionality",
+      "text": "= ts_utc.tz_convert(\"Europe/Berlin\")\n\nIn [499]: result = eastern + berlin\n\nIn [500]: result\nOut[500]:\n2013-01-01 00:00:00+00:00 0\n2013-01-02 00:00:00+00:00 2\n2013-01-03 00:00:00+00:00 4\ndtype: int64\n\nIn [501]: result.index\nOut[501]:\nDatetimeIndex(['2013-01-01 00:00:00+00:00', '2013-01-02 00:00:00+00:00',\n '2013-01-03 00:00:00+00:00'],\n dtype='datetime64[us, UTC]', freq=None)\nTo remove time zone information, use tz_localize(None) or tz_convert(None). tz_localize(None) will remove the time zone yielding the local time representation. tz_convert(None) will remove the time zone after converting to UTC time.\nIn [502]: didx = pd.date_range(start=\"2014-08-01 09:00\", freq=\"h\", periods=3, tz=\"US/Eastern\")\n\nIn [503]: didx\nOut[503]:\nDatetimeIndex(['2014-08-01 09:00:00-04:00', '2014-08-01 10:00:00-04:00',\n '2014-08-01 11:00:00-04:00'],\n dtype='datetime64[us, US/Eastern]', freq='h')\n\nIn [504]: didx.tz_localize(None)\nOut[504]:\nDatetimeIndex(['2014-08-01 09:00:00', '2014-08-01 10:00:00',\n '2014-08-01 11:00:00'],\n dtype='datetime64[us]', freq=None)\n\nIn [505]: didx.tz_convert(None)\nOut[505]:\nDatetimeIndex(['2014-08-01 13:00:00', '2014-08-01 14:00:00',\n '2014-08-01 15:00:00'],\n dtype='datetime64[us]', freq='h')\n\n# tz_convert(None) is identical to tz_convert('UTC').tz_localize(None)",
+      "sources": [
+        {
+          "section_id": "user_guide/timeseries#time-zone-handling",
+          "heading_path": "Time series / date functionality > Time zone handling",
+          "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling"
+        }
+      ],
+      "section_ids": [
+        "user_guide/timeseries#time-zone-handling"
+      ],
+      "section_id": "user_guide/timeseries#time-zone-handling",
+      "url": "https://pandas.pydata.org/docs/user_guide/timeseries.html#time-zone-handling",
+      "score": 0.7992278299861626
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 24665
+}

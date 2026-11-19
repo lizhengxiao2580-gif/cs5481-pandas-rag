@@ -1,0 +1,173 @@
+{
+  "question_id": "Q13",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:07:47.790386+00:00",
+  "answer": "To construct a Series of integers with missing values without converting to floating point, use the nullable integer dtype `\"Int64\"` (capital `\"I\"`) in the Series constructor:\n\n```python\npd.Series([1, 2, None], dtype=\"Int64\")\n```\n\nThis produces:\n\n```\n0       1\n1       2\n2    <NA>\ndtype: Int64\n```\n\nThe missing value is represented as `pandas.NA`, not `NaN` [1][2]. If you omit the `dtype`, `pd.Series([1, None])` infers `float64` with `NaN` [2].\n\n`\"Int64\"` is not the same spelling as NumPy’s lowercase `\"int64\"`; the capital `\"I\"` differentiates pandas’ nullable integer dtype from NumPy’s dtype [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/integer_na:0001",
+      "doc_id": "user_guide/integer_na",
+      "title": "Nullable integer data type",
+      "text": "arrays.IntegerArray uses pandas.NA as its missing value.\nIn Working with missing data, we saw that pandas primarily uses NaN to represent missing data. Because NaN is a float, this forces an array of integers with any missing values to become floating point. In some cases, this may not matter much. But if your integer column is, say, an identifier, casting to float can be problematic. Some integers cannot even be represented as floating point numbers.\n\npandas can represent integer data with possibly missing values using arrays.IntegerArray. This is an extension type implemented within pandas.\nIn [1]: arr = pd.array([1, 2, None], dtype=pd.Int64Dtype())\n\nIn [2]: arr\nOut[2]:\n<IntegerArray>\n[1, 2, <NA>]\nLength: 3, dtype: Int64\nOr the string alias \"Int64\" (note the capital \"I\") to differentiate from NumPy’s 'int64' dtype:\nIn [3]: pd.array([1, 2, np.nan], dtype=\"Int64\")\nOut[3]:\n<IntegerArray>\n[1, 2, <NA>]\nLength: 3, dtype: Int64\nAll NA-like values are replaced with pandas.NA.\nIn [4]: pd.array([1, 2, np.nan, None, pd.NA], dtype=\"Int64\")\nOut[4]:\n<IntegerArray>\n[1, 2, <NA>, <NA>, <NA>]\nLength: 5, dtype: Int64\nThis array can be stored in a DataFrame or Series like any NumPy array.\nIn [5]: pd.Series(arr)\nOut[5]:\n0 1\n1 2\n2 <NA>\ndtype: Int64\nYou can also pass the list-like object to the Series constructor with the dtype.\nWarning\nCurrently pandas.array() and pandas.Series() use different rules for dtype inference. pandas.array() will infer a nullable-integer dtype\nIn [6]: pd.array([1, None])\nOut[6]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [7]: pd.array([1, 2])\nOut[7]:\n<IntegerArray>\n[1, 2]\nLength: 2, dtype: Int64\nFor backwards-compatibility, Series infers these as either integer or float dtype.\nIn [8]: pd.Series([1, None",
+      "sources": [
+        {
+          "section_id": "user_guide/integer_na#nullable-integer-data-type",
+          "heading_path": "Nullable integer data type > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#nullable-integer-data-type"
+        },
+        {
+          "section_id": "user_guide/integer_na#construction",
+          "heading_path": "Nullable integer data type > Construction",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction"
+        }
+      ],
+      "section_ids": [
+        "user_guide/integer_na#nullable-integer-data-type",
+        "user_guide/integer_na#construction"
+      ],
+      "section_id": "user_guide/integer_na#nullable-integer-data-type",
+      "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#nullable-integer-data-type",
+      "score": 0.7896659179599523
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/integer_na:0002",
+      "doc_id": "user_guide/integer_na",
+      "title": "Nullable integer data type",
+      "text": "-integer dtype\nIn [6]: pd.array([1, None])\nOut[6]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [7]: pd.array([1, 2])\nOut[7]:\n<IntegerArray>\n[1, 2]\nLength: 2, dtype: Int64\nFor backwards-compatibility, Series infers these as either integer or float dtype.\nIn [8]: pd.Series([1, None])\nOut[8]:\n0 1.0\n1 NaN\ndtype: float64\n\nIn [9]: pd.Series([1, 2])\nOut[9]:\n0 1\n1 2\ndtype: int64\nWe recommend explicitly providing the dtype to avoid confusion.\nIn [10]: pd.array([1, None], dtype=\"Int64\")\nOut[10]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [11]: pd.Series([1, None], dtype=\"Int64\")\nOut[11]:\n0 1\n1 <NA>\ndtype: Int64\nIn the future, we may provide an option for Series to infer a nullable-integer dtype.\nIf you create a column of NA values (for example to fill them later) with df['new_col'] = pd.NA, the dtype would be set to object in the new column. The performance on this column will be worse than with the appropriate type. It’s better to use df['new_col'] = pd.Series(pd.NA, dtype=\"Int64\") (or another dtype that supports NA).\nIn [12]: df = pd.DataFrame()\n\nIn [13]: df['objects'] = pd.NA\n\nIn [14]: df.dtypes\nOut[14]:\nobjects object\ndtype: object\n\nOperations involving an integer array will behave similar to NumPy arrays. Missing values will be propagated, and the data will be coerced to another dtype if needed.\nIn [15]: s = pd.Series([1, 2, None], dtype=\"Int64\")\n\n# arithmetic\nIn [16]: s + 1\nOut[16]:\n0 2\n1 3\n2 <NA>\ndtype: Int64\n\n# comparison\nIn [17]: s == 1\nOut[17]:\n0 True\n1 False\n2 <NA>\ndtype: boolean\n\n# slicing operation\nIn [18]: s.iloc",
+      "sources": [
+        {
+          "section_id": "user_guide/integer_na#construction",
+          "heading_path": "Nullable integer data type > Construction",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction"
+        },
+        {
+          "section_id": "user_guide/integer_na#operations",
+          "heading_path": "Nullable integer data type > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/integer_na#construction",
+        "user_guide/integer_na#operations"
+      ],
+      "section_id": "user_guide/integer_na#construction",
+      "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction",
+      "score": 0.7358297215661664
+    }
+  ],
+  "latency_ms": 12496,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/integer_na:0001",
+      "doc_id": "user_guide/integer_na",
+      "title": "Nullable integer data type",
+      "text": "arrays.IntegerArray uses pandas.NA as its missing value.\nIn Working with missing data, we saw that pandas primarily uses NaN to represent missing data. Because NaN is a float, this forces an array of integers with any missing values to become floating point. In some cases, this may not matter much. But if your integer column is, say, an identifier, casting to float can be problematic. Some integers cannot even be represented as floating point numbers.\n\npandas can represent integer data with possibly missing values using arrays.IntegerArray. This is an extension type implemented within pandas.\nIn [1]: arr = pd.array([1, 2, None], dtype=pd.Int64Dtype())\n\nIn [2]: arr\nOut[2]:\n<IntegerArray>\n[1, 2, <NA>]\nLength: 3, dtype: Int64\nOr the string alias \"Int64\" (note the capital \"I\") to differentiate from NumPy’s 'int64' dtype:\nIn [3]: pd.array([1, 2, np.nan], dtype=\"Int64\")\nOut[3]:\n<IntegerArray>\n[1, 2, <NA>]\nLength: 3, dtype: Int64\nAll NA-like values are replaced with pandas.NA.\nIn [4]: pd.array([1, 2, np.nan, None, pd.NA], dtype=\"Int64\")\nOut[4]:\n<IntegerArray>\n[1, 2, <NA>, <NA>, <NA>]\nLength: 5, dtype: Int64\nThis array can be stored in a DataFrame or Series like any NumPy array.\nIn [5]: pd.Series(arr)\nOut[5]:\n0 1\n1 2\n2 <NA>\ndtype: Int64\nYou can also pass the list-like object to the Series constructor with the dtype.\nWarning\nCurrently pandas.array() and pandas.Series() use different rules for dtype inference. pandas.array() will infer a nullable-integer dtype\nIn [6]: pd.array([1, None])\nOut[6]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [7]: pd.array([1, 2])\nOut[7]:\n<IntegerArray>\n[1, 2]\nLength: 2, dtype: Int64\nFor backwards-compatibility, Series infers these as either integer or float dtype.\nIn [8]: pd.Series([1, None",
+      "sources": [
+        {
+          "section_id": "user_guide/integer_na#nullable-integer-data-type",
+          "heading_path": "Nullable integer data type > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#nullable-integer-data-type"
+        },
+        {
+          "section_id": "user_guide/integer_na#construction",
+          "heading_path": "Nullable integer data type > Construction",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction"
+        }
+      ],
+      "section_ids": [
+        "user_guide/integer_na#nullable-integer-data-type",
+        "user_guide/integer_na#construction"
+      ],
+      "section_id": "user_guide/integer_na#nullable-integer-data-type",
+      "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#nullable-integer-data-type",
+      "score": 0.7896659179599523
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/gotchas:0010",
+      "doc_id": "user_guide/gotchas",
+      "title": "Frequently Asked Questions (FAQ)",
+      "text": "When introducing NAs into an existing Series or DataFrame via reindex() or some other means, boolean and integer types will be promoted to a different dtype in order to store the NAs. The promotions are summarized in this table:\nTypeclass\nPromotion dtype for storing NAs\nfloating\nno change\nobject\nno change\ninteger\ncast to float64\nboolean\ncast to object\nSupport for integer NA\nIn the absence of high performance NA support being built into NumPy from the ground up, the primary casualty is the ability to represent NAs in integer arrays. For example:\nIn [35]: s = pd.Series([1, 2, 3, 4, 5], index=list(\"abcde\"))\n\nIn [36]: s\nOut[36]:\na 1\nb 2\nc 3\nd 4\ne 5\ndtype: int64\n\nIn [37]: s.dtype\nOut[37]: dtype('int64')\n\nIn [38]: s2 = s.reindex([\"a\", \"b\", \"c\", \"f\", \"u\"])\n\nIn [39]: s2\nOut[39]:\na 1.0\nb 2.0\nc 3.0\nf NaN\nu NaN\ndtype: float64\n\nIn [40]: s2.dtype\nOut[40]: dtype('float64')\nThis trade-off is made largely for memory and performance reasons, and also so that the resulting Series continues to be “numeric”.\nIf you need to represent integers with possibly missing values, use one of the nullable-integer extension dtypes provided by pandas or pyarrow\nInt8Dtype\nInt16Dtype\nInt32Dtype\nInt64Dtype\nArrowDtype\nIn [41]: s_int = pd.Series([1, 2, 3, 4, 5], index=list(\"abcde\"), dtype=pd.Int64Dtype())\n\nIn [42]: s_int\nOut[42]:\na 1\nb 2\nc 3\nd 4\ne 5\ndtype: Int64\n\nIn [43]: s_int.dtype\nOut[43]: Int64Dtype()\n\nIn [44]: s2_int = s_int.reindex([\"a\", \"b\", \"c\", \"f\", \"u\"])\n\nIn [45]: s2_int\nOut[45]:\na 1\nb 2\nc",
+      "sources": [
+        {
+          "section_id": "user_guide/gotchas#missing-value-representation-for-numpy-types",
+          "heading_path": "Frequently Asked Questions (FAQ) > Missing value representation for NumPy types",
+          "url": "https://pandas.pydata.org/docs/user_guide/gotchas.html#missing-value-representation-for-numpy-types"
+        }
+      ],
+      "section_ids": [
+        "user_guide/gotchas#missing-value-representation-for-numpy-types"
+      ],
+      "section_id": "user_guide/gotchas#missing-value-representation-for-numpy-types",
+      "url": "https://pandas.pydata.org/docs/user_guide/gotchas.html#missing-value-representation-for-numpy-types",
+      "score": 0.7521180895741921
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/integer_na:0002",
+      "doc_id": "user_guide/integer_na",
+      "title": "Nullable integer data type",
+      "text": "-integer dtype\nIn [6]: pd.array([1, None])\nOut[6]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [7]: pd.array([1, 2])\nOut[7]:\n<IntegerArray>\n[1, 2]\nLength: 2, dtype: Int64\nFor backwards-compatibility, Series infers these as either integer or float dtype.\nIn [8]: pd.Series([1, None])\nOut[8]:\n0 1.0\n1 NaN\ndtype: float64\n\nIn [9]: pd.Series([1, 2])\nOut[9]:\n0 1\n1 2\ndtype: int64\nWe recommend explicitly providing the dtype to avoid confusion.\nIn [10]: pd.array([1, None], dtype=\"Int64\")\nOut[10]:\n<IntegerArray>\n[1, <NA>]\nLength: 2, dtype: Int64\n\nIn [11]: pd.Series([1, None], dtype=\"Int64\")\nOut[11]:\n0 1\n1 <NA>\ndtype: Int64\nIn the future, we may provide an option for Series to infer a nullable-integer dtype.\nIf you create a column of NA values (for example to fill them later) with df['new_col'] = pd.NA, the dtype would be set to object in the new column. The performance on this column will be worse than with the appropriate type. It’s better to use df['new_col'] = pd.Series(pd.NA, dtype=\"Int64\") (or another dtype that supports NA).\nIn [12]: df = pd.DataFrame()\n\nIn [13]: df['objects'] = pd.NA\n\nIn [14]: df.dtypes\nOut[14]:\nobjects object\ndtype: object\n\nOperations involving an integer array will behave similar to NumPy arrays. Missing values will be propagated, and the data will be coerced to another dtype if needed.\nIn [15]: s = pd.Series([1, 2, None], dtype=\"Int64\")\n\n# arithmetic\nIn [16]: s + 1\nOut[16]:\n0 2\n1 3\n2 <NA>\ndtype: Int64\n\n# comparison\nIn [17]: s == 1\nOut[17]:\n0 True\n1 False\n2 <NA>\ndtype: boolean\n\n# slicing operation\nIn [18]: s.iloc",
+      "sources": [
+        {
+          "section_id": "user_guide/integer_na#construction",
+          "heading_path": "Nullable integer data type > Construction",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction"
+        },
+        {
+          "section_id": "user_guide/integer_na#operations",
+          "heading_path": "Nullable integer data type > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/integer_na#construction",
+        "user_guide/integer_na#operations"
+      ],
+      "section_id": "user_guide/integer_na#construction",
+      "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#construction",
+      "score": 0.7358297215661664
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/integer_na:0003",
+      "doc_id": "user_guide/integer_na",
+      "title": "Nullable integer data type",
+      "text": "to another dtype if needed.\nIn [15]: s = pd.Series([1, 2, None], dtype=\"Int64\")\n\n# arithmetic\nIn [16]: s + 1\nOut[16]:\n0 2\n1 3\n2 <NA>\ndtype: Int64\n\n# comparison\nIn [17]: s == 1\nOut[17]:\n0 True\n1 False\n2 <NA>\ndtype: boolean\n\n# slicing operation\nIn [18]: s.iloc[1:3]\nOut[18]:\n1 2\n2 <NA>\ndtype: Int64\n\n# operate with other dtypes\nIn [19]: s + s.iloc[1:3].astype(\"Int8\")\nOut[19]:\n0 <NA>\n1 4\n2 <NA>\ndtype: Int64\n\n# coerce when needed\nIn [20]: s + 0.01\nOut[20]:\n0 1.01\n1 2.01\n2 <NA>\ndtype: Float64\nThese dtypes can operate as part of a DataFrame.\nIn [21]: df = pd.DataFrame({\"A\": s, \"B\": [1, 1, 3], \"C\": list(\"aab\")})\n\nIn [22]: df\nOut[22]:\n A B C\n0 1 1 a\n1 2 1 a\n2 <NA> 3 b\n\nIn [23]: df.dtypes\nOut[23]:\nA Int64\nB int64\nC str\ndtype: object\nThese dtypes can be merged, reshaped & casted.\nIn [24]: pd.concat([df[[\"A\"]], df[[\"B\", \"C\"]]], axis=1).dtypes\nOut[24]:\nA Int64\nB int64\nC str\ndtype: object\n\nIn [25]: df[\"A\"].astype(float)\nOut[25]:\n0 1.0\n1 2.0\n2 NaN\nName: A, dtype: float64\nReduction and groupby operations such as sum() work as well.\nIn [26]: df.sum(numeric_only=True)\nOut[26]:\nA 3\nB 5\ndtype: Int64\n\nIn [27]: df.sum()\nOut[27]:\nA 3\nB 5\nC aab\ndtype: object\n\nIn [28]: df.groupby(\"B\").A.sum()\nOut[28",
+      "sources": [
+        {
+          "section_id": "user_guide/integer_na#operations",
+          "heading_path": "Nullable integer data type > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/integer_na#operations"
+      ],
+      "section_id": "user_guide/integer_na#operations",
+      "url": "https://pandas.pydata.org/docs/user_guide/integer_na.html#operations",
+      "score": 0.7050697548086726
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/missing_data:0001",
+      "doc_id": "user_guide/missing_data",
+      "title": "Working with missing data",
+      "text": "pandas uses different sentinel values to represent a missing (also referred to as NA) depending on the data type.\nnumpy.nan for NumPy data types. The disadvantage of using NumPy data types is that the original data type will be coerced to np.float64 or object.\nIn [1]: pd.Series([1, 2], dtype=np.int64).reindex([0, 1, 2])\nOut[1]:\n0 1.0\n1 2.0\n2 NaN\ndtype: float64\n\nIn [2]: pd.Series([True, False], dtype=np.bool_).reindex([0, 1, 2])\nOut[2]:\n0 True\n1 False\n2 NaN\ndtype: object\nNaT for NumPy np.datetime64, np.timedelta64, and PeriodDtype. For typing applications, use api.typing.NaTType.\nIn [3]: pd.Series([1, 2], dtype=np.dtype(\"timedelta64[ns]\")).reindex([0, 1, 2])\nOut[3]:\n0 0 days 00:00:00.000000001\n1 0 days 00:00:00.000000002\n2 NaT\ndtype: timedelta64[ns]\n\nIn [4]: pd.Series([1, 2], dtype=np.dtype(\"datetime64[ns]\")).reindex([0, 1, 2])\nOut[4]:\n0 1970-01-01 00:00:00.000000001\n1 1970-01-01 00:00:00.000000002\n2 NaT\ndtype: datetime64[ns]\n\nIn [5]: pd.Series([\"2020\", \"2020\"], dtype=pd.PeriodDtype(\"D\")).reindex([0, 1, 2])\nOut[5]:\n0 2020-01-01\n1 2020-01-01\n2 NaT\ndtype: period[D]\nNA for StringDtype, Int64Dtype (and other bit widths), Float64Dtype (and other bit widths), BooleanDtype and ArrowDtype. These types will maintain the original data type of the data. For typing applications, use api.typing.NAType.\nIn [6]: pd.Series([1, 2], dtype=\"Int64\").reindex([0, 1, 2])\nOut",
+      "sources": [
+        {
+          "section_id": "user_guide/missing_data#values-considered-missing",
+          "heading_path": "Working with missing data > Values considered “missing”",
+          "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#values-considered-missing"
+        }
+      ],
+      "section_ids": [
+        "user_guide/missing_data#values-considered-missing"
+      ],
+      "section_id": "user_guide/missing_data#values-considered-missing",
+      "url": "https://pandas.pydata.org/docs/user_guide/missing_data.html#values-considered-missing",
+      "score": 0.704855462066126
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 12496
+}

@@ -1,0 +1,187 @@
+{
+  "question_id": "Q07",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:05:27.517970+00:00",
+  "answer": "Use `pandas.melt` / `DataFrame.melt` and specify:\n\n- `id_vars='id'` to keep `id` as the identifier column [1][2]\n- `value_vars=['Jan', 'Feb']` to unpivot only those two columns [1][2]\n\nBy default, the unpivoted result will have two non-identifier columns named `variable` and `value` [1][3]. You can rename them with `var_name` and `value_name` [1][2].\n\nAssuming your DataFrame has columns named `id`, `Jan`, and `Feb`:\n\n```python\nlong = df.melt(id_vars='id', value_vars=['Jan', 'Feb'])\n```\n\nWith custom output column names:\n\n```python\nlong = df.melt(\n    id_vars='id',\n    value_vars=['Jan', 'Feb'],\n    var_name='month',\n    value_name='amount',\n)\n```",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.melt:0001",
+      "doc_id": "reference/api/pandas.melt",
+      "title": "pandas.melt",
+      "text": "pandas.melt\npandas.melt(frame, id_vars=None, value_vars=None, var_name=None, value_name='value', col_level=None, ignore_index=True)[source]\nUnpivot a DataFrame from wide to long format, optionally leaving identifiers set.\nThis function is useful to reshape a DataFrame into a format where one or more columns are identifier variables (id_vars), while all other columns are considered measured variables (value_vars), and are “unpivoted” to the row axis, leaving just two non-identifier columns, ‘variable’ and ‘value’.\nParameters:\nframeDataFrame\nThe DataFrame to unpivot.\nid_varsscalar, tuple, list, or ndarray, optional\nColumn(s) to use as identifier variables.\nvalue_varsscalar, tuple, list, or ndarray, optional\nColumn(s) to unpivot. If not specified, uses all columns that are not set as id_vars.\nvar_namescalar, tuple, list, or ndarray, optional\nName to use for the ‘variable’ column. If None it uses frame.columns.name or ‘variable’. Must be a scalar if columns are a MultiIndex.\nvalue_namescalar, default ‘value’\nName to use for the ‘value’ column, can’t be an existing column label.\ncol_levelscalar, optional\nIf columns are a MultiIndex then use this level to melt.\nignore_indexbool, default True\nIf True, original index is ignored. If False, the original index is retained. Index labels will be repeated as necessary.\nReturns:\nDataFrame\nUnpivoted DataFrame.\nSee also\nDataFrame.melt\nIdentical method.\npivot_table\nCreate a spreadsheet-style pivot table as a DataFrame.\nDataFrame.pivot\nReturn reshaped DataFrame organized by given index / column values.\nDataFrame.explode\nExplode a DataFrame from list-like columns to long format.\nNotes\nReference the user guide for more examples.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"A\": {0: \"a\", 1: \"b\", 2: \"c\"},\n... \"B\": {0: 1, 1: 3, 2: 5},\n... \"C\": {0: 2, 1: 4, 2: 6},\n... }\n... )\n>>> df\n A B C\n0 a 1 2\n1 b 3 4\n2 c 5 6\n>>> pd.melt(df, id",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.melt#page",
+          "heading_path": "pandas.melt",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.melt.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.melt#page"
+      ],
+      "section_id": "reference/api/pandas.melt#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.melt.html",
+      "score": 0.6736014810368145
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/07_reshape_table_layout:0005",
+      "doc_id": "getting_started/intro_tutorials/07_reshape_table_layout",
+      "title": "How to reshape the layout of tables",
+      "text": "27.4 67.0\n2 2019-04-09 03:00:00+00:00 54.5 34.2 67.0\n3 2019-04-09 04:00:00+00:00 34.5 48.5 41.0\n4 2019-04-09 05:00:00+00:00 46.5 59.5 41.0\nI want to collect all air quality \\(NO_2\\) measurements in a single column (long format).\nIn [18]: no_2 = no2_pivoted.melt(id_vars=\"date.utc\")\n\nIn [19]: no_2.head()\nOut[19]:\n date.utc location value\n0 2019-04-09 01:00:00+00:00 BETR801 22.5\n1 2019-04-09 02:00:00+00:00 BETR801 53.5\n2 2019-04-09 03:00:00+00:00 BETR801 54.5\n3 2019-04-09 04:00:00+00:00 BETR801 34.5\n4 2019-04-09 05:00:00+00:00 BETR801 46.5\nThe pandas.melt() method on a DataFrame converts the data table from wide format to long format. The column headers become the variable names in a newly created column.\nThe solution is the short version on how to apply pandas.melt(). The method will melt all columns NOT mentioned in id_vars together into two columns: A column with the column header names and a column with the values itself. The latter column gets by default the name value.\nThe parameters passed to pandas.melt() can be defined in more detail:\nIn [20]: no_2 = no2_pivoted.melt(\n ....: id_vars=\"date.utc\",\n ....: value_vars=[\"BETR801\", \"FR04014\", \"London Westminster\"],\n ....: value_name=\"NO_2\",\n ....: var_name=\"id_location\",\n ....: )\n ....:\n\nIn [21]: no_2.head()\nOut[21]:\n date.utc id_location NO_2\n0 2019-04-09 01:00:00+00:00 BET",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format",
+          "heading_path": "How to reshape the layout of tables > Wide to long format",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html#wide-to-long-format"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format"
+      ],
+      "section_id": "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html#wide-to-long-format",
+      "score": 0.6630584129403067
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:user_guide/reshaping:0013",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "x -1.000000e+09 3.803956e-01 -1.000000e+09 8.484421e-02\n\nThe top-level melt() function and the corresponding DataFrame.melt() are useful to reshape a DataFrame into a format where one or more columns are identifier variables, while all other columns, considered measured variables, are “unpivoted” to the row axis, leaving just two non-identifier columns, “variable” and “value”. The names of those columns can be customized by supplying the var_name and value_name parameters.\nIn [47]: cheese = pd.DataFrame(\n ....: {\n ....: \"first\": [\"John\", \"Mary\"],\n ....: \"last\": [\"Doe\", \"Bo\"],\n ....: \"height\": [5.5, 6.0],\n ....: \"weight\": [130, 150],\n ....: }\n ....: )\n ....:\n\nIn [48]: cheese\nOut[48]:\n first last height weight\n0 John Doe 5.5 130\n1 Mary Bo 6.0 150\n\nIn [49]: cheese.melt(id_vars=[\"first\", \"last\"])\nOut[49]:\n first last variable value\n0 John Doe height 5.5\n1 Mary Bo height 6.0\n2 John Doe weight 130.0\n3 Mary Bo weight 150.0\n\nIn [50]: cheese.melt(id_vars=[\"first\", \"last\"], var_name=\"quantity\")\nOut[50]:\n first last quantity value\n0 John Doe height 5.5\n1 Mary Bo height 6.0\n2 John Doe weight 130.0\n3 Mary Bo weight 150.0\nWhen transforming a DataFrame using melt(), the index will be ignored. The original index values can be kept by setting the ignore_index parameter to False (default is True). ignore_index=False will however duplicate index values.\nIn [51]: index = pd.MultiIndex.from_tuples([(\"person\", \"A\"), (\"person\", \"B\")])\n\nIn [52]: cheese = pd.DataFrame(\n ....: {\n ....: \"first\": [\"John\", \"Mary\"],\n ....: \"last\": [\"Doe\", \"Bo\"],\n ....: \"height\": [5.5, 6.0],\n ....: \"weight\": [130, 150],\n ....: },\n ....: index=index,\n ....: )\n ....:\n\nIn [53]: cheese\nOut[53]:\n first",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#stack-and-unstack",
+          "heading_path": "Reshaping and pivot tables > stack() and unstack()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#stack-and-unstack"
+        },
+        {
+          "section_id": "user_guide/reshaping#melt-and-wide-to-long",
+          "heading_path": "Reshaping and pivot tables > melt() and wide_to_long()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#melt-and-wide-to-long"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#stack-and-unstack",
+        "user_guide/reshaping#melt-and-wide-to-long"
+      ],
+      "section_id": "user_guide/reshaping#stack-and-unstack",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#stack-and-unstack",
+      "score": 0.6244295843090385
+    }
+  ],
+  "latency_ms": 15961,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.melt:0001",
+      "doc_id": "reference/api/pandas.melt",
+      "title": "pandas.melt",
+      "text": "pandas.melt\npandas.melt(frame, id_vars=None, value_vars=None, var_name=None, value_name='value', col_level=None, ignore_index=True)[source]\nUnpivot a DataFrame from wide to long format, optionally leaving identifiers set.\nThis function is useful to reshape a DataFrame into a format where one or more columns are identifier variables (id_vars), while all other columns are considered measured variables (value_vars), and are “unpivoted” to the row axis, leaving just two non-identifier columns, ‘variable’ and ‘value’.\nParameters:\nframeDataFrame\nThe DataFrame to unpivot.\nid_varsscalar, tuple, list, or ndarray, optional\nColumn(s) to use as identifier variables.\nvalue_varsscalar, tuple, list, or ndarray, optional\nColumn(s) to unpivot. If not specified, uses all columns that are not set as id_vars.\nvar_namescalar, tuple, list, or ndarray, optional\nName to use for the ‘variable’ column. If None it uses frame.columns.name or ‘variable’. Must be a scalar if columns are a MultiIndex.\nvalue_namescalar, default ‘value’\nName to use for the ‘value’ column, can’t be an existing column label.\ncol_levelscalar, optional\nIf columns are a MultiIndex then use this level to melt.\nignore_indexbool, default True\nIf True, original index is ignored. If False, the original index is retained. Index labels will be repeated as necessary.\nReturns:\nDataFrame\nUnpivoted DataFrame.\nSee also\nDataFrame.melt\nIdentical method.\npivot_table\nCreate a spreadsheet-style pivot table as a DataFrame.\nDataFrame.pivot\nReturn reshaped DataFrame organized by given index / column values.\nDataFrame.explode\nExplode a DataFrame from list-like columns to long format.\nNotes\nReference the user guide for more examples.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"A\": {0: \"a\", 1: \"b\", 2: \"c\"},\n... \"B\": {0: 1, 1: 3, 2: 5},\n... \"C\": {0: 2, 1: 4, 2: 6},\n... }\n... )\n>>> df\n A B C\n0 a 1 2\n1 b 3 4\n2 c 5 6\n>>> pd.melt(df, id",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.melt#page",
+          "heading_path": "pandas.melt",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.melt.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.melt#page"
+      ],
+      "section_id": "reference/api/pandas.melt#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.melt.html",
+      "score": 0.6736014810368145
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/intro_tutorials/07_reshape_table_layout:0005",
+      "doc_id": "getting_started/intro_tutorials/07_reshape_table_layout",
+      "title": "How to reshape the layout of tables",
+      "text": "27.4 67.0\n2 2019-04-09 03:00:00+00:00 54.5 34.2 67.0\n3 2019-04-09 04:00:00+00:00 34.5 48.5 41.0\n4 2019-04-09 05:00:00+00:00 46.5 59.5 41.0\nI want to collect all air quality \\(NO_2\\) measurements in a single column (long format).\nIn [18]: no_2 = no2_pivoted.melt(id_vars=\"date.utc\")\n\nIn [19]: no_2.head()\nOut[19]:\n date.utc location value\n0 2019-04-09 01:00:00+00:00 BETR801 22.5\n1 2019-04-09 02:00:00+00:00 BETR801 53.5\n2 2019-04-09 03:00:00+00:00 BETR801 54.5\n3 2019-04-09 04:00:00+00:00 BETR801 34.5\n4 2019-04-09 05:00:00+00:00 BETR801 46.5\nThe pandas.melt() method on a DataFrame converts the data table from wide format to long format. The column headers become the variable names in a newly created column.\nThe solution is the short version on how to apply pandas.melt(). The method will melt all columns NOT mentioned in id_vars together into two columns: A column with the column header names and a column with the values itself. The latter column gets by default the name value.\nThe parameters passed to pandas.melt() can be defined in more detail:\nIn [20]: no_2 = no2_pivoted.melt(\n ....: id_vars=\"date.utc\",\n ....: value_vars=[\"BETR801\", \"FR04014\", \"London Westminster\"],\n ....: value_name=\"NO_2\",\n ....: var_name=\"id_location\",\n ....: )\n ....:\n\nIn [21]: no_2.head()\nOut[21]:\n date.utc id_location NO_2\n0 2019-04-09 01:00:00+00:00 BET",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format",
+          "heading_path": "How to reshape the layout of tables > Wide to long format",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html#wide-to-long-format"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format"
+      ],
+      "section_id": "getting_started/intro_tutorials/07_reshape_table_layout#wide-to-long-format",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/07_reshape_table_layout.html#wide-to-long-format",
+      "score": 0.6630584129403067
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/reshaping:0013",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "x -1.000000e+09 3.803956e-01 -1.000000e+09 8.484421e-02\n\nThe top-level melt() function and the corresponding DataFrame.melt() are useful to reshape a DataFrame into a format where one or more columns are identifier variables, while all other columns, considered measured variables, are “unpivoted” to the row axis, leaving just two non-identifier columns, “variable” and “value”. The names of those columns can be customized by supplying the var_name and value_name parameters.\nIn [47]: cheese = pd.DataFrame(\n ....: {\n ....: \"first\": [\"John\", \"Mary\"],\n ....: \"last\": [\"Doe\", \"Bo\"],\n ....: \"height\": [5.5, 6.0],\n ....: \"weight\": [130, 150],\n ....: }\n ....: )\n ....:\n\nIn [48]: cheese\nOut[48]:\n first last height weight\n0 John Doe 5.5 130\n1 Mary Bo 6.0 150\n\nIn [49]: cheese.melt(id_vars=[\"first\", \"last\"])\nOut[49]:\n first last variable value\n0 John Doe height 5.5\n1 Mary Bo height 6.0\n2 John Doe weight 130.0\n3 Mary Bo weight 150.0\n\nIn [50]: cheese.melt(id_vars=[\"first\", \"last\"], var_name=\"quantity\")\nOut[50]:\n first last quantity value\n0 John Doe height 5.5\n1 Mary Bo height 6.0\n2 John Doe weight 130.0\n3 Mary Bo weight 150.0\nWhen transforming a DataFrame using melt(), the index will be ignored. The original index values can be kept by setting the ignore_index parameter to False (default is True). ignore_index=False will however duplicate index values.\nIn [51]: index = pd.MultiIndex.from_tuples([(\"person\", \"A\"), (\"person\", \"B\")])\n\nIn [52]: cheese = pd.DataFrame(\n ....: {\n ....: \"first\": [\"John\", \"Mary\"],\n ....: \"last\": [\"Doe\", \"Bo\"],\n ....: \"height\": [5.5, 6.0],\n ....: \"weight\": [130, 150],\n ....: },\n ....: index=index,\n ....: )\n ....:\n\nIn [53]: cheese\nOut[53]:\n first",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#stack-and-unstack",
+          "heading_path": "Reshaping and pivot tables > stack() and unstack()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#stack-and-unstack"
+        },
+        {
+          "section_id": "user_guide/reshaping#melt-and-wide-to-long",
+          "heading_path": "Reshaping and pivot tables > melt() and wide_to_long()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#melt-and-wide-to-long"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#stack-and-unstack",
+        "user_guide/reshaping#melt-and-wide-to-long"
+      ],
+      "section_id": "user_guide/reshaping#stack-and-unstack",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#stack-and-unstack",
+      "score": 0.6244295843090385
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/io:0053",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": ":00.000\":-0.1213062281,\"2013-01-02T00:00:00.000\":0.6957746499,\"2013-01-03T00:00:00.000\":0.9597255933,\"2013-01-04T00:00:00.000\":-0.6199759194,\"2013-01-05T00:00:00.000\":-0.7323393705},\"B\":{\"2013-01-01T00:00:00.000\":-0.0978826728,\"2013-01-02T00:00:00.000\":0.3417343559,\"2013-01-03T00:00:00.000\":-1.1103361029,\"2013-01-04T00:00:00.000\":0.1497483186,\"2013-01-05T00:00:00.000\":0.6877383895},\"date\":{\"2013-01-01T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-02T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-03T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-04T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-05T00:00:00.000\":\"2013-01-01T00:00:00.000\"},\"ints\":{\"2013-01-01T00:00:00.000\":0,\"2013-01-02T00:00:00.000\":1,\"2013-01-03T00:00:00.000\":2,\"2013-01-04T00:00:00.000\":3,\"2013-01-05T00:00:00.000\":4},\"bools\":{\"2013-01-01T00:00:00.000\":true,\"2013-01-02T00:00:00.000\":true,\"2013-01-03T00:00:00",
+      "sources": [
+        {
+          "section_id": "user_guide/io#json",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > JSON",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#json"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#json"
+      ],
+      "section_id": "user_guide/io#json",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#json",
+      "score": 0.6184077958315822
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/reshaping:0001",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "pandas provides methods for manipulating a Series and DataFrame to alter the representation of the data for further data processing or data summarization.\npivot() and pivot_table(): Group unique values within one or more discrete categories.\nstack() and unstack(): Pivot a column or row level to the opposite axis respectively.\nmelt() and wide_to_long(): Unpivot a wide DataFrame to a long format.\nget_dummies() and from_dummies(): Conversions with indicator variables.\nexplode(): Convert a column of list-like values to individual rows.\ncrosstab(): Calculate a cross-tabulation of multiple 1 dimensional factor arrays.\ncut(): Transform continuous variables to discrete, categorical values\nfactorize(): Encode 1 dimensional variables into integer labels.\n\npivot()\nData is often stored in so-called “stacked” or “record” format. In a “record” or “wide” format, typically there is one row for each subject. In the “stacked” or “long” format there are multiple rows for each subject where applicable.\nIn [1]: data = {\n ...: \"value\": range(12),\n ...: \"variable\": [\"A\"] * 3 + [\"B\"] * 3 + [\"C\"] * 3 + [\"D\"] * 3,\n ...: \"date\": pd.to_datetime([\"2020-01-03\", \"2020-01-04\", \"2020-01-05\"] * 4)\n ...: }\n ...:\n\nIn [2]: df = pd.DataFrame(data)\nTo perform time series operations with each unique variable, a better representation would be where the columns are the unique variables and an index of dates identifies individual observations. To reshape the data into this form, we use the DataFrame.pivot() method (also implemented as a top level function pivot()):\nIn [3]: pivoted = df.pivot(index=\"date\", columns=\"variable\", values=\"value\")\n\nIn [4]: pivoted\nOut[4]:\nvariable A B C D\ndate\n2020-01-03 0 3 6 9\n2020-01-04 1 4 7 10\n2020-01-05 2 5 8 11\nIf the values argument is omitted, and the input DataFrame has more than one column of values which are not used as column or index inputs to pivot(), then the resulting “pivoted” DataFrame will have hierarchical columns whose topmost level indicates the respective value column:",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#reshaping-and-pivot-tables",
+          "heading_path": "Reshaping and pivot tables > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#reshaping-and-pivot-tables"
+        },
+        {
+          "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+          "heading_path": "Reshaping and pivot tables > pivot() and pivot_table()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#reshaping-and-pivot-tables",
+        "user_guide/reshaping#pivot-and-pivot-table"
+      ],
+      "section_id": "user_guide/reshaping#reshaping-and-pivot-tables",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#reshaping-and-pivot-tables",
+      "score": 0.6104380455838101
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 15961
+}

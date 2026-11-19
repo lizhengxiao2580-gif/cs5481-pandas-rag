@@ -1,0 +1,92 @@
+{
+  "question_id": "Q22",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.",
+          "reason": "Directly supports required point 1: tz_localize assigns timezone to naive timestamps."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "rng_hourly.tz_localize('US/Eastern')",
+          "reason": "Example of using tz_localize on naive index, supporting required point 1."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "didx.tz_localize(None)\nOut[504]:\nDatetimeIndex(['2014-08-01 09:00:00', '2014-08-01 10:00:00',\n '2014-08-01 11:00:00'],\n dtype='datetime64[us]', freq=None)\n\nIn [505]: didx.tz_convert(None)\nOut[505]:\nDatetimeIndex(['2014-08-01 13:00:00', '2014-08-01 14:00:00',\n '2014-08-01 15:00:00'],",
+          "reason": "Shows behavior of tz_localize(None) and tz_convert(None), supporting optional special case and indirectly tz_convert."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "rng_hourly.tz_localize(\"US/Eastern\", ambiguous=\"infer\")",
+          "reason": "Example of tz_localize with ambiguous argument, supporting optional DST handling."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "s_naive.dt.tz_localize(\"UTC\").dt.tz_convert(\"US/Eastern\")",
+          "reason": "Shows chaining tz_localize then tz_convert, supporting both required points."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly distinguishes tz_localize for naive and tz_convert for aware, with accurate optional details. All claims are supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "s.dt.tz_localize(\"UTC\").dt.tz_convert(\"US/Eastern\")",
+          "reason": "Shows chaining tz_localize then tz_convert, supporting both required points."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "dti.tz_localize(\"Europe/Warsaw\", nonexistent=\"shift_forward\")",
+          "reason": "Example of tz_localize with nonexistent argument, supporting optional DST handling."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Localize tz-naive Datetime Array/Index to tz-aware Datetime Array/Index.",
+          "reason": "Directly supports required point 1."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "Series.tz_convert() converts a timezone aware time series to another time zone:",
+          "reason": "Directly supports required point 2."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "To remove time zone information, use tz_localize(None) or tz_convert(None). tz_localize(None) will remove the time zone yielding the local time representation. tz_convert(None) will remove the time zone after converting to UTC time.",
+          "reason": "Supports optional special case about removing timezone."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly distinguishes tz_localize for naive and tz_convert for aware, with accurate optional details. All claims are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

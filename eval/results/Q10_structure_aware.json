@@ -1,0 +1,149 @@
+{
+  "question_id": "Q10",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:06:43.909415+00:00",
+  "answer": "Use `Series.value_counts(normalize=True, dropna=False)` [1][2].\n\n- Set `normalize=True` to report relative frequencies/proportions instead of raw counts [1].\n- Set `dropna=False` to include missing values as a counted category [1][2].\n- By default, `dropna=True`, so missing values are excluded unless you explicitly set it to `False` [1].\n\nExample:\n\n```python\ns.value_counts(normalize=True, dropna=False)\n```\n\nThis combination returns proportions while also counting NaN values where present [1][2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:reference/api/pandas.Series.value_counts:0001",
+      "doc_id": "reference/api/pandas.Series.value_counts",
+      "title": "pandas.Series.value_counts",
+      "text": "pandas.Series.value_counts\nSeries.value_counts(normalize=False, sort=True, ascending=False, bins=None, dropna=True)[source]\nReturn a Series containing counts of unique values.\nThe resulting object will be in descending order so that the first element is the most frequently-occurring element. Excludes NA values by default.\nParameters:\nnormalizebool, default False\nIf True then the object returned will contain the relative frequencies of the unique values.\nsortbool, default True\nStable sort by frequencies when True. Preserve the order of the data when False.\nChanged in version 3.0.0: Prior to 3.0.0, the sort was unstable.\nascendingbool, default False\nSort in ascending order.\nbinsint, optional\nRather than count values, group them into half-open bins, a convenience for pd.cut, only works with numeric data.\ndropnabool, default True\nDon’t include counts of NaN.\nReturns:\nSeries\nSeries containing counts of unique values.\nSee also\nSeries.count\nNumber of non-NA elements in a Series.\nDataFrame.count\nNumber of non-NA elements in a DataFrame.\nDataFrame.value_counts\nEquivalent method on DataFrames.\nExamples\n>>> index = pd.Index([3, 1, 2, 3, 4, np.nan])\n>>> index.value_counts()\n3.0 2\n1.0 1\n2.0 1\n4.0 1\nName: count, dtype: int64\nWith normalize set to True, returns the relative frequency by dividing all values by the sum of values.\n>>> s = pd.Series([3, 1, 2, 3, 4, np.nan])\n>>> s.value_counts(normalize=True)\n3.0 0.4\n1.0 0.2\n2.0 0.2\n4.0 0.2\nName: proportion, dtype: float64\nbins\nBins can be useful for going from a continuous variable to a categorical variable; instead of counting unique apparitions of values, divide the index in the specified number of half-open bins.\n>>> s.value_counts(bins=3)\n(0.996, 2.0] 2\n(2.0, 3.0] 2\n(3.0, 4.0] 1\nName: count, dtype: int64\ndropna\nWith dropna set to",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.value_counts#page",
+          "heading_path": "pandas.Series.value_counts",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.value_counts#page"
+      ],
+      "section_id": "reference/api/pandas.Series.value_counts#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+      "score": 0.7845200471578774
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:reference/api/pandas.Series.value_counts:0002",
+      "doc_id": "reference/api/pandas.Series.value_counts",
+      "title": "pandas.Series.value_counts",
+      "text": "can be useful for going from a continuous variable to a categorical variable; instead of counting unique apparitions of values, divide the index in the specified number of half-open bins.\n>>> s.value_counts(bins=3)\n(0.996, 2.0] 2\n(2.0, 3.0] 2\n(3.0, 4.0] 1\nName: count, dtype: int64\ndropna\nWith dropna set to False we can also see NaN index values.\n>>> s.value_counts(dropna=False)\n3.0 2\n1.0 1\n2.0 1\n4.0 1\nNaN 1\nName: count, dtype: int64\nCategorical Dtypes\nRows with categorical type will be counted as one group if they have same categories and order. In the example below, even though a, c, and d all have the same data types of category, only c and d will be counted as one group since a doesn’t have the same categories.\n>>> df = pd.DataFrame({\"a\": [1], \"b\": [\"2\"], \"c\": [3], \"d\": [3]})\n>>> df = df.astype({\"a\": \"category\", \"c\": \"category\", \"d\": \"category\"})\n>>> df\n a b c d\n0 1 2 3 3\n>>> df.dtypes\na category\nb str\nc category\nd category\ndtype: object\n>>> df.dtypes.value_counts()\ncategory 2\ncategory 1\nstr 1\nName: count, dtype: int64",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.value_counts#page",
+          "heading_path": "pandas.Series.value_counts",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.value_counts#page"
+      ],
+      "section_id": "reference/api/pandas.Series.value_counts#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+      "score": 0.7001292587842678
+    }
+  ],
+  "latency_ms": 17677,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.Series.value_counts:0001",
+      "doc_id": "reference/api/pandas.Series.value_counts",
+      "title": "pandas.Series.value_counts",
+      "text": "pandas.Series.value_counts\nSeries.value_counts(normalize=False, sort=True, ascending=False, bins=None, dropna=True)[source]\nReturn a Series containing counts of unique values.\nThe resulting object will be in descending order so that the first element is the most frequently-occurring element. Excludes NA values by default.\nParameters:\nnormalizebool, default False\nIf True then the object returned will contain the relative frequencies of the unique values.\nsortbool, default True\nStable sort by frequencies when True. Preserve the order of the data when False.\nChanged in version 3.0.0: Prior to 3.0.0, the sort was unstable.\nascendingbool, default False\nSort in ascending order.\nbinsint, optional\nRather than count values, group them into half-open bins, a convenience for pd.cut, only works with numeric data.\ndropnabool, default True\nDon’t include counts of NaN.\nReturns:\nSeries\nSeries containing counts of unique values.\nSee also\nSeries.count\nNumber of non-NA elements in a Series.\nDataFrame.count\nNumber of non-NA elements in a DataFrame.\nDataFrame.value_counts\nEquivalent method on DataFrames.\nExamples\n>>> index = pd.Index([3, 1, 2, 3, 4, np.nan])\n>>> index.value_counts()\n3.0 2\n1.0 1\n2.0 1\n4.0 1\nName: count, dtype: int64\nWith normalize set to True, returns the relative frequency by dividing all values by the sum of values.\n>>> s = pd.Series([3, 1, 2, 3, 4, np.nan])\n>>> s.value_counts(normalize=True)\n3.0 0.4\n1.0 0.2\n2.0 0.2\n4.0 0.2\nName: proportion, dtype: float64\nbins\nBins can be useful for going from a continuous variable to a categorical variable; instead of counting unique apparitions of values, divide the index in the specified number of half-open bins.\n>>> s.value_counts(bins=3)\n(0.996, 2.0] 2\n(2.0, 3.0] 2\n(3.0, 4.0] 1\nName: count, dtype: int64\ndropna\nWith dropna set to",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.value_counts#page",
+          "heading_path": "pandas.Series.value_counts",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.value_counts#page"
+      ],
+      "section_id": "reference/api/pandas.Series.value_counts#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+      "score": 0.7845200471578774
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/categorical:0019",
+      "doc_id": "user_guide/categorical",
+      "title": "Categorical data",
+      "text": "Apart from Series.min(), Series.max() and Series.mode(), the following operations are possible with categorical data:\nSeries methods like Series.value_counts() will use all categories, even if some categories are not present in the data:\nIn [136]: s = pd.Series(pd.Categorical([\"a\", \"b\", \"c\", \"c\"], categories=[\"c\", \"a\", \"b\", \"d\"]))\n\nIn [137]: s.value_counts()\nOut[137]:\nc 2\na 1\nb 1\nd 0\nName: count, dtype: int64\nDataFrame methods like DataFrame.sum() also show “unused” categories when observed=False.\nIn [138]: columns = pd.Categorical(\n .....: [\"One\", \"One\", \"Two\"], categories=[\"One\", \"Two\", \"Three\"], ordered=True\n .....: )\n .....:\n\nIn [139]: df = pd.DataFrame(\n .....: data=[[1, 2, 3], [4, 5, 6]],\n .....: columns=pd.MultiIndex.from_arrays([[\"A\", \"B\", \"B\"], columns]),\n .....: ).T\n .....:\n\nIn [140]: df.groupby(level=1, observed=False).sum()\nOut[140]:\n 0 1\nOne 3 9\nTwo 3 6\nThree 0 0\nGroupby will also show “unused” categories when observed=False:\nIn [141]: cats = pd.Categorical(\n .....: [\"a\", \"b\", \"b\", \"b\", \"c\", \"c\", \"c\"], categories=[\"a\", \"b\", \"c\", \"d\"]\n .....: )\n .....:\n\nIn [142]: df = pd.DataFrame({\"cats\": cats, \"values\": [1, 2, 2, 2, 3, 4, 5]})\n\nIn [143]: df.groupby(\"cats\", observed=False).mean()\nOut[143]:\n values\ncats\na 1.0\nb 2.0\nc 4.0\nd NaN\n\nIn [144]: cats2 = pd.Categorical([\"a\", \"a\", \"b\", \"b\"], categories=[\"a\", \"b\", \"c\"])\n\nIn [145]: df2 = pd.DataFrame(\n .....: {\n .....: \"cats\": cats2,\n .....: \"B\": [\"c\", \"d\", \"c\", \"d\"],\n .....: \"values\": [1, 2, 3",
+      "sources": [
+        {
+          "section_id": "user_guide/categorical#operations",
+          "heading_path": "Categorical data > Operations",
+          "url": "https://pandas.pydata.org/docs/user_guide/categorical.html#operations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/categorical#operations"
+      ],
+      "section_id": "user_guide/categorical#operations",
+      "url": "https://pandas.pydata.org/docs/user_guide/categorical.html#operations",
+      "score": 0.7381974952675755
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/reshaping:0023",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "A\n1 1 0\n2 1 3\ncrosstab() can also summarize to Categorical data.\nIn [111]: foo = pd.Categorical([\"a\", \"b\"], categories=[\"a\", \"b\", \"c\"])\n\nIn [112]: bar = pd.Categorical([\"d\", \"e\"], categories=[\"d\", \"e\", \"f\"])\n\nIn [113]: pd.crosstab(foo, bar)\nOut[113]:\ncol_0 d e\nrow_0\na 1 0\nb 0 1\nFor Categorical data, to include all of data categories even if the actual data does not contain any instances of a particular category, use dropna=False.\nIn [114]: pd.crosstab(foo, bar, dropna=False)\nOut[114]:\ncol_0 d e f\nrow_0\na 1 0 0\nb 0 1 0\nc 0 0 0\nNormalization\nFrequency tables can also be normalized to show percentages rather than counts using the normalize argument:\nIn [115]: pd.crosstab(df[\"A\"], df[\"B\"], normalize=True)\nOut[115]:\nB 3 4\nA\n1 0.2 0.0\n2 0.2 0.6\nnormalize can also normalize values within each row or within each column:\nIn [116]: pd.crosstab(df[\"A\"], df[\"B\"], normalize=\"columns\")\nOut[116]:\nB 3 4\nA\n1 0.5 0.0\n2 0.5 1.0\ncrosstab() can also accept a third Series and an aggregation function (aggfunc) that will be applied to the values of the third Series within each group defined by the first two Series:\nIn [117]: pd.crosstab(df[\"A\"], df[\"B\"], values=df[\"C\"], aggfunc=\"sum\")\nOut[117]:\nB 3 4\nA\n1 1.0 NaN\n2 1.0 2.0\nAdding margins\nmargins=True will add a row and column with an All label with partial group aggregates across the categories on the rows and columns:\nIn [118]: pd.crosstab(\n .....: df[\"A\"], df[\"B\"], values=df[\"C\"], aggfunc=\"sum\", normalize=True, margins=True\n .....: )\n .....:\nOut[",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#crosstab",
+          "heading_path": "Reshaping and pivot tables > crosstab()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#crosstab"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#crosstab"
+      ],
+      "section_id": "user_guide/reshaping#crosstab",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#crosstab",
+      "score": 0.7180285205416007
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.Series.value_counts:0002",
+      "doc_id": "reference/api/pandas.Series.value_counts",
+      "title": "pandas.Series.value_counts",
+      "text": "can be useful for going from a continuous variable to a categorical variable; instead of counting unique apparitions of values, divide the index in the specified number of half-open bins.\n>>> s.value_counts(bins=3)\n(0.996, 2.0] 2\n(2.0, 3.0] 2\n(3.0, 4.0] 1\nName: count, dtype: int64\ndropna\nWith dropna set to False we can also see NaN index values.\n>>> s.value_counts(dropna=False)\n3.0 2\n1.0 1\n2.0 1\n4.0 1\nNaN 1\nName: count, dtype: int64\nCategorical Dtypes\nRows with categorical type will be counted as one group if they have same categories and order. In the example below, even though a, c, and d all have the same data types of category, only c and d will be counted as one group since a doesn’t have the same categories.\n>>> df = pd.DataFrame({\"a\": [1], \"b\": [\"2\"], \"c\": [3], \"d\": [3]})\n>>> df = df.astype({\"a\": \"category\", \"c\": \"category\", \"d\": \"category\"})\n>>> df\n a b c d\n0 1 2 3 3\n>>> df.dtypes\na category\nb str\nc category\nd category\ndtype: object\n>>> df.dtypes.value_counts()\ncategory 2\ncategory 1\nstr 1\nName: count, dtype: int64",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.value_counts#page",
+          "heading_path": "pandas.Series.value_counts",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.value_counts#page"
+      ],
+      "section_id": "reference/api/pandas.Series.value_counts#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html",
+      "score": 0.7001292587842678
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/06_calculate_statistics:0004",
+      "doc_id": "getting_started/intro_tutorials/06_calculate_statistics",
+      "title": "How to calculate summary statistics",
+      "text": "What is the number of passengers in each of the cabin classes?\nIn [12]: titanic[\"Pclass\"].value_counts()\nOut[12]:\nPclass\n3 491\n1 216\n2 184\nName: count, dtype: int64\nThe value_counts() method counts the number of records for each category in a column.\nThe function is a shortcut, it is actually a groupby operation in combination with counting the number of records within each group:\nIn [13]: titanic.groupby(\"Pclass\")[\"Pclass\"].count()\nOut[13]:\nPclass\n1 216\n2 184\n3 491\nName: Pclass, dtype: int64\nNote\nBoth size and count can be used in combination with groupby. Whereas size includes NaN values and just provides the number of rows (size of the table), count excludes the missing values. In the value_counts method, use the dropna argument to include or exclude the NaN values.\nThe user guide has a dedicated section on value_counts , see the page on discretization.\nREMEMBER\nAggregation statistics can be calculated on entire columns or rows.\ngroupby provides the power of the split-apply-combine pattern.\nvalue_counts is a convenient shortcut to count the number of entries in each category of a variable.\nA full description on the split-apply-combine approach is provided in the user guide pages about groupby operations.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/06_calculate_statistics#count-number-of-records-by-category",
+          "heading_path": "How to calculate summary statistics > Count number of records by category",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html#count-number-of-records-by-category"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/06_calculate_statistics#count-number-of-records-by-category"
+      ],
+      "section_id": "getting_started/intro_tutorials/06_calculate_statistics#count-number-of-records-by-category",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html#count-number-of-records-by-category",
+      "score": 0.6897905468952275
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 17677
+}

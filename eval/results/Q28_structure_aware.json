@@ -1,0 +1,108 @@
+{
+  "question_id": "Q28",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:36.854186+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 6056,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:user_guide/cookbook:0039",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "Performance comparison of SQL vs HDF5\nCSV\nThe CSV docs\nread_csv in action\nappending to a csv\nReading a csv chunk-by-chunk\nReading only rows matching a condition, chunk-by-chunk, so that only chunksize rows of the file are read at a time rather than the whole file GH 32072\nIn [219]: from io import StringIO\n\nIn [220]: data = \"col_1,col_2\\n940,45\\n1040,52\\n1530,46\\n753,43\\n890,32\\n\"\n\nIn [221]: pd.concat(\n .....: (chunk.query(\"col_1 >= 1000\") for chunk in pd.read_csv(StringIO(data), chunksize=2)),\n .....: ignore_index=True,\n .....: )\n .....:\nOut[221]:\n col_1 col_2\n0 1040 52\n1 1530 46\nReading the first few lines of a frame\nReading a file that is compressed but not by gzip/bz2 (the native compressed formats which read_csv understands). This example shows a WinZipped file, but is a general application of opening the file within a context manager and using that handle to read. See here\nInferring dtypes from a file\nDealing with bad lines GH 2886\nFields containing the read_csv comment character are truncated when read back unless they are quoted; write with quoting=csv.QUOTE_NONNUMERIC to quote all strings. Note that only the default C engine honors the quoting when reading; engine=\"python\" strips the comment regardless GH 27637\nIn [222]: import csv\n\nIn [223]: from io import StringIO\n\nIn [224]: df = pd.DataFrame({\"strings\": [\"a#b\", \"plain\"], \"value\": [1, 2]})\n\nIn [225]: out = df.to_csv(index=False, quoting=csv.QUOTE_NONNUMERIC)\n\nIn [226]: print(out)\n\"strings\",\"value\"\n\"a#b\",1\n\"plain\",2\n\nIn [227]: pd.read_csv(StringIO(out), comment=\"#\")\nOut[227]:\n strings value\n0 a#b 1\n1 plain 2\nWrite a multi-row index CSV without writing duplicates\nReading multiple files to create a single DataFrame\nThe best way to combine multiple files into a single DataFrame is to read the individual frames one by one, put all of the individual frames into a list, and then",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#data-in-out",
+          "heading_path": "Cookbook > Data in/out",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#data-in-out"
+      ],
+      "section_id": "user_guide/cookbook#data-in-out",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#data-in-out",
+      "score": 0.6536028359241708
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_sas:0022",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "Disk vs memory\npandas operates exclusively in memory, where a SAS data set exists on disk. This means that the size of data able to be loaded in pandas is limited by your machine’s memory, but also that the operations on that data may be faster.\nIf out of core processing is needed, one possibility is the dask.dataframe library (currently in development) which provides a subset of pandas functionality for an on-disk DataFrame\nData interop\npandas provides a read_sas() method that can read SAS data saved in the XPORT or SAS7BDAT binary format.\nlibname xportout xport 'transport-file.xpt';\ndata xportout.tips;\n set tips(rename=(total_bill=tbill));\n * xport variable names limited to 6 characters;\nrun;\ndf = pd.read_sas(\"transport-file.xpt\")\ndf = pd.read_sas(\"binary-file.sas7bdat\")\nYou can also specify the file format directly. By default, pandas will try to infer the file format based on its extension.\ndf = pd.read_sas(\"transport-file.xpt\", format=\"xport\")\ndf = pd.read_sas(\"binary-file.sas7bdat\", format=\"sas7bdat\")\nXPORT is a relatively limited format and the parsing of it is not as optimized as some of the other pandas readers. An alternative way to interop data between SAS and pandas is to serialize to csv.\n# version 0.17, 10M rows\n\nIn [8]: %time df = pd.read_sas('big.xpt')\nWall time: 14.6 s\n\nIn [9]: %time df = pd.read_csv('big.csv')\nWall time: 4.86 s",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#other-considerations",
+          "heading_path": "Comparison with SAS > Other considerations",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#other-considerations"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#other-considerations"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#other-considerations",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#other-considerations",
+      "score": 0.6391753261881616
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_spss:0004",
+      "doc_id": "getting_started/comparison/comparison_with_spss",
+      "title": "Comparison with SPSS",
+      "text": "Reading external data\nLike SPSS, pandas provides utilities for reading in data from many formats. The tips dataset, found within the pandas tests (csv) will be used in many of the following examples.\nIn SPSS, you would use File > Open > Data to import a CSV file:\nFILE > OPEN > DATA\n/TYPE=CSV\n/FILE='tips.csv'\n/DELIMITERS=\",\"\n/FIRSTCASE=2\n/VARIABLES=col1 col2 col3.\nThe pandas equivalent would use read_csv():\nurl = (\n \"https://raw.githubusercontent.com/pandas-dev\"\n \"/pandas/main/pandas/tests/io/data/csv/tips.csv\"\n)\ntips = pd.read_csv(url)\ntips\nLike SPSS’s data import wizard, read_csv can take a number of parameters to specify how the data should be parsed. For example, if the data was instead tab delimited, and did not have column names, the pandas command would be:\ntips = pd.read_csv(\"tips.csv\", sep=\"\\t\", header=None)\n\n# alternatively, read_table is an alias to read_csv with tab delimiter\ntips = pd.read_table(\"tips.csv\", header=None)",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_spss#data-input-output",
+          "heading_path": "Comparison with SPSS > Data input / output",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#data-input-output"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_spss#data-input-output"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_spss#data-input-output",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spss.html#data-input-output",
+      "score": 0.615919184514958
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0188",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "00 Oct 10 06:45 test.csv\n16000248 Oct 10 06:45 test.feather\n8281983 Oct 10 06:49 test.parquet\n16000857 Oct 10 06:47 test.pkl\n7552144 Oct 10 06:48 test.pkl.compress\n34816000 Oct 10 06:42 test.sql\n24009288 Oct 10 06:43 test_fixed.hdf\n24009288 Oct 10 06:43 test_fixed_compress.hdf\n24458940 Oct 10 06:44 test_table.hdf\n24458940 Oct 10 06:44 test_table_compress.hdf",
+      "sources": [
+        {
+          "section_id": "user_guide/io#performance-considerations",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > Performance considerations",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#performance-considerations"
+      ],
+      "section_id": "user_guide/io#performance-considerations",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#performance-considerations",
+      "score": 0.6126581811635134
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.read_csv:0001",
+      "doc_id": "reference/api/pandas.read_csv",
+      "title": "pandas.read_csv",
+      "text": "pandas.read_csv\npandas.read_csv(filepath_or_buffer, *, sep=<no_default>, delimiter=<no_default>, header='infer', names=<no_default>, index_col=None, usecols=None, dtype=None, engine=None, converters=None, true_values=None, false_values=None, skipinitialspace=False, skiprows=None, skipfooter=0, nrows=None, na_values=None, keep_default_na=True, na_filter=True, skip_blank_lines=True, parse_dates=None, date_format=None, dayfirst=False, cache_dates=True, iterator=False, chunksize=None, compression='infer', thousands=None, decimal='.', lineterminator=None, quotechar='\"', quoting=0, doublequote=True, escapechar=None, comment=None, encoding=None, encoding_errors='strict', dialect=None, on_bad_lines='error', low_memory=True, memory_map=False, float_precision=None, storage_options=None, dtype_backend=<no_default>)[source]\nRead a comma-separated values (csv) file into DataFrame.\nAlso supports optionally iterating or breaking of the file into chunks.\nAdditional help can be found in the online docs for IO Tools.\nParameters:\nfilepath_or_bufferstr, path object or file-like object\nAny valid string path is acceptable. The string could be a URL. Valid URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is expected. A local file could be: file://localhost/path/to/table.csv.\nCertain URL schemes may require additional packages. For example, S3 URLs require the s3fs library. See Optional dependencies for a full list.\nIf you want to pass in a path object, pandas accepts any os.PathLike.\nBy file-like object, we refer to objects with a read() method that accepts an optional size argument, such as a file handle (e.g. via builtin open function) or StringIO.\nsepstr, default ‘,’\nCharacter or regex pattern to treat as the delimiter. sep=None detects the separator from the first valid row of the file with Python’s builtin sniffer tool, csv.Sniffer; it is supported only by the Python parsing engine, which will be used automatically. In addition, separators longer than 1 character and different from '\\s+' will be interpreted as regular expressions and will force the use of the Python parsing engine. Note that regex delimiters are prone to ignoring quoted data. Regex example: '\\r\\t'.\ndelimiterstr, optional\nAlias for sep.\nheaderint",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.read_csv#page",
+          "heading_path": "pandas.read_csv",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.read_csv#page"
+      ],
+      "section_id": "reference/api/pandas.read_csv#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html",
+      "score": 0.6042666957388305
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 6057
+}

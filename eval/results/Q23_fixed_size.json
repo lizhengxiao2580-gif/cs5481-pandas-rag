@@ -1,0 +1,191 @@
+{
+  "question_id": "Q23",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:11:35.665315+00:00",
+  "answer": "A rolling window is a “generic fixed or variable sliding window over the values,” while an expanding window is an “accumulating window over the values” [1]. For rolling calculations, “the windows are formed by looking back the length of the window from the current observation”; for example, `pd.Series(range(5)).rolling(window=2).sum()` produces `NaN`, then `1.0`, `3.0`, `5.0`, `7.0` because it sums the current and previous value once two observations are available [1]. In contrast, an expanding window “yields the value of an aggregation statistic with all the data available up to that point in time” [2]. So a rolling window is limited to the specified lookback window, whereas an expanding window accumulates from the start through the current point [1][2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/window:0001",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "pandas contains a compact set of APIs for performing windowing operations - an operation that performs an aggregation over a sliding partition of values. The API functions similarly to the groupby API in that Series and DataFrame call the windowing method with necessary parameters and then subsequently call the aggregation function.\nIn [1]: s = pd.Series(range(5))\n\nIn [2]: s.rolling(window=2).sum()\nOut[2]:\n0 NaN\n1 1.0\n2 3.0\n3 5.0\n4 7.0\ndtype: float64\nThe windows are formed by looking back the length of the window from the current observation. The result above can be derived by taking the sum of the following windowed partitions of data:\nIn [3]: for window in s.rolling(window=2):\n ...: print(window)\n ...:\n0 0\ndtype: int64\n0 0\n1 1\ndtype: int64\n1 1\n2 2\ndtype: int64\n2 2\n3 3\ndtype: int64\n3 3\n4 4\ndtype: int64\n\npandas supports 4 types of windowing operations:\nRolling window: Generic fixed or variable sliding window over the values.\nWeighted window: Weighted, non-rectangular window supplied by the scipy.signal library.\nExpanding window: Accumulating window over the values.\nExponentially Weighted window: Accumulating and exponentially weighted window over the values.\nConcept\nMethod\nReturned Object\nSupports time-based windows\nSupports chained groupby\nSupports table method\nSupports online operations\nRolling window\nrolling\npandas.api.typing.Rolling\nYes\nYes\nYes\nNo\nWeighted window\nrolling\npandas.api.typing.Window\nNo\nNo\nNo\nNo\nExpanding window\nexpanding\npandas.api.typing.Expanding\nNo\nYes\nYes\nNo\nExponentially Weighted window\newm\npandas.api.typing.ExponentialMovingWindow\nNo\nYes\nNo\nYes\nAs noted above, some operations support specifying a window based on a time offset:\nIn [4]: s = pd.Series(range(5), index=pd.date_range('2020-01-01', periods=5, freq='1D'))\n\nIn [5]: s.rolling(window='2D').sum()\nOut[5]:\n2020",
+      "sources": [
+        {
+          "section_id": "user_guide/window#windowing-operations",
+          "heading_path": "Windowing operations > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#windowing-operations"
+        },
+        {
+          "section_id": "user_guide/window#overview",
+          "heading_path": "Windowing operations > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#overview"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#windowing-operations",
+        "user_guide/window#overview"
+      ],
+      "section_id": "user_guide/window#windowing-operations",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#windowing-operations",
+      "score": 0.7993538135917624
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/window:0015",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "NaN NaN\n B NaN NaN NaN\n... ... ... ...\n2020-01-09 B 0.342006 0.230190 0.052849\n C 0.230190 1.575251 0.082901\n2020-01-10 A -0.333945 0.006871 -0.655514\n B 0.649711 0.430860 0.469271\n C 0.430860 0.829721 0.055300\n\n[30 rows x 3 columns]\n\nThe win_type argument in .rolling generates a weighted window that is commonly used in filtering and spectral estimation. win_type must be a string that corresponds to a scipy.signal window function. Scipy must be installed in order to use these windows, and supplementary arguments that the Scipy window methods take must be specified in the aggregation function.\nIn [70]: s = pd.Series(range(10))\n\nIn [71]: s.rolling(window=5).mean()\nOut[71]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\n\nIn [72]: s.rolling(window=5, win_type=\"triang\").mean()\nOut[72]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\n\n# Supplementary Scipy arguments passed in the aggregation function\nIn [73]: s.rolling(window=5, win_type=\"gaussian\").mean(std=0.1)\nOut[73]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\nFor all supported aggregation functions, see Weighted window functions.\n\nAn expanding window yields the value of an aggregation statistic with all the data available up to that point in time. Since these calculations are a special case of rolling statistics, they are implemented in pandas such that the following two calls are equivalent:\nIn [74]: df = pd.DataFrame",
+      "sources": [
+        {
+          "section_id": "user_guide/window#rolling-window",
+          "heading_path": "Windowing operations > Rolling window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window"
+        },
+        {
+          "section_id": "user_guide/window#weighted-window",
+          "heading_path": "Windowing operations > Weighted window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#weighted-window"
+        },
+        {
+          "section_id": "user_guide/window#expanding-window",
+          "heading_path": "Windowing operations > Expanding window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#expanding-window"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#rolling-window",
+        "user_guide/window#weighted-window",
+        "user_guide/window#expanding-window"
+      ],
+      "section_id": "user_guide/window#rolling-window",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window",
+      "score": 0.7764343294009663
+    }
+  ],
+  "latency_ms": 21746,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/window:0001",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "pandas contains a compact set of APIs for performing windowing operations - an operation that performs an aggregation over a sliding partition of values. The API functions similarly to the groupby API in that Series and DataFrame call the windowing method with necessary parameters and then subsequently call the aggregation function.\nIn [1]: s = pd.Series(range(5))\n\nIn [2]: s.rolling(window=2).sum()\nOut[2]:\n0 NaN\n1 1.0\n2 3.0\n3 5.0\n4 7.0\ndtype: float64\nThe windows are formed by looking back the length of the window from the current observation. The result above can be derived by taking the sum of the following windowed partitions of data:\nIn [3]: for window in s.rolling(window=2):\n ...: print(window)\n ...:\n0 0\ndtype: int64\n0 0\n1 1\ndtype: int64\n1 1\n2 2\ndtype: int64\n2 2\n3 3\ndtype: int64\n3 3\n4 4\ndtype: int64\n\npandas supports 4 types of windowing operations:\nRolling window: Generic fixed or variable sliding window over the values.\nWeighted window: Weighted, non-rectangular window supplied by the scipy.signal library.\nExpanding window: Accumulating window over the values.\nExponentially Weighted window: Accumulating and exponentially weighted window over the values.\nConcept\nMethod\nReturned Object\nSupports time-based windows\nSupports chained groupby\nSupports table method\nSupports online operations\nRolling window\nrolling\npandas.api.typing.Rolling\nYes\nYes\nYes\nNo\nWeighted window\nrolling\npandas.api.typing.Window\nNo\nNo\nNo\nNo\nExpanding window\nexpanding\npandas.api.typing.Expanding\nNo\nYes\nYes\nNo\nExponentially Weighted window\newm\npandas.api.typing.ExponentialMovingWindow\nNo\nYes\nNo\nYes\nAs noted above, some operations support specifying a window based on a time offset:\nIn [4]: s = pd.Series(range(5), index=pd.date_range('2020-01-01', periods=5, freq='1D'))\n\nIn [5]: s.rolling(window='2D').sum()\nOut[5]:\n2020",
+      "sources": [
+        {
+          "section_id": "user_guide/window#windowing-operations",
+          "heading_path": "Windowing operations > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#windowing-operations"
+        },
+        {
+          "section_id": "user_guide/window#overview",
+          "heading_path": "Windowing operations > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#overview"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#windowing-operations",
+        "user_guide/window#overview"
+      ],
+      "section_id": "user_guide/window#windowing-operations",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#windowing-operations",
+      "score": 0.7993538135917624
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/window:0005",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "1).sum()\nOut[17]:\n0 NaN\n1 1.0\n2 3.0\n3 3.0\n4 2.0\n5 3.0\ndtype: float64\n\nIn [18]: s.rolling(window=3, min_periods=2).sum()\nOut[18]:\n0 NaN\n1 NaN\n2 3.0\n3 3.0\n4 NaN\n5 NaN\ndtype: float64\n\n# Equivalent to min_periods=3\nIn [19]: s.rolling(window=3, min_periods=None).sum()\nOut[19]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 NaN\n5 NaN\ndtype: float64\nAdditionally, all windowing operations support the aggregate method for returning a result of multiple aggregations applied to a window.\nIn [20]: df = pd.DataFrame({\"A\": range(5), \"B\": range(10, 15)})\n\nIn [21]: df.expanding().agg([\"sum\", \"mean\", \"std\"])\nOut[21]:\n A B\n sum mean std sum mean std\n0 0.0 0.0 NaN 10.0 10.0 NaN\n1 1.0 0.5 0.707107 21.0 10.5 0.707107\n2 3.0 1.0 1.000000 33.0 11.0 1.000000\n3 6.0 1.5 1.290994 46.0 11.5 1.290994\n4 10.0 2.0 1.581139 60.0 12.0 1.581139\n\nGeneric rolling windows support specifying windows as a fixed number of observations or variable number of observations based on an offset. If a time based offset is provided, the corresponding time based index must be monotonic.\nIn [22]: times = ['2020-01-01', '2020-01-03', '2020-01-04', '2020-01-05', '2020-01-29']\n\nIn [23]: s = pd.Series(range(5), index=pd.DatetimeIndex(times))\n\nIn [24]: s\nOut[24]:\n2020-01-01 0\n2020-01-03 1\n2020-01-",
+      "sources": [
+        {
+          "section_id": "user_guide/window#overview",
+          "heading_path": "Windowing operations > Overview",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#overview"
+        },
+        {
+          "section_id": "user_guide/window#rolling-window",
+          "heading_path": "Windowing operations > Rolling window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#overview",
+        "user_guide/window#rolling-window"
+      ],
+      "section_id": "user_guide/window#overview",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#overview",
+      "score": 0.7974442094023672
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/window:0009",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "0 2.0 1.0\n2013-01-01 09:00:06 1 1.0 2.0 1.0 NaN\nCustom window rolling\nIn addition to accepting an integer or offset as a window argument, rolling also accepts a BaseIndexer subclass that allows a user to define a custom method for calculating window bounds. The BaseIndexer subclass will need to define a get_window_bounds method that returns a tuple of two arrays, the first being the starting indices of the windows and the second being the ending indices of the windows. Additionally, num_values, min_periods, center, closed and step will automatically be passed to get_window_bounds and the defined method must always accept these arguments.\nFor example, if we have the following DataFrame\nIn [40]: use_expanding = [True, False, True, False, True]\n\nIn [41]: use_expanding\nOut[41]: [True, False, True, False, True]\n\nIn [42]: df = pd.DataFrame({\"values\": range(5)})\n\nIn [43]: df\nOut[43]:\n values\n0 0\n1 1\n2 2\n3 3\n4 4\nand we want to use an expanding window where use_expanding is True otherwise a window of size 1, we can create the following BaseIndexer subclass:\nIn [44]: from pandas.api.indexers import BaseIndexer\n\nIn [45]: class CustomIndexer(BaseIndexer):\n ....: def get_window_bounds(self, num_values, min_periods, center, closed, step):\n ....: start = np.empty(num_values, dtype=np.int64)\n ....: end = np.empty(num_values, dtype=np.int64)\n ....: for i in range(num_values):\n ....: if self.use_expanding[i]:\n ....: start[i] = 0\n ....: end[i] = i + 1\n ....: else:\n ....: start[i] = i\n ....: end[i] = i + self.window_size\n ....: return start, end\n ....:\n\nIn [46]: indexer = CustomIndexer(window_size=1, use_expanding=use_expanding)\n\nIn [47]: df.rolling(indexer).sum()\nOut[47]:\n values\n0 0.0\n1 1.0\n2 3.0\n3 3.0\n4 10.0\nYou can view",
+      "sources": [
+        {
+          "section_id": "user_guide/window#rolling-window",
+          "heading_path": "Windowing operations > Rolling window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#rolling-window"
+      ],
+      "section_id": "user_guide/window#rolling-window",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window",
+      "score": 0.7799526715288982
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/window:0006",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "onic.\nIn [22]: times = ['2020-01-01', '2020-01-03', '2020-01-04', '2020-01-05', '2020-01-29']\n\nIn [23]: s = pd.Series(range(5), index=pd.DatetimeIndex(times))\n\nIn [24]: s\nOut[24]:\n2020-01-01 0\n2020-01-03 1\n2020-01-04 2\n2020-01-05 3\n2020-01-29 4\ndtype: int64\n\n# Window with 2 observations\nIn [25]: s.rolling(window=2).sum()\nOut[25]:\n2020-01-01 NaN\n2020-01-03 1.0\n2020-01-04 3.0\n2020-01-05 5.0\n2020-01-29 7.0\ndtype: float64\n\n# Window with 2 days worth of observations\nIn [26]: s.rolling(window='2D').sum()\nOut[26]:\n2020-01-01 0.0\n2020-01-03 1.0\n2020-01-04 3.0\n2020-01-05 5.0\n2020-01-29 4.0\ndtype: float64\nFor all supported aggregation functions, see Rolling window functions.\nCentering windows\nBy default the labels are set to the right edge of the window, but a center keyword is available so the labels can be set at the center.\nIn [27]: s = pd.Series(range(10))\n\nIn [28]: s.rolling(window=5).mean()\nOut[28]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\n\nIn [29]: s.rolling(window=5, center=True).mean()\nOut[29]:\n0 NaN\n1 NaN\n2 2.0\n3 3.0\n4 4.0\n5 5.0\n6 6.0\n7 7.0\n8 NaN\n9 NaN\ndtype: float64\nThis can also be",
+      "sources": [
+        {
+          "section_id": "user_guide/window#rolling-window",
+          "heading_path": "Windowing operations > Rolling window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#rolling-window"
+      ],
+      "section_id": "user_guide/window#rolling-window",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window",
+      "score": 0.7798937558957455
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/window:0015",
+      "doc_id": "user_guide/window",
+      "title": "Windowing operations",
+      "text": "NaN NaN\n B NaN NaN NaN\n... ... ... ...\n2020-01-09 B 0.342006 0.230190 0.052849\n C 0.230190 1.575251 0.082901\n2020-01-10 A -0.333945 0.006871 -0.655514\n B 0.649711 0.430860 0.469271\n C 0.430860 0.829721 0.055300\n\n[30 rows x 3 columns]\n\nThe win_type argument in .rolling generates a weighted window that is commonly used in filtering and spectral estimation. win_type must be a string that corresponds to a scipy.signal window function. Scipy must be installed in order to use these windows, and supplementary arguments that the Scipy window methods take must be specified in the aggregation function.\nIn [70]: s = pd.Series(range(10))\n\nIn [71]: s.rolling(window=5).mean()\nOut[71]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\n\nIn [72]: s.rolling(window=5, win_type=\"triang\").mean()\nOut[72]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\n\n# Supplementary Scipy arguments passed in the aggregation function\nIn [73]: s.rolling(window=5, win_type=\"gaussian\").mean(std=0.1)\nOut[73]:\n0 NaN\n1 NaN\n2 NaN\n3 NaN\n4 2.0\n5 3.0\n6 4.0\n7 5.0\n8 6.0\n9 7.0\ndtype: float64\nFor all supported aggregation functions, see Weighted window functions.\n\nAn expanding window yields the value of an aggregation statistic with all the data available up to that point in time. Since these calculations are a special case of rolling statistics, they are implemented in pandas such that the following two calls are equivalent:\nIn [74]: df = pd.DataFrame",
+      "sources": [
+        {
+          "section_id": "user_guide/window#rolling-window",
+          "heading_path": "Windowing operations > Rolling window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window"
+        },
+        {
+          "section_id": "user_guide/window#weighted-window",
+          "heading_path": "Windowing operations > Weighted window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#weighted-window"
+        },
+        {
+          "section_id": "user_guide/window#expanding-window",
+          "heading_path": "Windowing operations > Expanding window",
+          "url": "https://pandas.pydata.org/docs/user_guide/window.html#expanding-window"
+        }
+      ],
+      "section_ids": [
+        "user_guide/window#rolling-window",
+        "user_guide/window#weighted-window",
+        "user_guide/window#expanding-window"
+      ],
+      "section_id": "user_guide/window#rolling-window",
+      "url": "https://pandas.pydata.org/docs/user_guide/window.html#rolling-window",
+      "score": 0.7764343294009663
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 21746
+}

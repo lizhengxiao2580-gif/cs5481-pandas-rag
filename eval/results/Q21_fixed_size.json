@@ -1,0 +1,149 @@
+{
+  "question_id": "Q21",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:10:46.714816+00:00",
+  "answer": "When concatenating two DataFrames along rows (`axis=0`):\n\n- `ignore_index=True` does not use the existing index values along the concatenation axis. The resulting row index is labeled `0, …, n - 1`, so overlapping original index labels are not preserved [1]. In a row-wise `concat`, this resets the row index [2][1].\n\n- `keys=['left', 'right']` adds another axis level to the resulting row index, creating a `MultiIndex`. The keys become the outermost level, and each DataFrame’s original row index values remain as the inner level [2][1]. This associates each row with its source DataFrame, for example allowing `result.loc['left']` [2].\n\nSo `ignore_index=True` replaces the row index with a fresh integer index, while `keys=['left','right']` preserves the original row labels under an added hierarchical key level [2][1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.concat:0001",
+      "doc_id": "reference/api/pandas.concat",
+      "title": "pandas.concat",
+      "text": "pandas.concat\npandas.concat(objs, *, axis=0, join='outer', ignore_index=False, keys=None, levels=None, names=None, verify_integrity=False, sort=<no_default>, copy=<no_default>, union_categories=False)[source]\nConcatenate pandas objects along a particular axis.\nAllows optional set logic along the other axes.\nCan also add a layer of hierarchical indexing on the concatenation axis, which may be useful if the labels are the same (or overlapping) on the passed axis number.\nParameters:\nobjsan iterable or mapping of Series or DataFrame objects\nIf a mapping is passed, the keys will be used as the keys argument, unless it is passed, in which case the values will be selected (see below). Any None objects will be dropped silently unless they are all None in which case a ValueError will be raised.\naxis{0/’index’, 1/’columns’}, default 0\nThe axis to concatenate along.\njoin{‘inner’, ‘outer’}, default ‘outer’\nHow to handle indexes on other axis (or axes).\nignore_indexbool, default False\nIf True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1. This is useful if you are concatenating objects where the concatenation axis does not have meaningful indexing information. Note the index values on the other axes are still respected in the join.\nkeyssequence, default None\nIf multiple levels passed, should contain tuples. Construct hierarchical index using the passed keys as the outermost level.\nlevelslist of sequences, default None\nSpecific levels (unique values) to use for constructing a MultiIndex. Otherwise they will be inferred from the keys.\nnameslist, default None\nNames for the levels in the resulting hierarchical index.\nverify_integritybool, default False\nCheck whether the new concatenated axis contains duplicates. This can be very expensive relative to the actual data concatenation.\nsortbool, default False\nSort non-concatenation axis. One exception to this is when the non-concatenation axis is a DatetimeIndex and join=’outer’ and the axis is not already aligned. In that case, the non-concatenation axis is always sorted lexicographically.\ncopybool, default False\nThis keyword is now ignored; changing its value will have no impact on the method.\nDeprecated since version 3.0.0: This keyword is",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.concat#page",
+          "heading_path": "pandas.concat",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.concat#page"
+      ],
+      "section_id": "reference/api/pandas.concat#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html",
+      "score": 0.8450013226685155
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/merging:0005",
+      "doc_id": "user_guide/merging",
+      "title": "Merge, join, concatenate and compare",
+      "text": "consecutively.\nIn [19]: s2 = pd.Series([\"_0\", \"_1\", \"_2\", \"_3\"])\n\nIn [20]: result = pd.concat([df1, s2, s2, s2], axis=1)\n\nIn [21]: result\nOut[21]:\n A B C D 0 1 2\n0 A0 B0 C0 D0 _0 _0 _0\n1 A1 B1 C1 D1 _1 _1 _1\n2 A2 B2 C2 D2 _2 _2 _2\n3 A3 B3 C3 D3 _3 _3 _3\nignore_index=True will drop all name references.\nIn [22]: result = pd.concat([df1, s1], axis=1, ignore_index=True)\n\nIn [23]: result\nOut[23]:\n 0 1 2 3 4\n0 A0 B0 C0 D0 X0\n1 A1 B1 C1 D1 X1\n2 A2 B2 C2 D2 X2\n3 A3 B3 C3 D3 X3\nResulting keys\nThe keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.\nIn [24]: result = pd.concat(frames, keys=[\"x\", \"y\", \"z\"])\n\nIn [25]: result\nOut[25]:\n A B C D\nx 0 A0 B0 C0 D0\n 1 A1 B1 C1 D1\n 2 A2 B2 C2 D2\n 3 A3 B3 C3 D3\ny 4 A4 B4 C4 D4\n 5 A5 B5 C5 D5\n 6 A6 B6 C6 D6\n 7 A7 B7 C7 D7\nz 8 A8 B8 C8 D8\n 9 A9 B9 C9 D9\n 10 A10 B10 C10 D10\n 11 A11 B11 C11 D11\n\nIn [26]: result.loc[\"y\"]\nOut[26]:\n A B C D\n4 A4 B4 C4 D4\n5 A5 B5 C5 D5\n6 A6 B6 C6 D6\n7 A7 B7 C7 D7\nThe keys argument can",
+      "sources": [
+        {
+          "section_id": "user_guide/merging#concat",
+          "heading_path": "Merge, join, concatenate and compare > concat()",
+          "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat"
+        }
+      ],
+      "section_ids": [
+        "user_guide/merging#concat"
+      ],
+      "section_id": "user_guide/merging#concat",
+      "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat",
+      "score": 0.8568095609968174
+    }
+  ],
+  "latency_ms": 16038,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/merging:0005",
+      "doc_id": "user_guide/merging",
+      "title": "Merge, join, concatenate and compare",
+      "text": "consecutively.\nIn [19]: s2 = pd.Series([\"_0\", \"_1\", \"_2\", \"_3\"])\n\nIn [20]: result = pd.concat([df1, s2, s2, s2], axis=1)\n\nIn [21]: result\nOut[21]:\n A B C D 0 1 2\n0 A0 B0 C0 D0 _0 _0 _0\n1 A1 B1 C1 D1 _1 _1 _1\n2 A2 B2 C2 D2 _2 _2 _2\n3 A3 B3 C3 D3 _3 _3 _3\nignore_index=True will drop all name references.\nIn [22]: result = pd.concat([df1, s1], axis=1, ignore_index=True)\n\nIn [23]: result\nOut[23]:\n 0 1 2 3 4\n0 A0 B0 C0 D0 X0\n1 A1 B1 C1 D1 X1\n2 A2 B2 C2 D2 X2\n3 A3 B3 C3 D3 X3\nResulting keys\nThe keys argument adds another axis level to the resulting index or column (creating a MultiIndex) associate specific keys with each original DataFrame.\nIn [24]: result = pd.concat(frames, keys=[\"x\", \"y\", \"z\"])\n\nIn [25]: result\nOut[25]:\n A B C D\nx 0 A0 B0 C0 D0\n 1 A1 B1 C1 D1\n 2 A2 B2 C2 D2\n 3 A3 B3 C3 D3\ny 4 A4 B4 C4 D4\n 5 A5 B5 C5 D5\n 6 A6 B6 C6 D6\n 7 A7 B7 C7 D7\nz 8 A8 B8 C8 D8\n 9 A9 B9 C9 D9\n 10 A10 B10 C10 D10\n 11 A11 B11 C11 D11\n\nIn [26]: result.loc[\"y\"]\nOut[26]:\n A B C D\n4 A4 B4 C4 D4\n5 A5 B5 C5 D5\n6 A6 B6 C6 D6\n7 A7 B7 C7 D7\nThe keys argument can",
+      "sources": [
+        {
+          "section_id": "user_guide/merging#concat",
+          "heading_path": "Merge, join, concatenate and compare > concat()",
+          "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat"
+        }
+      ],
+      "section_ids": [
+        "user_guide/merging#concat"
+      ],
+      "section_id": "user_guide/merging#concat",
+      "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat",
+      "score": 0.8568095609968174
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.concat:0001",
+      "doc_id": "reference/api/pandas.concat",
+      "title": "pandas.concat",
+      "text": "pandas.concat\npandas.concat(objs, *, axis=0, join='outer', ignore_index=False, keys=None, levels=None, names=None, verify_integrity=False, sort=<no_default>, copy=<no_default>, union_categories=False)[source]\nConcatenate pandas objects along a particular axis.\nAllows optional set logic along the other axes.\nCan also add a layer of hierarchical indexing on the concatenation axis, which may be useful if the labels are the same (or overlapping) on the passed axis number.\nParameters:\nobjsan iterable or mapping of Series or DataFrame objects\nIf a mapping is passed, the keys will be used as the keys argument, unless it is passed, in which case the values will be selected (see below). Any None objects will be dropped silently unless they are all None in which case a ValueError will be raised.\naxis{0/’index’, 1/’columns’}, default 0\nThe axis to concatenate along.\njoin{‘inner’, ‘outer’}, default ‘outer’\nHow to handle indexes on other axis (or axes).\nignore_indexbool, default False\nIf True, do not use the index values along the concatenation axis. The resulting axis will be labeled 0, …, n - 1. This is useful if you are concatenating objects where the concatenation axis does not have meaningful indexing information. Note the index values on the other axes are still respected in the join.\nkeyssequence, default None\nIf multiple levels passed, should contain tuples. Construct hierarchical index using the passed keys as the outermost level.\nlevelslist of sequences, default None\nSpecific levels (unique values) to use for constructing a MultiIndex. Otherwise they will be inferred from the keys.\nnameslist, default None\nNames for the levels in the resulting hierarchical index.\nverify_integritybool, default False\nCheck whether the new concatenated axis contains duplicates. This can be very expensive relative to the actual data concatenation.\nsortbool, default False\nSort non-concatenation axis. One exception to this is when the non-concatenation axis is a DatetimeIndex and join=’outer’ and the axis is not already aligned. In that case, the non-concatenation axis is always sorted lexicographically.\ncopybool, default False\nThis keyword is now ignored; changing its value will have no impact on the method.\nDeprecated since version 3.0.0: This keyword is",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.concat#page",
+          "heading_path": "pandas.concat",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.concat#page"
+      ],
+      "section_id": "reference/api/pandas.concat#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html",
+      "score": 0.8450013226685155
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.concat:0003",
+      "doc_id": "reference/api/pandas.concat",
+      "title": "pandas.concat",
+      "text": "list of rows and make a DataFrame in a single concat.\nExamples\nCombine two Series.\n>>> s1 = pd.Series([\"a\", \"b\"])\n>>> s2 = pd.Series([\"c\", \"d\"])\n>>> pd.concat([s1, s2])\n0 a\n1 b\n0 c\n1 d\ndtype: str\nClear the existing index and reset it in the result by setting the ignore_index option to True.\n>>> pd.concat([s1, s2], ignore_index=True)\n0 a\n1 b\n2 c\n3 d\ndtype: str\nAdd a hierarchical index at the outermost level of the data with the keys option.\n>>> pd.concat([s1, s2], keys=[\"s1\", \"s2\"])\ns1 0 a\n 1 b\ns2 0 c\n 1 d\ndtype: str\nLabel the index keys you create with the names option.\n>>> pd.concat([s1, s2], keys=[\"s1\", \"s2\"], names=[\"Series name\", \"Row ID\"])\nSeries name Row ID\ns1 0 a\n 1 b\ns2 0 c\n 1 d\ndtype: str\nCombine two DataFrame objects with identical columns.\n>>> df1 = pd.DataFrame([[\"a\", 1], [\"b\", 2]], columns=[\"letter\", \"number\"])\n>>> df1\n letter number\n0 a 1\n1 b 2\n>>> df2 = pd.DataFrame([[\"c\", 3], [\"d\", 4]], columns=[\"letter\", \"number\"])\n>>> df2\n letter number\n0 c 3\n1 d 4\n>>> pd.concat([df1, df2])\n letter number\n0 a 1\n1 b 2\n0 c 3\n1 d 4\nCombine DataFrame objects with overlapping columns and return everything. Columns outside the intersection will be filled with NaN values.\n>>> df3 = pd.DataFrame(\n... [[\"c\", 3, \"cat\"], [\"d\", 4, \"dog\"]], columns=[\"letter\", \"number\", \"animal\"]\n... )\n>>> df3\n letter number animal\n0 c 3 cat\n1 d 4 dog\n>>> pd.concat([df1, df3], sort=False)\n letter number animal\n0 a 1 NaN\n1 b 2 NaN\n0 c 3 cat\n1 d 4 dog\nCombine DataFrame objects with overlapping columns and",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.concat#page",
+          "heading_path": "pandas.concat",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.concat#page"
+      ],
+      "section_id": "reference/api/pandas.concat#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.concat.html",
+      "score": 0.8146425205954763
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/merging:0004",
+      "doc_id": "user_guide/merging",
+      "title": "Merge, join, concatenate and compare",
+      "text": "]: result = pd.concat([df1, df4], axis=1).reindex(df1.index)\n\nIn [13]: result\nOut[13]:\n A B C D B D F\n0 A0 B0 C0 D0 NaN NaN NaN\n1 A1 B1 C1 D1 NaN NaN NaN\n2 A2 B2 C2 D2 B2 D2 F2\n3 A3 B3 C3 D3 B3 D3 F3\nIgnoring indexes on the concatenation axis\nFor DataFrame objects which don’t have a meaningful index, the ignore_index ignores overlapping indexes.\nIn [14]: result = pd.concat([df1, df4], ignore_index=True, sort=False)\n\nIn [15]: result\nOut[15]:\n A B C D F\n0 A0 B0 C0 D0 NaN\n1 A1 B1 C1 D1 NaN\n2 A2 B2 C2 D2 NaN\n3 A3 B3 C3 D3 NaN\n4 NaN B2 NaN D2 F2\n5 NaN B3 NaN D3 F3\n6 NaN B6 NaN D6 F6\n7 NaN B7 NaN D7 F7\nConcatenating Series and DataFrame together\nYou can concatenate a mix of Series and DataFrame objects. The Series will be transformed to DataFrame with the column name as the name of the Series.\nIn [16]: s1 = pd.Series([\"X0\", \"X1\", \"X2\", \"X3\"], name=\"X\")\n\nIn [17]: result = pd.concat([df1, s1], axis=1)\n\nIn [18]: result\nOut[18]:\n A B C D X\n0 A0 B0 C0 D0 X0\n1 A1 B1 C1 D1 X1\n2 A2 B2 C2 D2 X2\n3 A3 B3 C3 D3 X3\nUnnamed Series will be numbered consecutively.\nIn [19]: s2 = pd.Series([\"_0\", \"_1\", \"_2\", \"_3\"])\n\nIn [20]: result = pd.concat([df1, s2, s2, s2], axis=1)\n\nIn [21]: result\nOut[21]:\n A B C D 0 1 2\n0 A0 B0 C0 D0 _0 _0 _0\n1 A1 B1 C1 D1 _1 _",
+      "sources": [
+        {
+          "section_id": "user_guide/merging#concat",
+          "heading_path": "Merge, join, concatenate and compare > concat()",
+          "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat"
+        }
+      ],
+      "section_ids": [
+        "user_guide/merging#concat"
+      ],
+      "section_id": "user_guide/merging#concat",
+      "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat",
+      "score": 0.8046491609250925
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/merging:0002",
+      "doc_id": "user_guide/merging",
+      "title": "Merge, join, concatenate and compare",
+      "text": "=[4, 5, 6, 7],\n ...: )\n ...:\n\nIn [3]: df3 = pd.DataFrame(\n ...: {\n ...: \"A\": [\"A8\", \"A9\", \"A10\", \"A11\"],\n ...: \"B\": [\"B8\", \"B9\", \"B10\", \"B11\"],\n ...: \"C\": [\"C8\", \"C9\", \"C10\", \"C11\"],\n ...: \"D\": [\"D8\", \"D9\", \"D10\", \"D11\"],\n ...: },\n ...: index=[8, 9, 10, 11],\n ...: )\n ...:\n\nIn [4]: frames = [df1, df2, df3]\n\nIn [5]: result = pd.concat(frames)\n\nIn [6]: result\nOut[6]:\n A B C D\n0 A0 B0 C0 D0\n1 A1 B1 C1 D1\n2 A2 B2 C2 D2\n3 A3 B3 C3 D3\n4 A4 B4 C4 D4\n5 A5 B5 C5 D5\n6 A6 B6 C6 D6\n7 A7 B7 C7 D7\n8 A8 B8 C8 D8\n9 A9 B9 C9 D9\n10 A10 B10 C10 D10\n11 A11 B11 C11 D11\nNote\nconcat() makes a full copy of the data, and iteratively reusing concat() can create unnecessary copies. Collect all DataFrame or Series objects in a list before using concat().\nframes = [process_your_file(f) for f in files]\nresult = pd.concat(frames)\nNote\nWhen concatenating DataFrame with named axes, pandas will attempt to preserve these index/column names whenever possible. In the case where all inputs share a common name, this name will be assigned to the result. When the input names do not all agree, the result will be unnamed. The same is true for MultiIndex, but the logic is applied separately on a level-by-level basis.\nJoining logic of the resulting axis\nThe join keyword specifies how to handle axis values that don’t exist in the first DataFrame.\njoin='outer' takes the union of all axis values.\nIn [7]: df4 = pd.DataFrame(\n ...: {\n ...: \"B\": [\"B2\", \"B3\", \"B6",
+      "sources": [
+        {
+          "section_id": "user_guide/merging#concat",
+          "heading_path": "Merge, join, concatenate and compare > concat()",
+          "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat"
+        }
+      ],
+      "section_ids": [
+        "user_guide/merging#concat"
+      ],
+      "section_id": "user_guide/merging#concat",
+      "url": "https://pandas.pydata.org/docs/user_guide/merging.html#concat",
+      "score": 0.7908786979692051
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 16038
+}

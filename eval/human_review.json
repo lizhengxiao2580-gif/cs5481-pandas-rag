@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "confirmed_on": "2026-11-19",
+  "timezone": "Asia/Shanghai",
+  "reviewer_role": "project member",
+  "confirmation_source": "The user confirmed that they actually checked the existing evaluation and found no issues.",
+  "review_type": "Human review and confirmation of existing model-assisted scoring",
+  "score_changes_requested": false,
+  "independent_blind_ratings": false,
+  "artifact_sha256": {
+    "questions.jsonl": "ea44f40bfb5ed2ca218d8b0279d28f670b37f199cb2a7c418a461d7a741ce0e6",
+    "results/summary.json": "3b848eccc1670859b271f1cffb1eeaa8c578e46e33a73e39f66a31b422b5be02",
+    "results/raw_results.jsonl": "3363ea17794b7e8417a4eb4235d43a47cb1a29382200513107a05de1fe261942",
+    "review_overrides.json": "55d48a5c2d222f2395e10c4516a19ac9c53713058b8594ee5bca9928d65a57aa"
+  }
+}

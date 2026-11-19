@@ -1,0 +1,92 @@
+{
+  "question_id": "Q14",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict)",
+          "reason": "Directly supports required point 1 about unmatched values becoming NaN."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "If ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.",
+          "reason": "Directly supports required point 2 about na_action='ignore' skipping missing values."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses Series.map with a function and linking series, but does not mention unmatched dictionary values or na_action."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is a traceback from DataFrame.apply, unrelated to Series.map dictionary behavior or na_action."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.transform, not Series.map dictionary behavior or na_action."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are correctly stated and supported by cited passages. The additional note about dict subclass __missing__ is also supported by the cited text."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Values that are not found in the dict are converted to NaN, unless the dict has a default value (e.g. defaultdict)",
+          "reason": "Directly supports required point 1 about unmatched values becoming NaN."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "If ‘ignore’, propagate NaN values, without passing them to the mapping correspondence.",
+          "reason": "Directly supports required point 2 about na_action='ignore' skipping missing values."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is a traceback from DataFrame.apply, unrelated to Series.map dictionary behavior or na_action."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses Series construction from dict, not Series.map behavior."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.transform, not Series.map dictionary behavior or na_action."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are correctly stated and supported by cited passages. The example about NaN staying NaN with na_action='ignore' is directly supported by the cited example."
+    }
+  },
+  "prompt_version": 1
+}

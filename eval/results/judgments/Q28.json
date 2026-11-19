@@ -1,0 +1,90 @@
+{
+  "question_id": "Q28",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses CSV usage examples and chunking but provides no evidence about exact runtime for a 10 GB CSV on unspecified hardware."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage compares disk vs memory and shows a benchmark for a specific 10M row CSV, but does not answer the exact runtime for the user's unspecified 10 GB CSV."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows how to read CSV with read_csv but contains no timing information relevant to the user's specific hardware and data."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage lists file sizes for various formats but does not provide runtime for reading a 10 GB CSV."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is the read_csv API reference; it documents parameters but does not give exact runtime for an unmeasured workload."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because no hardware, data, or benchmark details are provided. The system explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as none contain evidence for the requested exact runtime."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows source code traceback from read_csv but does not provide exact runtime for the user's unspecified 10 GB CSV."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is the read_csv API reference; it documents parameters but does not give exact runtime for an unmeasured workload."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses SAS interop and a specific benchmark for a 10M row CSV, not the user's unspecified 10 GB CSV."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage lists file sizes for various formats but does not provide runtime for reading a 10 GB CSV."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows timing benchmarks for various formats on a specific dataset, not the user's unspecified 10 GB CSV."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because no hardware, data, or benchmark details are provided. The system explicitly declines to give an unsupported answer, satisfying the required point. Retrieval passages are all irrelevant as none contain evidence for the requested exact runtime."
+    }
+  },
+  "prompt_version": 1
+}

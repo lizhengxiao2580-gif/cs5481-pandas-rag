@@ -1,0 +1,108 @@
+{
+  "question_id": "Q27",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:29.311995+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 3191,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/comparison/comparison_with_spreadsheets:0001",
+      "doc_id": "getting_started/comparison/comparison_with_spreadsheets",
+      "title": "Comparison with spreadsheets",
+      "text": "Since many potential pandas users have some familiarity with spreadsheet programs like Excel, this page is meant to provide some examples of how various spreadsheet operations would be performed using pandas. This page will use terminology and link to documentation for Excel, but much will be the same/similar in Google Sheets, LibreOffice Calc, Apple Numbers, and other Excel-compatible spreadsheet software.\nIf you’re new to pandas, you might want to first read through 10 Minutes to pandas to familiarize yourself with the library.\nAs is customary, we import pandas and NumPy as follows:\nIn [1]: import pandas as pd\n\nIn [2]: import numpy as np",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_spreadsheets#comparison-with-spreadsheets",
+          "heading_path": "Comparison with spreadsheets > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html#comparison-with-spreadsheets"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_spreadsheets#comparison-with-spreadsheets"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_spreadsheets#comparison-with-spreadsheets",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_spreadsheets.html#comparison-with-spreadsheets",
+      "score": 0.5745819270699506
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/index:0001",
+      "doc_id": "getting_started/index",
+      "title": "Getting started",
+      "text": "To quickly try pandas in your browser without installing anything, you can use the Try pandas online page.",
+      "sources": [
+        {
+          "section_id": "getting_started/index#getting-started",
+          "heading_path": "Getting started > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/index.html#getting-started"
+        }
+      ],
+      "section_ids": [
+        "getting_started/index#getting-started"
+      ],
+      "section_id": "getting_started/index#getting-started",
+      "url": "https://pandas.pydata.org/docs/getting_started/index.html#getting-started",
+      "score": 0.5742890544512285
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.Series.apply:0001",
+      "doc_id": "reference/api/pandas.Series.apply",
+      "title": "pandas.Series.apply",
+      "text": "pandas.Series.apply\nSeries.apply(func, args=(), *, by_row='compat', **kwargs)[source]\nInvoke function on values of Series.\nCan be ufunc (a NumPy function that applies to the entire Series) or a Python function that only works on single values.\nParameters:\nfuncfunction\nPython function or NumPy ufunc to apply.\nargstuple\nPositional arguments passed to func after the series value.\nby_rowFalse or “compat”, default “compat”\nIf \"compat\" and func is a callable, func will be passed each element of the Series, like Series.map. If func is a list or dict of callables, will first try to translate each func into pandas methods. If that doesn’t work, will try call to apply again with by_row=\"compat\" and if that fails, will call apply again with by_row=False (backward compatible). If False, the func will be passed the whole Series at once.\nby_row has no effect when func is a string.\nAdded in version 2.1.0.\n**kwargs\nAdditional keyword arguments passed to func.\nReturns:\nSeries or DataFrame\nIf func returns a Series object the result will be a DataFrame.\nSee also\nSeries.map\nFor element-wise operations.\nSeries.agg\nOnly perform aggregating type operations.\nSeries.transform\nOnly perform transforming type operations.\nNotes\nFunctions that mutate the passed object can produce unexpected behavior or errors and are not supported. See Mutating with User Defined Function (UDF) methods for more details.\nExamples\nCreate a series with typical summer temperatures for each city.\n>>> s = pd.Series([20, 21, 12], index=[\"London\", \"New York\", \"Helsinki\"])\n>>> s\nLondon 20\nNew York 21\nHelsinki 12\ndtype: int64\nSquare the values by defining a function and passing it as an argument to apply().\n>>> def square(x):\n... return x**2\n>>> s.apply(square)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nSquare the values by passing an anonymous function as an argument to apply().\n>>> s.apply(lambda x: x**2)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nDefine a custom function that needs additional positional arguments and pass these additional arguments using the args keyword.\n>>> def subtract_custom_value(x, custom_value):\n... return x - custom_value",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.apply#page",
+          "heading_path": "pandas.Series.apply",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.apply#page"
+      ],
+      "section_id": "reference/api/pandas.Series.apply#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html",
+      "score": 0.5624719309693911
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/tutorials:0010",
+      "doc_id": "getting_started/tutorials",
+      "title": "Tutorials and Books",
+      "text": "Pandas: .head() to .tail() (2016) (1:26) GitHub repo\nData analysis in Python with pandas (2016-2018) GitHub repo and Jupyter Notebook\nBest practices with pandas (2018) GitHub repo and Jupyter Notebook",
+      "sources": [
+        {
+          "section_id": "getting_started/tutorials#video-tutorials",
+          "heading_path": "Tutorials and Books > Video tutorials",
+          "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#video-tutorials"
+        }
+      ],
+      "section_ids": [
+        "getting_started/tutorials#video-tutorials"
+      ],
+      "section_id": "getting_started/tutorials#video-tutorials",
+      "url": "https://pandas.pydata.org/docs/getting_started/tutorials.html#video-tutorials",
+      "score": 0.5618892032976444
+    },
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.Series.apply:0002",
+      "doc_id": "reference/api/pandas.Series.apply",
+      "title": "pandas.Series.apply",
+      "text": "(square)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nSquare the values by passing an anonymous function as an argument to apply().\n>>> s.apply(lambda x: x**2)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nDefine a custom function that needs additional positional arguments and pass these additional arguments using the args keyword.\n>>> def subtract_custom_value(x, custom_value):\n... return x - custom_value\n>>> s.apply(subtract_custom_value, args=(5,))\nLondon 15\nNew York 16\nHelsinki 7\ndtype: int64\nDefine a custom function that takes keyword arguments and pass these arguments to apply.\n>>> def add_custom_values(x, **kwargs):\n... for month in kwargs:\n... x += kwargs[month]\n... return x\n>>> s.apply(add_custom_values, june=30, july=20, august=25)\nLondon 95\nNew York 96\nHelsinki 87\ndtype: int64\nUse a function from the Numpy library.\n>>> s.apply(np.log)\nLondon 2.995732\nNew York 3.044522\nHelsinki 2.484907\ndtype: float64",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.apply#page",
+          "heading_path": "pandas.Series.apply",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.apply#page"
+      ],
+      "section_id": "reference/api/pandas.Series.apply#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html",
+      "score": 0.5616869171615126
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 3191
+}

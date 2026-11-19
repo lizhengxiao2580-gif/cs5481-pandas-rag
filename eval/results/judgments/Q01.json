@@ -1,0 +1,90 @@
+{
+  "question_id": "Q01",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses header behavior and duplicate names, not usecols."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",
+          "reason": "Directly supports selecting columns by name with usecols."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "usecolslist-like or callable, default None\nReturn a subset of the columns. If list-like, all elements must either be positional (i.e. integer indices into the document columns) or strings that correspond to column names provided either by the user in names or inferred from the document header row(s).",
+          "reason": "Explains usecols accepts column names."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Only function signature and general parameters, no specific usecols explanation."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Title only, no substantive content."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",
+          "reason": "Directly supports selecting columns by name with usecols."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is about selecting columns from a DataFrame, not reading CSV with usecols."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Only function signature and general parameters, no specific usecols explanation."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Unrelated CSV parsing examples."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Introductory DataFrame creation, not relevant."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passage."
+    }
+  },
+  "prompt_version": 1
+}

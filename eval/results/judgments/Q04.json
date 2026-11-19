@@ -1,0 +1,92 @@
+{
+  "question_id": "Q04",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Define in which columns to look for missing values.\n>>> df.dropna(subset=[\"name\", \"toy\"])",
+          "reason": "Passage contains an example using subset to restrict missing-value checks, supporting required point 1."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "how{‘any’, ‘all’}, default ‘any’\nDetermine if row or column is removed from DataFrame, when we have at least one NA or all NA.\n‘any’ : If any NA values are present, drop that row or column.",
+          "reason": "Passage documents how='any' default behavior, supporting required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage only shows basic dropna usage without subset or how='any' explanation relevant to the required points."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses notna() and boolean indexing, not dropna with subset."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.filter, unrelated to dropna."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses df.dropna(subset=['name','age']) and explains default how='any'. Both required points are covered and supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Define in which columns to look for missing values.\n>>> df.dropna(subset=[\"name\", \"toy\"])",
+          "reason": "Passage contains an example using subset to restrict missing-value checks, supporting required point 1."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "how{‘any’, ‘all’}, default ‘any’\nDetermine if row or column is removed from DataFrame, when we have at least one NA or all NA.\n‘any’ : If any NA values are present, drop that row or column.",
+          "reason": "Passage documents how='any' default behavior, supporting required point 2."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses notna() and boolean indexing, not dropna with subset."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.filter, unrelated to dropna."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage shows dropna(how='any') without subset, not directly supporting the required points."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses df.dropna(subset=['name','age']) and explains default how='any'. Both required points are covered and supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

@@ -1,0 +1,209 @@
+{
+  "question_id": "Q15",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:08:07.424647+00:00",
+  "answer": "No. `DataFrame.groupby` excludes grouping keys that are NA by default: the `dropna` parameter defaults to `True`, so any “NA group” is dropped [1][2][3][4]. Here “NA” includes `NA`, `NaN`, `NaT`, and `None` [3].\n\nTo include NA groups, set `dropna=False` [1][2][3][5]:\n\n```python\ndf.groupby(\"key\", dropna=False)\n```",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/groupby:0005",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "the keys in the original dataframe:\nIn [19]: df2 = pd.DataFrame({\"X\": [\"B\", \"B\", \"A\", \"A\"], \"Y\": [1, 2, 3, 4]})\n\nIn [20]: df2.groupby([\"X\"]).sum()\nOut[20]:\n Y\nX\nA 7\nB 3\n\nIn [21]: df2.groupby([\"X\"], sort=False).sum()\nOut[21]:\n Y\nX\nB 3\nA 7\nNote that groupby will preserve the order in which observations are sorted within each group. For example, the groups created by groupby() below are in the order they appeared in the original DataFrame:\nIn [22]: df3 = pd.DataFrame({\"X\": [\"A\", \"B\", \"A\", \"B\"], \"Y\": [1, 4, 3, 2]})\n\nIn [23]: df3.groupby(\"X\").get_group(\"A\")\nOut[23]:\n X Y\n0 A 1\n2 A 3\n\nIn [24]: df3.groupby([\"X\"]).get_group((\"B\",))\nOut[24]:\n X Y\n1 B 4\n3 B 2\nGroupBy dropna\nBy default NA values are excluded from group keys during the groupby operation. However, in case you want to include NA values in group keys, you could pass dropna=False to achieve it.\nIn [25]: df_list = [[1, 2, 3], [1, None, 4], [2, 1, 3], [1, 2, 2]]\n\nIn [26]: df_dropna = pd.DataFrame(df_list, columns=[\"a\", \"b\", \"c\"])\n\nIn [27]: df_dropna\nOut[27]:\n a b c\n0 1 2.0 3\n1 1 NaN 4\n2 2 1.0 3\n3 1 2.0 2\n# Default ``dropna`` is set to True, which will exclude NaNs in keys\nIn [28]: df_dropna.groupby(by=[\"b\"], dropna=True).sum()\nOut[28]:\n a c\nb\n1.0 2 3\n2.0 2 5\n\n# In order to allow NaN in keys, set ``dropna`` to False\nIn [29]: df_dropna.groupby(by",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+          "heading_path": "Group by: split-apply-combine > Splitting an object into groups",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#splitting-an-object-into-groups"
+      ],
+      "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups",
+      "score": 0.8703712612198997
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:user_guide/groupby:0006",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "3\n3 1 2.0 2\n# Default ``dropna`` is set to True, which will exclude NaNs in keys\nIn [28]: df_dropna.groupby(by=[\"b\"], dropna=True).sum()\nOut[28]:\n a c\nb\n1.0 2 3\n2.0 2 5\n\n# In order to allow NaN in keys, set ``dropna`` to False\nIn [29]: df_dropna.groupby(by=[\"b\"], dropna=False).sum()\nOut[29]:\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\nThe default setting of dropna argument is True which means NA are not included in group keys.\nGroupBy object attributes\nThe groups attribute of a GroupBy object is a dictionary that maps each unique group key to the index labels belonging to that group. In the above example:\nIn [30]: df.groupby(\"A\").groups\nOut[30]: {'bar': [1, 3, 5], 'foo': [0, 2, 4, 6, 7]}\n\nIn [31]: df.T.groupby(get_letter_type).groups\nOut[31]: {'consonant': ['B', 'C', 'D'], 'vowel': ['A']}\nCalling the standard Python len function on the GroupBy object returns the number of groups, which is the same as the length of the groups dictionary:\nIn [32]: grouped = df.groupby([\"A\", \"B\"])\n\nIn [33]: grouped.groups\nOut[33]:\n{('bar', 'one'): RangeIndex(start=1, stop=2, step=1),\n ('bar', 'three'): RangeIndex(start=3, stop=4, step=1),\n ('bar', 'two'): RangeIndex(start=5, stop=6, step=1),\n ('foo', 'one'): RangeIndex(start=0, stop=12, step=6),\n ('foo', 'three'): RangeIndex(start=7, stop=8, step=1),\n ('foo', 'two'): RangeIndex(start=2, stop=6, step=2)}\n\nIn [34]: len(grouped)\nOut[34]: 6\nGroupBy will tab complete column names, GroupBy operations, and other attributes:\nIn [35]: n = 10\n\nIn [36]: weight =",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+          "heading_path": "Group by: split-apply-combine > Splitting an object into groups",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#splitting-an-object-into-groups"
+      ],
+      "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups",
+      "score": 0.8398087660555672
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:user_guide/groupby:0041",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "observed=True)\n .....: .count()\n .....: )\n .....:\n\nIn [212]: s.index.dtype\nOut[212]: CategoricalDtype(categories=['a', 'b'], ordered=False, categories_dtype=str)\nNA group handling\nBy NA, we are referring to any NA values, including NA, NaN, NaT, and None. If there are any NA values in the grouping key, by default these will be excluded. In other words, any “NA group” will be dropped. You can include NA groups by specifying dropna=False.\nIn [213]: df = pd.DataFrame({\"key\": [1.0, 1.0, np.nan, 2.0, np.nan], \"A\": [1, 2, 3, 4, 5]})\n\nIn [214]: df\nOut[214]:\n key A\n0 1.0 1\n1 1.0 2\n2 NaN 3\n3 2.0 4\n4 NaN 5\n\nIn [215]: df.groupby(\"key\", dropna=True).sum()\nOut[215]:\n A\nkey\n1.0 3\n2.0 4\n\nIn [216]: df.groupby(\"key\", dropna=False).sum()\nOut[216]:\n A\nkey\n1.0 3\n2.0 4\nNaN 8\nGrouping with ordered factors\nCategorical variables represented as instances of pandas’s Categorical class can be used as group keys. If so, the order of the levels will be preserved. When observed=False and sort=False, any unobserved categories will be at the end of the result in order.\nIn [217]: days = pd.Categorical(\n .....: values=[\"Wed\", \"Mon\", \"Thu\", \"Mon\", \"Wed\", \"Sat\"],\n .....: categories=[\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"],\n .....: )\n .....:\n\nIn [218]: data = pd.DataFrame(\n .....: {\n .....: \"day\": days,\n .....: \"workers\": [3, 4, 1, 4, 2, 2],\n .....: }\n .....: )\n .....:\n\nIn [219]: data\nOut[219]:\n day workers\n0 Wed 3\n1 Mon 4\n2 Thu 1\n3 Mon 4\n4 Wed 2\n5 Sat 2\n\nIn [220]:",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#other-useful-features",
+          "heading_path": "Group by: split-apply-combine > Other useful features",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#other-useful-features"
+      ],
+      "section_id": "user_guide/groupby#other-useful-features",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features",
+      "score": 0.8242145354810948
+    },
+    {
+      "n": 4,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.groupby:0003",
+      "doc_id": "reference/api/pandas.DataFrame.groupby",
+      "title": "pandas.DataFrame.groupby",
+      "text": ">>> df = pd.DataFrame(\n... {\n... \"Animal\": [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... \"Max Speed\": [380.0, 370.0, 24.0, 26.0],\n... }\n... )\n>>> df\n Animal Max Speed\n0 Falcon 380.0\n1 Falcon 370.0\n2 Parrot 24.0\n3 Parrot 26.0\n>>> df.groupby([\"Animal\"]).mean()\n Max Speed\nAnimal\nFalcon 375.0\nParrot 25.0\nHierarchical Indexes\nWe can groupby different levels of a hierarchical index using the level parameter:\n>>> arrays = [\n... [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... [\"Captive\", \"Wild\", \"Captive\", \"Wild\"],\n... ]\n>>> index = pd.MultiIndex.from_arrays(arrays, names=(\"Animal\", \"Type\"))\n>>> df = pd.DataFrame({\"Max Speed\": [390.0, 350.0, 30.0, 20.0]}, index=index)\n>>> df\n Max Speed\nAnimal Type\nFalcon Captive 390.0\n Wild 350.0\nParrot Captive 30.0\n Wild 20.0\n>>> df.groupby(level=0).mean()\n Max Speed\nAnimal\nFalcon 370.0\nParrot 25.0\n>>> df.groupby(level=\"Type\").mean()\n Max Speed\nType\nCaptive 210.0\nWild 185.0\nWe can also choose to include NA in group keys or not by setting dropna parameter, the default setting is True.\n>>> arr = [[1, 2, 3], [1, None, 4], [2, 1, 3], [1, 2, 2]]\n>>> df = pd.DataFrame(arr, columns=[\"a\", \"b\", \"c\"])\n>>> df.groupby(by=[\"b\"]).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\n>>> df.groupby(by=[\"b\"], dropna=False).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\n>>> arr = [[\"a\", 12, 12], [None, 12.3, 33.0], [\"b\",",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.groupby#page",
+          "heading_path": "pandas.DataFrame.groupby",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.groupby#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.groupby#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html",
+      "score": 0.7933331928687731
+    },
+    {
+      "n": 5,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.groupby:0004",
+      "doc_id": "reference/api/pandas.DataFrame.groupby",
+      "title": "pandas.DataFrame.groupby",
+      "text": "c\"])\n>>> df.groupby(by=[\"b\"]).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\n>>> df.groupby(by=[\"b\"], dropna=False).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\n>>> arr = [[\"a\", 12, 12], [None, 12.3, 33.0], [\"b\", 12.3, 123], [\"a\", 1, 1]]\n>>> df = pd.DataFrame(arr, columns=[\"a\", \"b\", \"c\"])\n>>> df.groupby(by=\"a\").sum()\n b c\na\na 13.0 13.0\nb 12.3 123.0\n>>> df.groupby(by=\"a\", dropna=False).sum()\n b c\na\na 13.0 13.0\nb 12.3 123.0\nNaN 12.3 33.0\nWhen using .apply(), use group_keys to include or exclude the group keys. The group_keys argument defaults to True (include).\n>>> df = pd.DataFrame(\n... {\n... \"Animal\": [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... \"Max Speed\": [380.0, 370.0, 24.0, 26.0],\n... }\n... )\n>>> df.groupby(\"Animal\", group_keys=True)[[\"Max Speed\"]].apply(lambda x: x)\n Max Speed\nAnimal\nFalcon 0 380.0\n 1 370.0\nParrot 2 24.0\n 3 26.0\n>>> df.groupby(\"Animal\", group_keys=False)[[\"Max Speed\"]].apply(lambda x: x)\n Max Speed\n0 380.0\n1 370.0\n2 24.0\n3 26.0",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.groupby#page",
+          "heading_path": "pandas.DataFrame.groupby",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.groupby#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.groupby#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html",
+      "score": 0.8202375547059008
+    }
+  ],
+  "latency_ms": 15173,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/groupby:0005",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "the keys in the original dataframe:\nIn [19]: df2 = pd.DataFrame({\"X\": [\"B\", \"B\", \"A\", \"A\"], \"Y\": [1, 2, 3, 4]})\n\nIn [20]: df2.groupby([\"X\"]).sum()\nOut[20]:\n Y\nX\nA 7\nB 3\n\nIn [21]: df2.groupby([\"X\"], sort=False).sum()\nOut[21]:\n Y\nX\nB 3\nA 7\nNote that groupby will preserve the order in which observations are sorted within each group. For example, the groups created by groupby() below are in the order they appeared in the original DataFrame:\nIn [22]: df3 = pd.DataFrame({\"X\": [\"A\", \"B\", \"A\", \"B\"], \"Y\": [1, 4, 3, 2]})\n\nIn [23]: df3.groupby(\"X\").get_group(\"A\")\nOut[23]:\n X Y\n0 A 1\n2 A 3\n\nIn [24]: df3.groupby([\"X\"]).get_group((\"B\",))\nOut[24]:\n X Y\n1 B 4\n3 B 2\nGroupBy dropna\nBy default NA values are excluded from group keys during the groupby operation. However, in case you want to include NA values in group keys, you could pass dropna=False to achieve it.\nIn [25]: df_list = [[1, 2, 3], [1, None, 4], [2, 1, 3], [1, 2, 2]]\n\nIn [26]: df_dropna = pd.DataFrame(df_list, columns=[\"a\", \"b\", \"c\"])\n\nIn [27]: df_dropna\nOut[27]:\n a b c\n0 1 2.0 3\n1 1 NaN 4\n2 2 1.0 3\n3 1 2.0 2\n# Default ``dropna`` is set to True, which will exclude NaNs in keys\nIn [28]: df_dropna.groupby(by=[\"b\"], dropna=True).sum()\nOut[28]:\n a c\nb\n1.0 2 3\n2.0 2 5\n\n# In order to allow NaN in keys, set ``dropna`` to False\nIn [29]: df_dropna.groupby(by",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+          "heading_path": "Group by: split-apply-combine > Splitting an object into groups",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#splitting-an-object-into-groups"
+      ],
+      "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups",
+      "score": 0.8703712612198997
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/groupby:0006",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "3\n3 1 2.0 2\n# Default ``dropna`` is set to True, which will exclude NaNs in keys\nIn [28]: df_dropna.groupby(by=[\"b\"], dropna=True).sum()\nOut[28]:\n a c\nb\n1.0 2 3\n2.0 2 5\n\n# In order to allow NaN in keys, set ``dropna`` to False\nIn [29]: df_dropna.groupby(by=[\"b\"], dropna=False).sum()\nOut[29]:\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\nThe default setting of dropna argument is True which means NA are not included in group keys.\nGroupBy object attributes\nThe groups attribute of a GroupBy object is a dictionary that maps each unique group key to the index labels belonging to that group. In the above example:\nIn [30]: df.groupby(\"A\").groups\nOut[30]: {'bar': [1, 3, 5], 'foo': [0, 2, 4, 6, 7]}\n\nIn [31]: df.T.groupby(get_letter_type).groups\nOut[31]: {'consonant': ['B', 'C', 'D'], 'vowel': ['A']}\nCalling the standard Python len function on the GroupBy object returns the number of groups, which is the same as the length of the groups dictionary:\nIn [32]: grouped = df.groupby([\"A\", \"B\"])\n\nIn [33]: grouped.groups\nOut[33]:\n{('bar', 'one'): RangeIndex(start=1, stop=2, step=1),\n ('bar', 'three'): RangeIndex(start=3, stop=4, step=1),\n ('bar', 'two'): RangeIndex(start=5, stop=6, step=1),\n ('foo', 'one'): RangeIndex(start=0, stop=12, step=6),\n ('foo', 'three'): RangeIndex(start=7, stop=8, step=1),\n ('foo', 'two'): RangeIndex(start=2, stop=6, step=2)}\n\nIn [34]: len(grouped)\nOut[34]: 6\nGroupBy will tab complete column names, GroupBy operations, and other attributes:\nIn [35]: n = 10\n\nIn [36]: weight =",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+          "heading_path": "Group by: split-apply-combine > Splitting an object into groups",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#splitting-an-object-into-groups"
+      ],
+      "section_id": "user_guide/groupby#splitting-an-object-into-groups",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#splitting-an-object-into-groups",
+      "score": 0.8398087660555672
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/groupby:0041",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "observed=True)\n .....: .count()\n .....: )\n .....:\n\nIn [212]: s.index.dtype\nOut[212]: CategoricalDtype(categories=['a', 'b'], ordered=False, categories_dtype=str)\nNA group handling\nBy NA, we are referring to any NA values, including NA, NaN, NaT, and None. If there are any NA values in the grouping key, by default these will be excluded. In other words, any “NA group” will be dropped. You can include NA groups by specifying dropna=False.\nIn [213]: df = pd.DataFrame({\"key\": [1.0, 1.0, np.nan, 2.0, np.nan], \"A\": [1, 2, 3, 4, 5]})\n\nIn [214]: df\nOut[214]:\n key A\n0 1.0 1\n1 1.0 2\n2 NaN 3\n3 2.0 4\n4 NaN 5\n\nIn [215]: df.groupby(\"key\", dropna=True).sum()\nOut[215]:\n A\nkey\n1.0 3\n2.0 4\n\nIn [216]: df.groupby(\"key\", dropna=False).sum()\nOut[216]:\n A\nkey\n1.0 3\n2.0 4\nNaN 8\nGrouping with ordered factors\nCategorical variables represented as instances of pandas’s Categorical class can be used as group keys. If so, the order of the levels will be preserved. When observed=False and sort=False, any unobserved categories will be at the end of the result in order.\nIn [217]: days = pd.Categorical(\n .....: values=[\"Wed\", \"Mon\", \"Thu\", \"Mon\", \"Wed\", \"Sat\"],\n .....: categories=[\"Mon\", \"Tue\", \"Wed\", \"Thu\", \"Fri\", \"Sat\", \"Sun\"],\n .....: )\n .....:\n\nIn [218]: data = pd.DataFrame(\n .....: {\n .....: \"day\": days,\n .....: \"workers\": [3, 4, 1, 4, 2, 2],\n .....: }\n .....: )\n .....:\n\nIn [219]: data\nOut[219]:\n day workers\n0 Wed 3\n1 Mon 4\n2 Thu 1\n3 Mon 4\n4 Wed 2\n5 Sat 2\n\nIn [220]:",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#other-useful-features",
+          "heading_path": "Group by: split-apply-combine > Other useful features",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#other-useful-features"
+      ],
+      "section_id": "user_guide/groupby#other-useful-features",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features",
+      "score": 0.8242145354810948
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.groupby:0004",
+      "doc_id": "reference/api/pandas.DataFrame.groupby",
+      "title": "pandas.DataFrame.groupby",
+      "text": "c\"])\n>>> df.groupby(by=[\"b\"]).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\n>>> df.groupby(by=[\"b\"], dropna=False).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\n>>> arr = [[\"a\", 12, 12], [None, 12.3, 33.0], [\"b\", 12.3, 123], [\"a\", 1, 1]]\n>>> df = pd.DataFrame(arr, columns=[\"a\", \"b\", \"c\"])\n>>> df.groupby(by=\"a\").sum()\n b c\na\na 13.0 13.0\nb 12.3 123.0\n>>> df.groupby(by=\"a\", dropna=False).sum()\n b c\na\na 13.0 13.0\nb 12.3 123.0\nNaN 12.3 33.0\nWhen using .apply(), use group_keys to include or exclude the group keys. The group_keys argument defaults to True (include).\n>>> df = pd.DataFrame(\n... {\n... \"Animal\": [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... \"Max Speed\": [380.0, 370.0, 24.0, 26.0],\n... }\n... )\n>>> df.groupby(\"Animal\", group_keys=True)[[\"Max Speed\"]].apply(lambda x: x)\n Max Speed\nAnimal\nFalcon 0 380.0\n 1 370.0\nParrot 2 24.0\n 3 26.0\n>>> df.groupby(\"Animal\", group_keys=False)[[\"Max Speed\"]].apply(lambda x: x)\n Max Speed\n0 380.0\n1 370.0\n2 24.0\n3 26.0",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.groupby#page",
+          "heading_path": "pandas.DataFrame.groupby",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.groupby#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.groupby#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html",
+      "score": 0.8202375547059008
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.groupby:0003",
+      "doc_id": "reference/api/pandas.DataFrame.groupby",
+      "title": "pandas.DataFrame.groupby",
+      "text": ">>> df = pd.DataFrame(\n... {\n... \"Animal\": [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... \"Max Speed\": [380.0, 370.0, 24.0, 26.0],\n... }\n... )\n>>> df\n Animal Max Speed\n0 Falcon 380.0\n1 Falcon 370.0\n2 Parrot 24.0\n3 Parrot 26.0\n>>> df.groupby([\"Animal\"]).mean()\n Max Speed\nAnimal\nFalcon 375.0\nParrot 25.0\nHierarchical Indexes\nWe can groupby different levels of a hierarchical index using the level parameter:\n>>> arrays = [\n... [\"Falcon\", \"Falcon\", \"Parrot\", \"Parrot\"],\n... [\"Captive\", \"Wild\", \"Captive\", \"Wild\"],\n... ]\n>>> index = pd.MultiIndex.from_arrays(arrays, names=(\"Animal\", \"Type\"))\n>>> df = pd.DataFrame({\"Max Speed\": [390.0, 350.0, 30.0, 20.0]}, index=index)\n>>> df\n Max Speed\nAnimal Type\nFalcon Captive 390.0\n Wild 350.0\nParrot Captive 30.0\n Wild 20.0\n>>> df.groupby(level=0).mean()\n Max Speed\nAnimal\nFalcon 370.0\nParrot 25.0\n>>> df.groupby(level=\"Type\").mean()\n Max Speed\nType\nCaptive 210.0\nWild 185.0\nWe can also choose to include NA in group keys or not by setting dropna parameter, the default setting is True.\n>>> arr = [[1, 2, 3], [1, None, 4], [2, 1, 3], [1, 2, 2]]\n>>> df = pd.DataFrame(arr, columns=[\"a\", \"b\", \"c\"])\n>>> df.groupby(by=[\"b\"]).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\n>>> df.groupby(by=[\"b\"], dropna=False).sum()\n a c\nb\n1.0 2 3\n2.0 2 5\nNaN 1 4\n>>> arr = [[\"a\", 12, 12], [None, 12.3, 33.0], [\"b\",",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.groupby#page",
+          "heading_path": "pandas.DataFrame.groupby",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.groupby#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.groupby#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html",
+      "score": 0.7933331928687731
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 15173
+}

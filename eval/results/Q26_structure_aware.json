@@ -1,0 +1,108 @@
+{
+  "question_id": "Q26",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:24.679916+00:00",
+  "answer": "I couldn't find enough evidence in the pandas documentation to answer this.",
+  "refused": true,
+  "citations": [],
+  "latency_ms": 4741,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:user_guide/indexing:0045",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "-1.039575 0.271860 NaN\n2000-01-05 0.567020 -0.424972 0.276232 -1.087401 NaN\n2000-01-06 7.000000 -0.673690 -1.478427 0.524988 NaN\n2000-01-07 0.577046 0.404705 -1.715002 -1.039268 NaN\n2000-01-08 -1.157892 -0.370647 -1.344312 0.844885 NaN\n2000-01-09 NaN NaN NaN NaN 7.0",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#fast-scalar-value-getting-and-setting",
+          "heading_path": "Indexing and selecting data > Fast scalar value getting and setting",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#fast-scalar-value-getting-and-setting"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#fast-scalar-value-getting-and-setting"
+      ],
+      "section_id": "user_guide/indexing#fast-scalar-value-getting-and-setting",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#fast-scalar-value-getting-and-setting",
+      "score": 0.40215662195885993
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/style:0008",
+      "doc_id": "user_guide/style",
+      "title": "Table Visualization",
+      "text": "(Negative) 19.000000 439.000000 6.000000 452.000000 226 232.000000\n[9]:\ns\n[9]:\nModel: Decision Tree Regression\nPredicted: Tumour Non-Tumour Tumour Non-Tumour\nActual Label:\nTumour (Positive) 38 2 18 22\nNon-Tumour (Negative) 19 439 6 452\nThe first step we have taken is the create the Styler object from the DataFrame and then select the range of interest by hiding unwanted columns with .hide().\n[10]:\ns = df.style.format(\"{:.0f}\").hide(\n [(\"Random\", \"Tumour\"), (\"Random\", \"Non-Tumour\")], axis=\"columns\"\n)\ns\n[10]:\nModel: Decision Tree Regression\nPredicted: Tumour Non-Tumour Tumour Non-Tumour\nActual Label:\nTumour (Positive) 38 2 18 22\nNon-Tumour (Negative) 19 439 6 452",
+      "sources": [
+        {
+          "section_id": "user_guide/style#Styler-Object-and-HTML",
+          "heading_path": "Table Visualization > Styler Object and HTML",
+          "url": "https://pandas.pydata.org/docs/user_guide/style.html#Styler-Object-and-HTML"
+        }
+      ],
+      "section_ids": [
+        "user_guide/style#Styler-Object-and-HTML"
+      ],
+      "section_id": "user_guide/style#Styler-Object-and-HTML",
+      "url": "https://pandas.pydata.org/docs/user_guide/style.html#Styler-Object-and-HTML",
+      "score": 0.3925169461995542
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/overview:0008",
+      "doc_id": "getting_started/overview",
+      "title": "Package overview",
+      "text": "The list of the Core Team members and more detailed information can be found on the pandas website.",
+      "sources": [
+        {
+          "section_id": "getting_started/overview#development-team",
+          "heading_path": "Package overview > Development team",
+          "url": "https://pandas.pydata.org/docs/getting_started/overview.html#development-team"
+        }
+      ],
+      "section_ids": [
+        "getting_started/overview#development-team"
+      ],
+      "section_id": "getting_started/overview#development-team",
+      "url": "https://pandas.pydata.org/docs/getting_started/overview.html#development-team",
+      "score": 0.37896538784546885
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0001",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "How do I select a subset of a DataFrame?",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe",
+      "score": 0.37401610256436535
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0054",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": "T00:00:00.000\":0.9597255933,\"2013-01-04T00:00:00.000\":-0.6199759194,\"2013-01-05T00:00:00.000\":-0.7323393705},\"B\":{\"2013-01-01T00:00:00.000\":-0.0978826728,\"2013-01-02T00:00:00.000\":0.3417343559,\"2013-01-03T00:00:00.000\":-1.1103361029,\"2013-01-04T00:00:00.000\":0.1497483186,\"2013-01-05T00:00:00.000\":0.6877383895},\"date\":{\"2013-01-01T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-02T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-03T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-04T00:00:00.000\":\"2013-01-01T00:00:00.000\",\"2013-01-05T00:00:00.000\":\"2013-01-01T00:00:00.000\"},\"ints\":{\"2013-01-01T00:00:00.000\":0,\"2013-01-02T00:00:00.000\":1,\"2013-01-03T00:00:00.000\":2,\"2013-01-04T00:00:00.000\":3,\"2013-01-05T00:00:00.000\":4},\"bools\":{\"2013-01-01T00:00:00.000\":true,\"2013-01-02T00:00:00.000\":true,\"2013-01-03T00:00:00.000\":true,\"2013-01-04T00:00:00.000\":true,\"2013-01-05T00:00:00.000\":true}}\nFallback",
+      "sources": [
+        {
+          "section_id": "user_guide/io#json",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > JSON",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#json"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#json"
+      ],
+      "section_id": "user_guide/io#json",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#json",
+      "score": 0.37076171716301126
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 4741
+}

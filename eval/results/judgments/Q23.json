@@ -1,0 +1,92 @@
+{
+  "question_id": "Q23",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Rolling window: Generic fixed or variable sliding window over the values.",
+          "reason": "Directly supports required point 1 (rolling uses a sliding window)."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses rolling min_periods and expanding aggregation examples but does not explicitly define rolling as sliding or expanding as accumulating."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses custom window rolling with BaseIndexer, not the core rolling vs expanding distinction."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses rolling with time-based windows and centering, but does not define expanding as accumulating."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.",
+          "reason": "Directly supports required point 2 (expanding uses an accumulating window)."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are explicitly stated and supported by cited passages. The optional rolling example is also supported by passage 1."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.",
+          "reason": "Directly supports required point 2 (expanding uses an accumulating window)."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Generic rolling windows support specifying windows as a fixed number of observations or variable number of observations based on an offset.",
+          "reason": "Supports required point 1 (rolling uses a sliding window) by describing fixed/variable observation windows."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Rolling window: Generic fixed or variable sliding window over the values.",
+          "reason": "Directly supports required point 1 (rolling uses a sliding window)."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses rolling centering and endpoints, not the core rolling vs expanding distinction."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses custom window rolling with BaseIndexer, not the core rolling vs expanding distinction."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Both required points are explicitly stated and supported by cited passages. The optional equivalence example is supported by passage 1."
+    }
+  },
+  "prompt_version": 1
+}

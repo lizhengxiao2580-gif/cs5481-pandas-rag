@@ -1,0 +1,90 @@
+{
+  "question_id": "Q02",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "indexbool, default True\nWrite row names (index).",
+          "reason": "Directly documents the index parameter and its default, supporting the required point."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Create ‘out.csv’ containing ‘df’ without indices\n>>> df = pd.DataFrame(\n... [[\"Raphael\", \"red\", \"sai\"], [\"Donatello\", \"purple\", \"bo staff\"]],\n... columns=[\"name\", \"mask\", \"weapon\"],\n... )\n>>> df.to_csv(\"out.csv\", index=False)",
+          "reason": "Provides an example of using index=False to omit row indices."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text discusses to_string and JSON writing, not CSV index control."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text is about Parquet serialization, not CSV."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text is about Excel writing, not CSV."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states index=False and explains the default. All claims are supported by cited passages."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "indexbool, default True\nWrite row names (index).",
+          "reason": "Directly documents the index parameter and its default, supporting the required point."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Create ‘out.csv’ containing ‘df’ without indices\n>>> df = pd.DataFrame(\n... [[\"Raphael\", \"red\", \"sai\"], [\"Donatello\", \"purple\", \"bo staff\"]],\n... columns=[\"name\", \"mask\", \"weapon\"],\n... )\n>>> df.to_csv(\"out.csv\", index=False)",
+          "reason": "Provides an example of using index=False to omit row indices."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text is about Excel writing, not CSV."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "index: whether to write row (index) names (default True)",
+          "reason": "Contains a concise description of the index parameter relevant to the required point."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Text shows CSV writing without index=False and does not explain how to omit the index."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states index=False and explains the default. All claims are supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

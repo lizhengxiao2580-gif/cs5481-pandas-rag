@@ -1,0 +1,167 @@
+{
+  "question_id": "Q11",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:07:07.576051+00:00",
+  "answer": "Yes, when both key columns contain rows where the key is null, pandas will match those rows against each other [1][2]. This behavior is not the same as typical SQL joins; the documentation states it is different from usual SQL join behaviour and can lead to unexpected results [1][2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sql:0009",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "be performed with join() or merge(). By default, join() will join the DataFrames on their indices. Each method has parameters allowing you to specify the type of join to perform (LEFT, RIGHT, INNER, FULL) or the columns to join on (column names or indices).\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nIn [24]: df1 = pd.DataFrame({\"key\": [\"A\", \"B\", \"C\", \"D\"], \"value\": np.random.randn(4)})\n\nIn [25]: df2 = pd.DataFrame({\"key\": [\"B\", \"D\", \"D\", \"E\"], \"value\": np.random.randn(4)})\nAssume we have two database tables of the same name and structure as our DataFrames.\nNow let’s go over the various types of JOINs.\nINNER JOIN\nSELECT *\nFROM df1\nINNER JOIN df2\n ON df1.key = df2.key;\n# merge performs an INNER JOIN by default\nIn [26]: pd.merge(df1, df2, on=\"key\")\nOut[26]:\n key value_x value_y\n0 B -0.282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\nmerge() also offers parameters for cases when you’d like to join one DataFrame’s column with another DataFrame’s index.\nIn [27]: indexed_df2 = df2.set_index(\"key\")\n\nIn [28]: pd.merge(df1, indexed_df2, left_on=\"key\", right_index=True)\nOut[28]:\n key value_x value_y\n1 B -0.282863 1.212112\n3 D -1.135632 -0.173215\n3 D -1.135632 0.119209\nmerge() also supports joining on multiple columns by passing a list of column names.\nSELECT *\nFROM df1_multi\nINNER JOIN df2_multi\n ON df1_multi.key1 = df2_multi.key1\n AND df1_multi.key2 = df2_multi.key2;\nIn [29]: df1_multi = pd.DataFrame({\n ....: \"key1\": [\"A\", \"B\", \"C\", \"D\"],\n ....: \"key2\": [1, 2, 3,",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#join",
+          "heading_path": "Comparison with SQL > JOIN",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#join"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#join",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join",
+      "score": 0.8265241962659726
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.merge:0001",
+      "doc_id": "reference/api/pandas.DataFrame.merge",
+      "title": "pandas.DataFrame.merge",
+      "text": "pandas.DataFrame.merge\nDataFrame.merge(right, how='inner', on=None, left_on=None, right_on=None, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=<no_default>, indicator=False, validate=None)[source]\nMerge DataFrame or named Series objects with a database-style join.\nA named Series object is treated as a DataFrame with a single named column.\nThe join is done on columns or indexes. If joining columns on columns, the DataFrame indexes will be ignored. Otherwise if joining indexes on indexes or indexes on a column or columns, the index will be passed on. When performing a cross merge, no column specifications to merge on are allowed.\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nParameters:\nrightDataFrame or named Series\nObject to merge with.\nhow{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},\ndefault ‘inner’ Type of merge to be performed.\nleft: use only keys from left frame, similar to a SQL left outer join; preserve key order.\nright: use only keys from right frame, similar to a SQL right outer join; preserve key order.\nouter: use union of keys from both frames, similar to a SQL full outer join; sort keys lexicographically.\ninner: use intersection of keys from both frames, similar to a SQL inner join; preserve the order of the left keys.\ncross: creates the cartesian product from both frames, preserves the order of the left keys.\nleft_anti: use only keys from left frame that are not in right frame, similar to SQL left anti join; preserve key order.\nAdded in version 3.0.\nright_anti: use only keys from right frame that are not in left frame, similar to SQL right anti join; preserve key order.\nAdded in version 3.0.\nonHashable or a sequence of the previous\nColumn or index level names to join on. These must be found in both DataFrames. If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.\nleft_onHashable or a sequence of the previous, or array-like\nColumn or index level names to join on in the left DataFrame. Can also be an array or",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.merge#page",
+          "heading_path": "pandas.DataFrame.merge",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.merge.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.merge#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.merge#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.merge.html",
+      "score": 0.7927329094953125
+    }
+  ],
+  "latency_ms": 8886,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sql:0009",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "be performed with join() or merge(). By default, join() will join the DataFrames on their indices. Each method has parameters allowing you to specify the type of join to perform (LEFT, RIGHT, INNER, FULL) or the columns to join on (column names or indices).\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nIn [24]: df1 = pd.DataFrame({\"key\": [\"A\", \"B\", \"C\", \"D\"], \"value\": np.random.randn(4)})\n\nIn [25]: df2 = pd.DataFrame({\"key\": [\"B\", \"D\", \"D\", \"E\"], \"value\": np.random.randn(4)})\nAssume we have two database tables of the same name and structure as our DataFrames.\nNow let’s go over the various types of JOINs.\nINNER JOIN\nSELECT *\nFROM df1\nINNER JOIN df2\n ON df1.key = df2.key;\n# merge performs an INNER JOIN by default\nIn [26]: pd.merge(df1, df2, on=\"key\")\nOut[26]:\n key value_x value_y\n0 B -0.282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\nmerge() also offers parameters for cases when you’d like to join one DataFrame’s column with another DataFrame’s index.\nIn [27]: indexed_df2 = df2.set_index(\"key\")\n\nIn [28]: pd.merge(df1, indexed_df2, left_on=\"key\", right_index=True)\nOut[28]:\n key value_x value_y\n1 B -0.282863 1.212112\n3 D -1.135632 -0.173215\n3 D -1.135632 0.119209\nmerge() also supports joining on multiple columns by passing a list of column names.\nSELECT *\nFROM df1_multi\nINNER JOIN df2_multi\n ON df1_multi.key1 = df2_multi.key1\n AND df1_multi.key2 = df2_multi.key2;\nIn [29]: df1_multi = pd.DataFrame({\n ....: \"key1\": [\"A\", \"B\", \"C\", \"D\"],\n ....: \"key2\": [1, 2, 3,",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#join",
+          "heading_path": "Comparison with SQL > JOIN",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#join"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#join",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join",
+      "score": 0.8265241962659726
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.merge:0001",
+      "doc_id": "reference/api/pandas.DataFrame.merge",
+      "title": "pandas.DataFrame.merge",
+      "text": "pandas.DataFrame.merge\nDataFrame.merge(right, how='inner', on=None, left_on=None, right_on=None, left_index=False, right_index=False, sort=False, suffixes=('_x', '_y'), copy=<no_default>, indicator=False, validate=None)[source]\nMerge DataFrame or named Series objects with a database-style join.\nA named Series object is treated as a DataFrame with a single named column.\nThe join is done on columns or indexes. If joining columns on columns, the DataFrame indexes will be ignored. Otherwise if joining indexes on indexes or indexes on a column or columns, the index will be passed on. When performing a cross merge, no column specifications to merge on are allowed.\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nParameters:\nrightDataFrame or named Series\nObject to merge with.\nhow{‘left’, ‘right’, ‘outer’, ‘inner’, ‘cross’, ‘left_anti’, ‘right_anti’},\ndefault ‘inner’ Type of merge to be performed.\nleft: use only keys from left frame, similar to a SQL left outer join; preserve key order.\nright: use only keys from right frame, similar to a SQL right outer join; preserve key order.\nouter: use union of keys from both frames, similar to a SQL full outer join; sort keys lexicographically.\ninner: use intersection of keys from both frames, similar to a SQL inner join; preserve the order of the left keys.\ncross: creates the cartesian product from both frames, preserves the order of the left keys.\nleft_anti: use only keys from left frame that are not in right frame, similar to SQL left anti join; preserve key order.\nAdded in version 3.0.\nright_anti: use only keys from right frame that are not in left frame, similar to SQL right anti join; preserve key order.\nAdded in version 3.0.\nonHashable or a sequence of the previous\nColumn or index level names to join on. These must be found in both DataFrames. If on is None and not merging on indexes then this defaults to the intersection of the columns in both DataFrames.\nleft_onHashable or a sequence of the previous, or array-like\nColumn or index level names to join on in the left DataFrame. Can also be an array or",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.merge#page",
+          "heading_path": "pandas.DataFrame.merge",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.merge.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.merge#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.merge#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.merge.html",
+      "score": 0.7927329094953125
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sql:0011",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "value_y\n0 B 2 -2.104569 B 2 -0.424972\n1 D 4 1.071804 D 4 0.567020\n2 D 4 1.071804 D 4 0.276232\nLEFT OUTER JOIN\nShow all records from df1.\nSELECT *\nFROM df1\nLEFT OUTER JOIN df2\n ON df1.key = df2.key;\nIn [34]: pd.merge(df1, df2, on=\"key\", how=\"left\")\nOut[34]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\nRIGHT JOIN\nShow all records from df2.\nSELECT *\nFROM df1\nRIGHT OUTER JOIN df2\n ON df1.key = df2.key;\nIn [35]: pd.merge(df1, df2, on=\"key\", how=\"right\")\nOut[35]:\n key value_x value_y\n0 B -0.282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\n3 E NaN -1.044236\nFULL JOIN\npandas also allows for FULL JOINs, which display both sides of the dataset, whether or not the joined columns find a match. As of writing, FULL JOINs are not supported in all RDBMS (MySQL).\nShow all records from both tables.\nSELECT *\nFROM df1\nFULL OUTER JOIN df2\n ON df1.key = df2.key;\nIn [36]: pd.merge(df1, df2, on=\"key\", how=\"outer\")\nOut[36]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n5 E NaN -1.044236\n\nUNION ALL can be performed using concat().\nIn [37]: df1 = pd.DataFrame(\n ....: {\"city\": [\"Chicago\", \"San Francisco\", \"New York City\"], \"rank\": range(1,",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#join",
+          "heading_path": "Comparison with SQL > JOIN",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#union",
+          "heading_path": "Comparison with SQL > UNION",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#union"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#join",
+        "getting_started/comparison/comparison_with_sql#union"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#join",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join",
+      "score": 0.7544339117558859
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sas:0015",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "accomplished via the how keyword.\nIn [1]: inner_join = df1.merge(df2, on=[\"key\"], how=\"inner\")\n\nIn [2]: inner_join\nOut[2]:\n key value_x value_y\n0 B -0.282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\n\nIn [3]: left_join = df1.merge(df2, on=[\"key\"], how=\"left\")\n\nIn [4]: left_join\nOut[4]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n\nIn [5]: right_join = df1.merge(df2, on=[\"key\"], how=\"right\")\n\nIn [6]: right_join\nOut[6]:\n key value_x value_y\n0 B -0.282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\n3 E NaN -1.044236\n\nIn [7]: outer_join = df1.merge(df2, on=[\"key\"], how=\"outer\")\n\nIn [8]: outer_join\nOut[8]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n5 E NaN -1.044236\n\nBoth pandas and SAS have a representation for missing data.\npandas represents missing data with the special float value NaN (not a number). Many of the semantics are the same; for example missing data propagates through numeric operations, and is ignored by default for aggregations.\nIn [1]: outer_join\nOut[1]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n5 E NaN -",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#merging",
+          "heading_path": "Comparison with SAS > Merging",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#merging"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#missing-data",
+          "heading_path": "Comparison with SAS > Missing data",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#missing-data"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#merging",
+        "getting_started/comparison/comparison_with_sas#missing-data"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#merging",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#merging",
+      "score": 0.7538087464131797
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_stata:0016",
+      "doc_id": "getting_started/comparison/comparison_with_stata",
+      "title": "Comparison with Stata",
+      "text": ".282863 1.212112\n1 D -1.135632 -0.173215\n2 D -1.135632 0.119209\n3 E NaN -1.044236\n\nIn [55]: outer_join = df1.merge(df2, on=[\"key\"], how=\"outer\")\n\nIn [56]: outer_join\nOut[56]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n5 E NaN -1.044236\n\nBoth pandas and Stata have a representation for missing data.\npandas represents missing data with the special float value NaN (not a number). Many of the semantics are the same; for example missing data propagates through numeric operations, and is ignored by default for aggregations.\nIn [57]: outer_join\nOut[57]:\n key value_x value_y\n0 A 0.469112 NaN\n1 B -0.282863 1.212112\n2 C -1.509059 NaN\n3 D -1.135632 -0.173215\n4 D -1.135632 0.119209\n5 E NaN -1.044236\n\nIn [58]: outer_join[\"value_x\"] + outer_join[\"value_y\"]\nOut[58]:\n0 NaN\n1 0.929249\n2 NaN\n3 -1.308847\n4 -1.016424\n5 NaN\ndtype: float64\n\nIn [59]: outer_join[\"value_x\"].sum()\nOut[59]: np.float64(-3.5940742896293765)\nOne difference is that missing data cannot be compared to its sentinel value. For example, in Stata you could do this to filter missing values.\n* Keep missing values\nlist if value_x == .\n* Keep non-missing values\nlist if value_x != .\nIn pandas, Series.isna() and Series.notna() can be used to filter the rows.\nIn [60]: outer_join[outer_join[\"value_x\"].isna()]\nOut[60]:\n key value_x value_y\n5 E NaN -1.044236\n\nIn [61]: outer_join[outer_join[\"value_x\"].notna()]\nOut[61]:\n key",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_stata#merging",
+          "heading_path": "Comparison with Stata > Merging",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#merging"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_stata#missing-data",
+          "heading_path": "Comparison with Stata > Missing data",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#missing-data"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_stata#merging",
+        "getting_started/comparison/comparison_with_stata#missing-data"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_stata#merging",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_stata.html#merging",
+      "score": 0.7430541875390829
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 8886
+}

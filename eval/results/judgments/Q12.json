@@ -1,0 +1,92 @@
+{
+  "question_id": "Q12",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "pandas allows indexing with NA values in a boolean array, which are treated as False.\nIn [1]: s = pd.Series([1, 2, 3])\n\nIn [2]: mask = pd.array([True, False, pd.NA], dtype=\"boolean\")\n\nIn [3]: s[mask]\nOut[3]:\n0 1\ndtype: int64\nIf you would prefer to keep the NA values you can manually fill them with fillna(True).",
+          "reason": "Directly supports both required points: NA treated as False and fillna(True) to retain rows."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Missing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead",
+          "reason": "Supports the alternative DataFrame.filter method with na=True, which is a valid way to retain rows."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses NA in boolean context and TypeError, not indexing mask behavior or retaining rows."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses Kleene logic and NA propagation, not indexing mask behavior or retaining rows."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses NumPy ufuncs and conversion, not indexing mask behavior or retaining rows."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states NA treated as False and provides fillna(True) to retain rows, both supported by cited passage [1]. The optional DataFrame.filter alternative is supported by [2]."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "pandas allows indexing with NA values in a boolean array, which are treated as False.\nIn [1]: s = pd.Series([1, 2, 3])\n\nIn [2]: mask = pd.array([True, False, pd.NA], dtype=\"boolean\")\n\nIn [3]: s[mask]\nOut[3]:\n0 1\ndtype: int64\nIf you would prefer to keep the NA values you can manually fill them with fillna(True).",
+          "reason": "Directly supports both required points: NA treated as False and fillna(True) to retain rows."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses NA in boolean context and TypeError, not indexing mask behavior or retaining rows."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses isna() and missing data, not indexing mask behavior or retaining rows."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "Missing values in the mask are treated as False by default, matching df[mask] for a mask with nullable boolean dtype. Pass na=True to keep the corresponding rows instead",
+          "reason": "Supports the alternative DataFrame.filter method with na=True, which is a valid way to retain rows."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Discusses NumPy ufuncs and conversion, not indexing mask behavior or retaining rows."
+        }
+      ],
+      "point_scores": [
+        true,
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly states NA treated as False and provides fillna(True) to retain rows, both supported by cited passage [1]. The optional DataFrame.filter alternative is supported by [2]."
+    }
+  },
+  "prompt_version": 1
+}

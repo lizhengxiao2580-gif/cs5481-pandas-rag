@@ -1,0 +1,10 @@
+{
+  "model": "deepseek-v4-pro",
+  "temperature": 0,
+  "max_tokens": 6000,
+  "thinking": "disabled",
+  "response_format": "json_object",
+  "timeout_seconds": 180,
+  "workers": 4,
+  "initial_attempt": "An earlier grading attempt used the application 40-second timeout and default thinking mode. It was stopped before any judgments were saved; formal answers were not rerun."
+}

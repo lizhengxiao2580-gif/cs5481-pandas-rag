@@ -1,0 +1,189 @@
+{
+  "question_id": "Q17",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:08:34.180097+00:00",
+  "answer": "`DataFrame.pivot` uses unique values from the specified `index`/`columns` to form the result axes and does **not** support data aggregation [1]. Therefore, if the data contains repeated or duplicate `index`/`columns` combinations, `pivot()` raises a `ValueError`: “A ValueError is raised if there are any duplicates” [2], specifically “When there are any index, columns combinations with multiple values” [1]. The reshaping docs state that `pivot()` can only handle unique rows specified by `index` and `columns` [3].\n\nUse `pivot_table()` instead when the data contains duplicates or when aggregation is needed [3][1]. `DataFrame.pivot_table` is a “Generalization of pivot that can handle duplicate values for one index/column pair” [1], and it performs pivoting with aggregation; its default `aggfunc` is `'mean'` [4].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot:0001",
+      "doc_id": "reference/api/pandas.DataFrame.pivot",
+      "title": "pandas.DataFrame.pivot",
+      "text": "pandas.DataFrame.pivot\nDataFrame.pivot(*, columns, index=<no_default>, values=<no_default>)[source]\nReturn reshaped DataFrame organized by given index / column values.\nReshape data (produce a “pivot” table) based on column values. Uses unique values from specified index / columns to form axes of the resulting DataFrame. This function does not support data aggregation, multiple values will result in a MultiIndex in the columns. See the User Guide for more on reshaping.\nParameters:\ncolumnsHashable or a sequence of the previous\nColumn to use to make new frame’s columns.\nindexHashable or a sequence of the previous, optional\nColumn to use to make new frame’s index. If not given, uses existing index.\nvaluesHashable or a sequence of the previous, optional\nColumn(s) to use for populating new frame’s values. If not specified, all remaining columns will be used and the result will have hierarchically indexed columns.\nReturns:\nDataFrame\nReturns reshaped DataFrame.\nRaises:\nValueError:\nWhen there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.\nSee also\nDataFrame.pivot_table\nGeneralization of pivot that can handle duplicate values for one index/column pair.\nDataFrame.unstack\nPivot based on the index values instead of a column.\nwide_to_long\nWide panel to long format. Less flexible but more user-friendly than melt.\nNotes\nFor finer-tuned control, see hierarchical indexing documentation along with the related stack/unstack methods.\nReference the user guide for more examples.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"foo\": [\"one\", \"one\", \"one\", \"two\", \"two\", \"two\"],\n... \"bar\": [\"A\", \"B\", \"C\", \"A\", \"B\", \"C\"],\n... \"baz\": [1, 2, 3, 4, 5, 6],\n... \"zoo\": [\"x\", \"y\", \"z\", \"q\", \"w\", \"t\"],\n... }\n... )\n>>> df\n foo bar baz zoo\n0 one A 1 x\n1 one B 2 y\n2 one C 3 z\n3 two A 4 q\n4 two B 5 w\n5 two C 6 t\n>>> df.pivot(index=\"foo\", columns=\"bar\", values=\"baz\")\nbar A B C\nfoo\none 1 2 3",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot#page",
+          "heading_path": "pandas.DataFrame.pivot",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html",
+      "score": 0.7942045793682431
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot:0003",
+      "doc_id": "reference/api/pandas.DataFrame.pivot",
+      "title": "pandas.DataFrame.pivot",
+      "text": "3\n4 2 1 1 5 4\n5 2 2 2 6 5\n>>> df.pivot(index=\"lev1\", columns=[\"lev2\", \"lev3\"], values=\"values\")\nlev2 1 2\nlev3 1 2 1 2\nlev1\n1 0.0 1.0 2.0 NaN\n2 4.0 3.0 NaN 5.0\n>>> df.pivot(index=[\"lev1\", \"lev2\"], columns=[\"lev3\"], values=\"values\")\n lev3 1 2\nlev1 lev2\n 1 1 0.0 1.0\n 2 2.0 NaN\n 2 1 4.0 3.0\n 2 NaN 5.0\nA ValueError is raised if there are any duplicates.\n>>> df = pd.DataFrame(\n... {\n... \"foo\": [\"one\", \"one\", \"two\", \"two\"],\n... \"bar\": [\"A\", \"A\", \"B\", \"C\"],\n... \"baz\": [1, 2, 3, 4],\n... }\n... )\n>>> df\n foo bar baz\n0 one A 1\n1 one A 2\n2 two B 3\n3 two C 4\nNotice that the first two rows are the same for our index and columns arguments.\n>>> df.pivot(index=\"foo\", columns=\"bar\", values=\"baz\")\nTraceback (most recent call last):\n ...\nValueError: Index contains duplicate entries, cannot reshape",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot#page",
+          "heading_path": "pandas.DataFrame.pivot",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html",
+      "score": 0.8229363642356963
+    },
+    {
+      "n": 3,
+      "chunk_id": "fixed_size:user_guide/reshaping:0002",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "date\n2020-01-03 0 3 6 9\n2020-01-04 1 4 7 10\n2020-01-05 2 5 8 11\nIf the values argument is omitted, and the input DataFrame has more than one column of values which are not used as column or index inputs to pivot(), then the resulting “pivoted” DataFrame will have hierarchical columns whose topmost level indicates the respective value column:\nIn [5]: df[\"value2\"] = df[\"value\"] * 2\n\nIn [6]: pivoted = df.pivot(index=\"date\", columns=\"variable\")\n\nIn [7]: pivoted\nOut[7]:\n value value2\nvariable A B C D A B C D\ndate\n2020-01-03 0 3 6 9 0 6 12 18\n2020-01-04 1 4 7 10 2 8 14 20\n2020-01-05 2 5 8 11 4 10 16 22\nYou can then select subsets from the pivoted DataFrame:\nIn [8]: pivoted[\"value2\"]\nOut[8]:\nvariable A B C D\ndate\n2020-01-03 0 6 12 18\n2020-01-04 2 8 14 20\n2020-01-05 4 10 16 22\nNote that this returns a view on the underlying data in the case where the data are homogeneously-typed.\nNote\npivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().\npivot_table()\nWhile pivot() provides general purpose pivoting with various data types, pandas also provides pivot_table() or pivot_table() for pivoting with aggregation of numeric data.\nThe function pivot_table() can be used to create spreadsheet-style pivot tables. See the cookbook for some advanced strategies.\nIn [9]: import datetime\n\nIn [10]: df = pd.DataFrame(\n ....: {\n ....: \"A\": [\"one\", \"one\", \"two\", \"three\"] * 6,\n ....: \"B\": [\"A\", \"B\", \"C\"] * 8,\n ....: \"C\": [\"foo\", \"foo\", \"foo\", \"bar\", \"bar\", \"bar\"] * 4,",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+          "heading_path": "Reshaping and pivot tables > pivot() and pivot_table()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#pivot-and-pivot-table"
+      ],
+      "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table",
+      "score": 0.8366279417302259
+    },
+    {
+      "n": 4,
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot_table:0001",
+      "doc_id": "reference/api/pandas.DataFrame.pivot_table",
+      "title": "pandas.DataFrame.pivot_table",
+      "text": "pandas.DataFrame.pivot_table\nDataFrame.pivot_table(values=None, index=None, columns=None, aggfunc='mean', fill_value=None, margins=False, dropna=True, margins_name='All', observed=True, sort=True, **kwargs)[source]\nCreate a spreadsheet-style pivot table as a DataFrame.\nThe levels in the pivot table will be stored in MultiIndex objects (hierarchical indexes) on the index and columns of the result DataFrame.\nParameters:\nvalueslist-like or scalar, optional\nColumn or columns to aggregate.\nindexcolumn, Grouper, array, or sequence of the previous\nKeys to group by on the pivot table index. If a list is passed, it can contain any of the other types (except list). If an array is passed, it must be the same length as the data and will be used in the same manner as column values.\ncolumnscolumn, Grouper, array, or sequence of the previous\nKeys to group by on the pivot table column. If a list is passed, it can contain any of the other types (except list). If an array is passed, it must be the same length as the data and will be used in the same manner as column values.\naggfuncfunction, list of functions, dict, default “mean”\nIf a list of functions is passed, the resulting pivot table will have hierarchical columns whose top level are the function names (inferred from the function objects themselves). If a dict is passed, the key is column to aggregate and the value is function or list of functions. If margin=True, aggfunc will be used to calculate the partial aggregates.\nfill_valuescalar, default None\nValue to replace missing values with (in the resulting pivot table, after aggregation).\nmarginsbool, default False\nIf margins=True, special All columns and rows will be added with partial group aggregates across the categories on the rows and columns.\ndropnabool, default True\nDo not include columns whose entries are all NaN. If True,\nrows with an NA value in any column will be omitted before computing margins,\nindex/column keys containing NA values will be dropped (see dropna parameter in DataFrame.groupby()).\nmargins_namestr, default ‘All’\nName of the row / column that will contain the totals when margins is True.\nobservedbool, default True\nThis only applies if any of the groupers are Categoricals. If True: only show observed values for categorical groupers. If False:",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+          "heading_path": "pandas.DataFrame.pivot_table",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot_table#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+      "score": 0.744082798559766
+    }
+  ],
+  "latency_ms": 21771,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/reshaping:0002",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": "date\n2020-01-03 0 3 6 9\n2020-01-04 1 4 7 10\n2020-01-05 2 5 8 11\nIf the values argument is omitted, and the input DataFrame has more than one column of values which are not used as column or index inputs to pivot(), then the resulting “pivoted” DataFrame will have hierarchical columns whose topmost level indicates the respective value column:\nIn [5]: df[\"value2\"] = df[\"value\"] * 2\n\nIn [6]: pivoted = df.pivot(index=\"date\", columns=\"variable\")\n\nIn [7]: pivoted\nOut[7]:\n value value2\nvariable A B C D A B C D\ndate\n2020-01-03 0 3 6 9 0 6 12 18\n2020-01-04 1 4 7 10 2 8 14 20\n2020-01-05 2 5 8 11 4 10 16 22\nYou can then select subsets from the pivoted DataFrame:\nIn [8]: pivoted[\"value2\"]\nOut[8]:\nvariable A B C D\ndate\n2020-01-03 0 6 12 18\n2020-01-04 2 8 14 20\n2020-01-05 4 10 16 22\nNote that this returns a view on the underlying data in the case where the data are homogeneously-typed.\nNote\npivot() can only handle unique rows specified by index and columns. If your data contains duplicates, use pivot_table().\npivot_table()\nWhile pivot() provides general purpose pivoting with various data types, pandas also provides pivot_table() or pivot_table() for pivoting with aggregation of numeric data.\nThe function pivot_table() can be used to create spreadsheet-style pivot tables. See the cookbook for some advanced strategies.\nIn [9]: import datetime\n\nIn [10]: df = pd.DataFrame(\n ....: {\n ....: \"A\": [\"one\", \"one\", \"two\", \"three\"] * 6,\n ....: \"B\": [\"A\", \"B\", \"C\"] * 8,\n ....: \"C\": [\"foo\", \"foo\", \"foo\", \"bar\", \"bar\", \"bar\"] * 4,",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+          "heading_path": "Reshaping and pivot tables > pivot() and pivot_table()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#pivot-and-pivot-table"
+      ],
+      "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table",
+      "score": 0.8366279417302259
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot:0003",
+      "doc_id": "reference/api/pandas.DataFrame.pivot",
+      "title": "pandas.DataFrame.pivot",
+      "text": "3\n4 2 1 1 5 4\n5 2 2 2 6 5\n>>> df.pivot(index=\"lev1\", columns=[\"lev2\", \"lev3\"], values=\"values\")\nlev2 1 2\nlev3 1 2 1 2\nlev1\n1 0.0 1.0 2.0 NaN\n2 4.0 3.0 NaN 5.0\n>>> df.pivot(index=[\"lev1\", \"lev2\"], columns=[\"lev3\"], values=\"values\")\n lev3 1 2\nlev1 lev2\n 1 1 0.0 1.0\n 2 2.0 NaN\n 2 1 4.0 3.0\n 2 NaN 5.0\nA ValueError is raised if there are any duplicates.\n>>> df = pd.DataFrame(\n... {\n... \"foo\": [\"one\", \"one\", \"two\", \"two\"],\n... \"bar\": [\"A\", \"A\", \"B\", \"C\"],\n... \"baz\": [1, 2, 3, 4],\n... }\n... )\n>>> df\n foo bar baz\n0 one A 1\n1 one A 2\n2 two B 3\n3 two C 4\nNotice that the first two rows are the same for our index and columns arguments.\n>>> df.pivot(index=\"foo\", columns=\"bar\", values=\"baz\")\nTraceback (most recent call last):\n ...\nValueError: Index contains duplicate entries, cannot reshape",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot#page",
+          "heading_path": "pandas.DataFrame.pivot",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html",
+      "score": 0.8229363642356963
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot:0001",
+      "doc_id": "reference/api/pandas.DataFrame.pivot",
+      "title": "pandas.DataFrame.pivot",
+      "text": "pandas.DataFrame.pivot\nDataFrame.pivot(*, columns, index=<no_default>, values=<no_default>)[source]\nReturn reshaped DataFrame organized by given index / column values.\nReshape data (produce a “pivot” table) based on column values. Uses unique values from specified index / columns to form axes of the resulting DataFrame. This function does not support data aggregation, multiple values will result in a MultiIndex in the columns. See the User Guide for more on reshaping.\nParameters:\ncolumnsHashable or a sequence of the previous\nColumn to use to make new frame’s columns.\nindexHashable or a sequence of the previous, optional\nColumn to use to make new frame’s index. If not given, uses existing index.\nvaluesHashable or a sequence of the previous, optional\nColumn(s) to use for populating new frame’s values. If not specified, all remaining columns will be used and the result will have hierarchically indexed columns.\nReturns:\nDataFrame\nReturns reshaped DataFrame.\nRaises:\nValueError:\nWhen there are any index, columns combinations with multiple values. DataFrame.pivot_table when you need to aggregate.\nSee also\nDataFrame.pivot_table\nGeneralization of pivot that can handle duplicate values for one index/column pair.\nDataFrame.unstack\nPivot based on the index values instead of a column.\nwide_to_long\nWide panel to long format. Less flexible but more user-friendly than melt.\nNotes\nFor finer-tuned control, see hierarchical indexing documentation along with the related stack/unstack methods.\nReference the user guide for more examples.\nExamples\n>>> df = pd.DataFrame(\n... {\n... \"foo\": [\"one\", \"one\", \"one\", \"two\", \"two\", \"two\"],\n... \"bar\": [\"A\", \"B\", \"C\", \"A\", \"B\", \"C\"],\n... \"baz\": [1, 2, 3, 4, 5, 6],\n... \"zoo\": [\"x\", \"y\", \"z\", \"q\", \"w\", \"t\"],\n... }\n... )\n>>> df\n foo bar baz zoo\n0 one A 1 x\n1 one B 2 y\n2 one C 3 z\n3 two A 4 q\n4 two B 5 w\n5 two C 6 t\n>>> df.pivot(index=\"foo\", columns=\"bar\", values=\"baz\")\nbar A B C\nfoo\none 1 2 3",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot#page",
+          "heading_path": "pandas.DataFrame.pivot",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot.html",
+      "score": 0.7942045793682431
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/reshaping:0005",
+      "doc_id": "user_guide/reshaping",
+      "title": "Reshaping and pivot tables",
+      "text": ".761726 NaN -1.067650 0.380863 NaN -0.533825\nB bar -1.665170 NaN 1.637410 -0.832585 NaN 0.818705\n foo -0.097554 0.372851 NaN -0.048777 0.186425 NaN\nC bar -0.744154 -2.392449 NaN -0.372077 -1.196224 NaN\n foo 1.061810 NaN -3.491906 0.530905 NaN -1.745953\nThe result is a DataFrame potentially having a MultiIndex on the index or column. If the values column name is not given, the pivot table will include all of the data in an additional level of hierarchy in the columns:\nIn [15]: pd.pivot_table(df[[\"A\", \"B\", \"C\", \"D\", \"E\"]], index=[\"A\", \"B\"], columns=[\"C\"])\nOut[15]:\n D E\nC bar foo bar foo\nA B\none A -0.995460 0.595334 -0.235796 0.380863\n B 0.393570 -0.494817 -0.832585 -0.048777\n C 0.196903 -0.767769 -0.372077 0.530905\nthree A -0.431886 NaN -1.004091 NaN\n B NaN -1.065818 NaN 0.186425\n C 0.798396 NaN -1.196224 NaN\ntwo A NaN 0.197720 NaN -0.533825\n B -0.986678 NaN 0.818705 NaN\n C NaN -1.274317 NaN -1.745953\nAlso, you can use Grouper for index and columns keywords. For detail of Grouper, see Grouping with a Grouper specification.\nIn [16]: pd.pivot_table(df, values=\"D\", index=pd.Grouper(freq=\"ME\", key=\"F\"), columns=\"C\")\nOut[16]:\nC bar foo\nF\n2013-01-31 NaN 0.595334\n2013-02-28 NaN -0.494817\n2013-03-31 NaN -1.274317\n2013-04-30 -0.431886 NaN\n2013-05-31 0.",
+      "sources": [
+        {
+          "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+          "heading_path": "Reshaping and pivot tables > pivot() and pivot_table()",
+          "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table"
+        }
+      ],
+      "section_ids": [
+        "user_guide/reshaping#pivot-and-pivot-table"
+      ],
+      "section_id": "user_guide/reshaping#pivot-and-pivot-table",
+      "url": "https://pandas.pydata.org/docs/user_guide/reshaping.html#pivot-and-pivot-table",
+      "score": 0.7665302068645272
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot_table:0001",
+      "doc_id": "reference/api/pandas.DataFrame.pivot_table",
+      "title": "pandas.DataFrame.pivot_table",
+      "text": "pandas.DataFrame.pivot_table\nDataFrame.pivot_table(values=None, index=None, columns=None, aggfunc='mean', fill_value=None, margins=False, dropna=True, margins_name='All', observed=True, sort=True, **kwargs)[source]\nCreate a spreadsheet-style pivot table as a DataFrame.\nThe levels in the pivot table will be stored in MultiIndex objects (hierarchical indexes) on the index and columns of the result DataFrame.\nParameters:\nvalueslist-like or scalar, optional\nColumn or columns to aggregate.\nindexcolumn, Grouper, array, or sequence of the previous\nKeys to group by on the pivot table index. If a list is passed, it can contain any of the other types (except list). If an array is passed, it must be the same length as the data and will be used in the same manner as column values.\ncolumnscolumn, Grouper, array, or sequence of the previous\nKeys to group by on the pivot table column. If a list is passed, it can contain any of the other types (except list). If an array is passed, it must be the same length as the data and will be used in the same manner as column values.\naggfuncfunction, list of functions, dict, default “mean”\nIf a list of functions is passed, the resulting pivot table will have hierarchical columns whose top level are the function names (inferred from the function objects themselves). If a dict is passed, the key is column to aggregate and the value is function or list of functions. If margin=True, aggfunc will be used to calculate the partial aggregates.\nfill_valuescalar, default None\nValue to replace missing values with (in the resulting pivot table, after aggregation).\nmarginsbool, default False\nIf margins=True, special All columns and rows will be added with partial group aggregates across the categories on the rows and columns.\ndropnabool, default True\nDo not include columns whose entries are all NaN. If True,\nrows with an NA value in any column will be omitted before computing margins,\nindex/column keys containing NA values will be dropped (see dropna parameter in DataFrame.groupby()).\nmargins_namestr, default ‘All’\nName of the row / column that will contain the totals when margins is True.\nobservedbool, default True\nThis only applies if any of the groupers are Categoricals. If True: only show observed values for categorical groupers. If False:",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+          "heading_path": "pandas.DataFrame.pivot_table",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot_table#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+      "score": 0.744082798559766
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 21771
+}

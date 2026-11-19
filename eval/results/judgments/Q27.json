@@ -1,0 +1,90 @@
+{
+  "question_id": "Q27",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage describes pandas.Series.apply, not pd.teleport_to_mars; no evidence for the unsupported API."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Continuation of Series.apply examples; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses DataFrame.pipe and method chaining; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses elementwise functions and map; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses pandas options API; no evidence for pd.teleport_to_mars."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because pd.teleport_to_mars is not documented. System X explicitly declines to answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    },
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage is an introduction to spreadsheet comparisons; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 2,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage mentions trying pandas online; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 3,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage describes pandas.Series.apply; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage lists video tutorials; no evidence for pd.teleport_to_mars."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Continuation of Series.apply examples; no evidence for pd.teleport_to_mars."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": null,
+      "unsupported_claims": [],
+      "reason": "The question is unanswerable because pd.teleport_to_mars is not documented. System Y explicitly declines to answer, satisfying the required point. Retrieval passages are all irrelevant as expected."
+    }
+  },
+  "prompt_version": 1
+}

@@ -1,0 +1,90 @@
+{
+  "question_id": "Q03",
+  "judge_model": "deepseek-v4-pro",
+  "benchmark_issue": null,
+  "systems": {
+    "structure_aware": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage only contains a heading 'How do I select a subset of a DataFrame?' with no substantive evidence about isin or filtering."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "In [16]: class_23 = titanic[titanic[\"Pclass\"].isin([2, 3])]",
+          "reason": "Shows isin used inside selection brackets to filter rows, supporting the required point."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Similar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list.",
+          "reason": "Explains isin returns a boolean mask and can be used to filter rows, supporting the required point."
+        },
+        {
+          "rank": 4,
+          "relevant": true,
+          "quote": "Using a boolean vector to index a Series works exactly as in a NumPy ndarray:",
+          "reason": "Describes boolean vector indexing, which is the mechanism for filtering with isin's mask."
+        },
+        {
+          "rank": 5,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses HDFStore query syntax, not relevant to isin filtering."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses isin with a list and boolean mask to filter rows, satisfying the required point. The alternative OR condition is also supported by cited passages."
+    },
+    "fixed_size": {
+      "retrieval": [
+        {
+          "rank": 1,
+          "relevant": true,
+          "quote": "Consider the isin() method of Series, which returns a boolean vector that is true wherever the Series elements exist in the passed list.",
+          "reason": "Directly explains isin returning a boolean mask for filtering, supporting the required point."
+        },
+        {
+          "rank": 2,
+          "relevant": true,
+          "quote": "Similar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list.",
+          "reason": "Shows isin used to filter rows and explains its boolean output, supporting the required point."
+        },
+        {
+          "rank": 3,
+          "relevant": true,
+          "quote": "Using isin() method for filtering:",
+          "reason": "Indicates isin is used for filtering, though the excerpt is brief; still relevant to the required point."
+        },
+        {
+          "rank": 4,
+          "relevant": false,
+          "quote": "",
+          "reason": "Passage discusses HDFStore query syntax, not relevant to isin filtering."
+        },
+        {
+          "rank": 5,
+          "relevant": true,
+          "quote": "row_mask = df.isin(values).all(axis=1)",
+          "reason": "Shows DataFrame.isin used to create a boolean mask for row selection, supporting the required point."
+        }
+      ],
+      "point_scores": [
+        true
+      ],
+      "correct": true,
+      "faithful": true,
+      "unsupported_claims": [],
+      "reason": "Answer correctly uses isin with a list and boolean mask to filter rows, satisfying the required point. The alternative OR condition is also supported by cited passages."
+    }
+  },
+  "prompt_version": 1
+}

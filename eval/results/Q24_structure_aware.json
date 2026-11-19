@@ -1,0 +1,129 @@
+{
+  "question_id": "Q24",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:12:08.689028+00:00",
+  "answer": "For a callable `func`, the difference is:\n\n- With `by_row='compat'`, `func` is passed each element of the `Series`, like `Series.map` [1].\n- With `by_row=False`, `func` is passed the whole `Series` at once [1].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:reference/api/pandas.Series.apply:0001",
+      "doc_id": "reference/api/pandas.Series.apply",
+      "title": "pandas.Series.apply",
+      "text": "pandas.Series.apply\nSeries.apply(func, args=(), *, by_row='compat', **kwargs)[source]\nInvoke function on values of Series.\nCan be ufunc (a NumPy function that applies to the entire Series) or a Python function that only works on single values.\nParameters:\nfuncfunction\nPython function or NumPy ufunc to apply.\nargstuple\nPositional arguments passed to func after the series value.\nby_rowFalse or “compat”, default “compat”\nIf \"compat\" and func is a callable, func will be passed each element of the Series, like Series.map. If func is a list or dict of callables, will first try to translate each func into pandas methods. If that doesn’t work, will try call to apply again with by_row=\"compat\" and if that fails, will call apply again with by_row=False (backward compatible). If False, the func will be passed the whole Series at once.\nby_row has no effect when func is a string.\nAdded in version 2.1.0.\n**kwargs\nAdditional keyword arguments passed to func.\nReturns:\nSeries or DataFrame\nIf func returns a Series object the result will be a DataFrame.\nSee also\nSeries.map\nFor element-wise operations.\nSeries.agg\nOnly perform aggregating type operations.\nSeries.transform\nOnly perform transforming type operations.\nNotes\nFunctions that mutate the passed object can produce unexpected behavior or errors and are not supported. See Mutating with User Defined Function (UDF) methods for more details.\nExamples\nCreate a series with typical summer temperatures for each city.\n>>> s = pd.Series([20, 21, 12], index=[\"London\", \"New York\", \"Helsinki\"])\n>>> s\nLondon 20\nNew York 21\nHelsinki 12\ndtype: int64\nSquare the values by defining a function and passing it as an argument to apply().\n>>> def square(x):\n... return x**2\n>>> s.apply(square)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nSquare the values by passing an anonymous function as an argument to apply().\n>>> s.apply(lambda x: x**2)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nDefine a custom function that needs additional positional arguments and pass these additional arguments using the args keyword.\n>>> def subtract_custom_value(x, custom_value):\n... return x - custom_value",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.apply#page",
+          "heading_path": "pandas.Series.apply",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.apply#page"
+      ],
+      "section_id": "reference/api/pandas.Series.apply#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html",
+      "score": 0.7645529718088018
+    }
+  ],
+  "latency_ms": 11281,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:reference/api/pandas.Series.apply:0001",
+      "doc_id": "reference/api/pandas.Series.apply",
+      "title": "pandas.Series.apply",
+      "text": "pandas.Series.apply\nSeries.apply(func, args=(), *, by_row='compat', **kwargs)[source]\nInvoke function on values of Series.\nCan be ufunc (a NumPy function that applies to the entire Series) or a Python function that only works on single values.\nParameters:\nfuncfunction\nPython function or NumPy ufunc to apply.\nargstuple\nPositional arguments passed to func after the series value.\nby_rowFalse or “compat”, default “compat”\nIf \"compat\" and func is a callable, func will be passed each element of the Series, like Series.map. If func is a list or dict of callables, will first try to translate each func into pandas methods. If that doesn’t work, will try call to apply again with by_row=\"compat\" and if that fails, will call apply again with by_row=False (backward compatible). If False, the func will be passed the whole Series at once.\nby_row has no effect when func is a string.\nAdded in version 2.1.0.\n**kwargs\nAdditional keyword arguments passed to func.\nReturns:\nSeries or DataFrame\nIf func returns a Series object the result will be a DataFrame.\nSee also\nSeries.map\nFor element-wise operations.\nSeries.agg\nOnly perform aggregating type operations.\nSeries.transform\nOnly perform transforming type operations.\nNotes\nFunctions that mutate the passed object can produce unexpected behavior or errors and are not supported. See Mutating with User Defined Function (UDF) methods for more details.\nExamples\nCreate a series with typical summer temperatures for each city.\n>>> s = pd.Series([20, 21, 12], index=[\"London\", \"New York\", \"Helsinki\"])\n>>> s\nLondon 20\nNew York 21\nHelsinki 12\ndtype: int64\nSquare the values by defining a function and passing it as an argument to apply().\n>>> def square(x):\n... return x**2\n>>> s.apply(square)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nSquare the values by passing an anonymous function as an argument to apply().\n>>> s.apply(lambda x: x**2)\nLondon 400\nNew York 441\nHelsinki 144\ndtype: int64\nDefine a custom function that needs additional positional arguments and pass these additional arguments using the args keyword.\n>>> def subtract_custom_value(x, custom_value):\n... return x - custom_value",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.Series.apply#page",
+          "heading_path": "pandas.Series.apply",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.Series.apply#page"
+      ],
+      "section_id": "reference/api/pandas.Series.apply#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.Series.apply.html",
+      "score": 0.7645529718088018
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0033",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "np.mean(x))\nOut[151]:\none 0.811094\ntwo 1.360588\nthree 0.187958\ndtype: float64\n\nIn [152]: df.apply(lambda x: np.mean(x), axis=1)\nOut[152]:\na 1.583749\nb 0.734929\nc 1.133683\nd -0.166914\ndtype: float64\n\nIn [153]: df.apply(lambda x: x.max() - x.min())\nOut[153]:\none 1.051928\ntwo 1.632779\nthree 1.840607\ndtype: float64\n\nIn [154]: df.apply(np.cumsum)\nOut[154]:\n one two three\na 1.394981 1.772517 NaN\nb 1.738035 3.684640 -0.050390\nc 2.433281 5.163008 1.177045\nd NaN 5.442353 0.563873\n\nIn [155]: df.apply(np.exp)\nOut[155]:\n one two three\na 4.034899 5.885648 NaN\nb 1.409244 6.767440 0.950858\nc 2.004201 4.385785 3.412466\nd NaN 1.322262 0.541630\nWarning\nFor a general Python callable, apply() invokes it once per column (or once per row with axis=1) in a Python-level loop. It is a tool for flexibility, not speed: when a vectorized equivalent exists, it will generally be much faster. Every example above can be written more directly without apply:\nIn [156]: df.mean() # df.apply(lambda x: np.mean(x))\nOut[156]:\none 0.811094\ntwo 1.360588\nthree 0.187958\ndtype: float64\n\nIn [157]: df.mean(axis=1) # df.apply(lambda x: np.mean(x), axis=1)\nOut[157]:\na 1.583749\nb 0.734929\nc 1.133683\nd -0.166914\ndtype: float64\n\nIn [158]: df.max() - df.min() # df.apply(lambda x: x.max() - x.min())\nOut[158]:\none 1.051928\ntwo",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#function-application",
+          "heading_path": "Essential basic functionality > Function application",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#function-application"
+      ],
+      "section_id": "user_guide/basics#function-application",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application",
+      "score": 0.730639347665324
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0035",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "from a third-party library that operates on one row or column at a time.\nThe apply() method will also dispatch on a string method name.\nIn [161]: df.apply(\"mean\")\nOut[161]:\none 0.811094\ntwo 1.360588\nthree 0.187958\ndtype: float64\n\nIn [162]: df.apply(\"mean\", axis=1)\nOut[162]:\na 1.583749\nb 0.734929\nc 1.133683\nd -0.166914\ndtype: float64\nThe return type of the function passed to apply() affects the type of the final output from DataFrame.apply for the default behaviour:\nIf the applied function returns a Series, the final output is a DataFrame. The columns match the index of the Series returned by the applied function.\nIf the applied function returns any other type, the final output is a Series.\nThis default behaviour can be overridden using the result_type, which accepts three options: reduce, broadcast, and expand. These will determine how list-likes return values expand (or not) to a DataFrame.\napply() combined with some cleverness can be used to answer many questions about a data set. For example, suppose we wanted to extract the date where the maximum value for each column occurred:\nIn [163]: tsdf = pd.DataFrame(\n .....: np.random.randn(1000, 3),\n .....: columns=[\"A\", \"B\", \"C\"],\n .....: index=pd.date_range(\"1/1/2000\", periods=1000),\n .....: )\n .....:\n\nIn [164]: tsdf.apply(lambda x: x.idxmax())\nOut[164]:\nA 2000-08-06\nB 2001-01-18\nC 2001-07-18\ndtype: datetime64[us]\n(In this case the built-in tsdf.idxmax() gives the same result more simply; apply is shown for illustration.)\nYou may also pass additional arguments and keyword arguments to the apply() method.\nIn [165]: def subtract_and_divide(x, sub, divide=1):\n .....: return (x - sub) / divide\n .....:\n\nIn [166]: df_udf = pd.DataFrame(np.ones((2, 2)))\n\nIn [167]: df_udf.apply(subtract_and_divide, args=(5,), divide=3)\nOut[167]:\n 0 1\n0 -1.333",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#function-application",
+          "heading_path": "Essential basic functionality > Function application",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#function-application"
+      ],
+      "section_id": "user_guide/basics#function-application",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application",
+      "score": 0.7146843742144017
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/user_defined_functions:0006",
+      "doc_id": "user_guide/user_defined_functions",
+      "title": "User-Defined Functions (UDFs)",
+      "text": "1 7\n2 8\ndtype: int64\nIn the example, the function hotter will be called 3 times, once for each row. And each call will receive the whole row as the argument, allowing computations that require more than one value in the row.\napply is also available for SeriesGroupBy.apply(), DataFrameGroupBy.apply(), Rolling.apply(), Expanding.apply() and Resampler.apply(). You can read more about apply in groupby operations Flexible apply.\nWhen to use: apply() is suitable when no alternative vectorized method or UDF method is available, but consider optimizing performance with vectorized operations wherever possible.\nSeries.pipe() and DataFrame.pipe()\nThe pipe method is similar to map and apply, but the function receives the whole Series or DataFrame it is called on.\nIn [16]: temperature = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31],\n ....: })\n ....:\n\nIn [17]: def normalize(df):\n ....: return df / df.mean().mean()\n ....:\n\nIn [18]: temperature.pipe(normalize)\nOut[18]:\n NYC Los Angeles\n0 0.604317 0.949640\n1 0.906475 1.208633\n2 0.992806 1.338129\nThis is equivalent to calling the normalize function with the DataFrame as the parameter.\nIn [19]: normalize(temperature)\nOut[19]:\n NYC Los Angeles\n0 0.604317 0.949640\n1 0.906475 1.208633\n2 0.992806 1.338129\nThe main advantage of using pipe is readability. It allows method chaining and clearer code when calling multiple functions.\nIn [20]: temperature_celsius = pd.DataFrame({\n ....: \"NYC\": [14, 21, 23],\n ....: \"Los Angeles\": [22, 28, 31],\n ....: })\n ....:\n\nIn [21]: def multiply_by_9(value):\n ....: return value * 9\n ....:\n\nIn [22]: def divide_by_5(value):\n ....: return value / 5\n ....:\n\nIn [23]: def add_32(value):\n ....: return value + 32\n ....:\n\n# Without `pipe`:\nIn [24]: fahrenheit = add_32(divide_by_5(multiply_by_9(",
+      "sources": [
+        {
+          "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+          "heading_path": "User-Defined Functions (UDFs) > Methods that support User-Defined Functions",
+          "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions"
+        }
+      ],
+      "section_ids": [
+        "user_guide/user_defined_functions#methods-that-support-user-defined-functions"
+      ],
+      "section_id": "user_guide/user_defined_functions#methods-that-support-user-defined-functions",
+      "url": "https://pandas.pydata.org/docs/user_guide/user_defined_functions.html#methods-that-support-user-defined-functions",
+      "score": 0.7106550448474726
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/basics:0034",
+      "doc_id": "user_guide/basics",
+      "title": "Essential basic functionality",
+      "text": "64\n\nIn [157]: df.mean(axis=1) # df.apply(lambda x: np.mean(x), axis=1)\nOut[157]:\na 1.583749\nb 0.734929\nc 1.133683\nd -0.166914\ndtype: float64\n\nIn [158]: df.max() - df.min() # df.apply(lambda x: x.max() - x.min())\nOut[158]:\none 1.051928\ntwo 1.632779\nthree 1.840607\ndtype: float64\n\nIn [159]: df.cumsum() # df.apply(np.cumsum)\nOut[159]:\n one two three\na 1.394981 1.772517 NaN\nb 1.738035 3.684640 -0.050390\nc 2.433281 5.163008 1.177045\nd NaN 5.442353 0.563873\n\nIn [160]: np.exp(df) # df.apply(np.exp)\nOut[160]:\n one two three\na 4.034899 5.885648 NaN\nb 1.409244 6.767440 0.950858\nc 2.004201 4.385785 3.412466\nd NaN 1.322262 0.541630\nThe first four avoid the per-column loop and are several times faster on a wide frame. The last is a NumPy ufunc, which apply recognizes and applies to the whole frame at once, so the two are equally fast; the direct spelling is simply clearer.\nBefore reaching for apply, look for a vectorized alternative: a DataFrame or Series method, an arithmetic or comparison operation (see Flexible binary operations), or an accessor method such as the vectorized string methods under .str or the datetime properties under .dt. Reserve apply for logic with no vectorized equivalent, such as a function from a third-party library that operates on one row or column at a time.\nThe apply() method will also dispatch on a string method name.\nIn [161]: df.apply(\"mean\")\nOut[161]:\none 0.811094\ntwo 1.360588\nthree 0.187958\ndtype: float64\n\nIn [162]: df.apply(\"mean\", axis=1)\nOut[162]:\na 1.583749\nb 0.734929\nc",
+      "sources": [
+        {
+          "section_id": "user_guide/basics#function-application",
+          "heading_path": "Essential basic functionality > Function application",
+          "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application"
+        }
+      ],
+      "section_ids": [
+        "user_guide/basics#function-application"
+      ],
+      "section_id": "user_guide/basics#function-application",
+      "url": "https://pandas.pydata.org/docs/user_guide/basics.html#function-application",
+      "score": 0.7099365021985748
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 11281
+}

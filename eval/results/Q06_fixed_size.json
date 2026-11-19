@@ -1,0 +1,173 @@
+{
+  "question_id": "Q06",
+  "strategy": "fixed_size",
+  "started_utc": "2026-11-18T13:04:41.277550+00:00",
+  "answer": "Use `groupby` with a list of the grouping columns, then calculate the mean for the sales column:\n\n```python\nmean_sales = df.groupby([\"region\", \"product\"])[\"sales\"].mean()\n```\n\nThe docs show that grouping by multiple columns and calling `mean()` produces means for each combination, such as each `Store`-`Product` combination for revenue and quantity [1]. You can also use `.agg` with a dictionary to apply `\"mean\"` to a specific column, as shown with `tips.groupby([\"smoker\", \"day\"]).agg({\"tip\": [\"size\", \"mean\"]})` [2].\n\nThis assumes the columns are named `\"region\"`, `\"product\"`, and `\"sales\"` and that you want the mean of `\"sales\"` for each unique `\"region\"`-`\"product\"` combination [1][2].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "fixed_size:user_guide/groupby:0050",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "1 28.86 1\nWe now find the prices per store/product.\nIn [267]: (\n .....: df.groupby([\"Store\", \"Product\"])\n .....: .pipe(lambda grp: grp.Revenue.sum() / grp.Quantity.sum())\n .....: .unstack()\n .....: .round(2)\n .....: )\n .....:\nOut[267]:\nProduct Product_1 Product_2\nStore\nStore_1 6.82 7.05\nStore_2 6.30 6.64\nPiping can also be expressive when you want to deliver a grouped object to some arbitrary function, for example:\nIn [268]: def mean(groupby):\n .....: return groupby.mean()\n .....:\n\nIn [269]: df.groupby([\"Store\", \"Product\"]).pipe(mean)\nOut[269]:\n Revenue Quantity\nStore Product\nStore_1 Product_1 34.622727 5.075758\n Product_2 35.482815 5.029630\nStore_2 Product_1 32.972837 5.237589\n Product_2 34.684360 5.224000\nHere mean takes a GroupBy object and finds the mean of the Revenue and Quantity columns respectively for each Store-Product combination. The mean function can be any function that takes in a GroupBy object; the .pipe will pass the GroupBy object as a parameter into the function you specify.\n\nMulti-column factorization\nBy using DataFrameGroupBy.ngroup(), we can extract information about the groups in a way similar to factorize() (as described further in the reshaping API) but which applies naturally to multiple columns of mixed type and different sources. This can be useful as an intermediate categorical-like step in processing, when the relationships between the group rows are more important than their content, or as input to an algorithm which only accepts the integer encoding. (For more information about support in pandas for full categorical data, see the Categorical introduction and the API documentation.)\nIn [270]: dfg = pd.DataFrame({\"A\": [1, 1, 2, 3, 2], \"B\": list(\"aaaba\")})\n\nIn [271]: dfg\nOut[271]:\n A B\n0 1 a\n1 1 a\n2 2 a\n3 3 b\n4 2 a\n\nIn [272]: dfg.groupby([\"A\", \"B\"]).ngroup()\nOut[272]:",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#other-useful-features",
+          "heading_path": "Group by: split-apply-combine > Other useful features",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features"
+        },
+        {
+          "section_id": "user_guide/groupby#examples",
+          "heading_path": "Group by: split-apply-combine > Examples",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#examples"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#other-useful-features",
+        "user_guide/groupby#examples"
+      ],
+      "section_id": "user_guide/groupby#other-useful-features",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features",
+      "score": 0.6258222361075056
+    },
+    {
+      "n": 2,
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sql:0008",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "’d like to see how tip amount differs by day of the week - DataFrameGroupBy.agg() allows you to pass a dictionary to your grouped DataFrame, indicating which functions to apply to specific columns.\nSELECT day, AVG(tip), COUNT(*)\nFROM tips\nGROUP BY day;\n/*\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThu 2.771452 62\n*/\nIn [22]: tips.groupby(\"day\").agg({\"tip\": \"mean\", \"day\": \"size\"})\nOut[22]:\n tip day\nday\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThur 2.771452 62\nGrouping by more than one column is done by passing a list of columns to the groupby() method.\nSELECT smoker, day, COUNT(*), AVG(tip)\nFROM tips\nGROUP BY smoker, day;\n/*\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thu 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thu 17 3.030000\n*/\nIn [23]: tips.groupby([\"smoker\", \"day\"]).agg({\"tip\": [\"size\", \"mean\"]})\nOut[23]:\n tip\n size mean\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thur 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thur 17 3.030000\n\nJOINs can be performed with join() or merge(). By default, join() will join the DataFrames on their indices. Each method has parameters allowing you to specify the type of join to perform (LEFT, RIGHT, INNER, FULL) or the columns to join on (column names or indices).\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nIn [24",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+          "heading_path": "Comparison with SQL > GROUP BY",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#join",
+          "heading_path": "Comparison with SQL > JOIN",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#group-by",
+        "getting_started/comparison/comparison_with_sql#join"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by",
+      "score": 0.5662391118859047
+    }
+  ],
+  "latency_ms": 25125,
+  "hits": [
+    {
+      "chunk_id": "fixed_size:user_guide/groupby:0050",
+      "doc_id": "user_guide/groupby",
+      "title": "Group by: split-apply-combine",
+      "text": "1 28.86 1\nWe now find the prices per store/product.\nIn [267]: (\n .....: df.groupby([\"Store\", \"Product\"])\n .....: .pipe(lambda grp: grp.Revenue.sum() / grp.Quantity.sum())\n .....: .unstack()\n .....: .round(2)\n .....: )\n .....:\nOut[267]:\nProduct Product_1 Product_2\nStore\nStore_1 6.82 7.05\nStore_2 6.30 6.64\nPiping can also be expressive when you want to deliver a grouped object to some arbitrary function, for example:\nIn [268]: def mean(groupby):\n .....: return groupby.mean()\n .....:\n\nIn [269]: df.groupby([\"Store\", \"Product\"]).pipe(mean)\nOut[269]:\n Revenue Quantity\nStore Product\nStore_1 Product_1 34.622727 5.075758\n Product_2 35.482815 5.029630\nStore_2 Product_1 32.972837 5.237589\n Product_2 34.684360 5.224000\nHere mean takes a GroupBy object and finds the mean of the Revenue and Quantity columns respectively for each Store-Product combination. The mean function can be any function that takes in a GroupBy object; the .pipe will pass the GroupBy object as a parameter into the function you specify.\n\nMulti-column factorization\nBy using DataFrameGroupBy.ngroup(), we can extract information about the groups in a way similar to factorize() (as described further in the reshaping API) but which applies naturally to multiple columns of mixed type and different sources. This can be useful as an intermediate categorical-like step in processing, when the relationships between the group rows are more important than their content, or as input to an algorithm which only accepts the integer encoding. (For more information about support in pandas for full categorical data, see the Categorical introduction and the API documentation.)\nIn [270]: dfg = pd.DataFrame({\"A\": [1, 1, 2, 3, 2], \"B\": list(\"aaaba\")})\n\nIn [271]: dfg\nOut[271]:\n A B\n0 1 a\n1 1 a\n2 2 a\n3 3 b\n4 2 a\n\nIn [272]: dfg.groupby([\"A\", \"B\"]).ngroup()\nOut[272]:",
+      "sources": [
+        {
+          "section_id": "user_guide/groupby#other-useful-features",
+          "heading_path": "Group by: split-apply-combine > Other useful features",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features"
+        },
+        {
+          "section_id": "user_guide/groupby#examples",
+          "heading_path": "Group by: split-apply-combine > Examples",
+          "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#examples"
+        }
+      ],
+      "section_ids": [
+        "user_guide/groupby#other-useful-features",
+        "user_guide/groupby#examples"
+      ],
+      "section_id": "user_guide/groupby#other-useful-features",
+      "url": "https://pandas.pydata.org/docs/user_guide/groupby.html#other-useful-features",
+      "score": 0.6258222361075056
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sql:0008",
+      "doc_id": "getting_started/comparison/comparison_with_sql",
+      "title": "Comparison with SQL",
+      "text": "’d like to see how tip amount differs by day of the week - DataFrameGroupBy.agg() allows you to pass a dictionary to your grouped DataFrame, indicating which functions to apply to specific columns.\nSELECT day, AVG(tip), COUNT(*)\nFROM tips\nGROUP BY day;\n/*\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThu 2.771452 62\n*/\nIn [22]: tips.groupby(\"day\").agg({\"tip\": \"mean\", \"day\": \"size\"})\nOut[22]:\n tip day\nday\nFri 2.734737 19\nSat 2.993103 87\nSun 3.255132 76\nThur 2.771452 62\nGrouping by more than one column is done by passing a list of columns to the groupby() method.\nSELECT smoker, day, COUNT(*), AVG(tip)\nFROM tips\nGROUP BY smoker, day;\n/*\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thu 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thu 17 3.030000\n*/\nIn [23]: tips.groupby([\"smoker\", \"day\"]).agg({\"tip\": [\"size\", \"mean\"]})\nOut[23]:\n tip\n size mean\nsmoker day\nNo Fri 4 2.812500\n Sat 45 3.102889\n Sun 57 3.167895\n Thur 45 2.673778\nYes Fri 15 2.714000\n Sat 42 2.875476\n Sun 19 3.516842\n Thur 17 3.030000\n\nJOINs can be performed with join() or merge(). By default, join() will join the DataFrames on their indices. Each method has parameters allowing you to specify the type of join to perform (LEFT, RIGHT, INNER, FULL) or the columns to join on (column names or indices).\nWarning\nIf both key columns contain rows where the key is a null value, those rows will be matched against each other. This is different from usual SQL join behaviour and can lead to unexpected results.\nIn [24",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+          "heading_path": "Comparison with SQL > GROUP BY",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by"
+        },
+        {
+          "section_id": "getting_started/comparison/comparison_with_sql#join",
+          "heading_path": "Comparison with SQL > JOIN",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#join"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sql#group-by",
+        "getting_started/comparison/comparison_with_sql#join"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sql#group-by",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html#group-by",
+      "score": 0.5662391118859047
+    },
+    {
+      "chunk_id": "fixed_size:user_guide/cookbook:0024",
+      "doc_id": "user_guide/cookbook",
+      "title": "Cookbook",
+      "text": "0.701683\nPivot\nThe Pivot docs.\nPartial sums and subtotals\nIn [175]: df = pd.DataFrame(\n .....: data={\n .....: \"Province\": [\"ON\", \"QC\", \"BC\", \"AL\", \"AL\", \"MN\", \"ON\"],\n .....: \"City\": [\n .....: \"Toronto\",\n .....: \"Montreal\",\n .....: \"Vancouver\",\n .....: \"Calgary\",\n .....: \"Edmonton\",\n .....: \"Winnipeg\",\n .....: \"Windsor\",\n .....: ],\n .....: \"Sales\": [13, 6, 16, 8, 4, 3, 1],\n .....: }\n .....: )\n .....:\n\nIn [176]: table = pd.pivot_table(\n .....: df,\n .....: values=[\"Sales\"],\n .....: index=[\"Province\"],\n .....: columns=[\"City\"],\n .....: aggfunc=\"sum\",\n .....: margins=True,\n .....: )\n .....:\n\nIn [177]: table.stack(\"City\")\nOut[177]:\n Sales\nProvince City\nAL Calgary 8.0\n Edmonton 4.0\n Montreal NaN\n Toronto NaN\n Vancouver NaN\n... ...\nAll Toronto 13.0\n Vancouver 16.0\n Windsor 1.0\n Winnipeg 3.0\n All 51.0\n\n[48 rows x 1 columns]\nFrequency table like plyr in R\nIn [178]: grades = [48, 99, 75, 80, 42, 80, 72, 68, 36, 78]\n\nIn [179]: df = pd.DataFrame(\n .....: {\n .....: \"ID\": [\"x%d\" % r for r in range(10)],\n .....: \"Gender\": [\"F\", \"M\", \"F\", \"M\", \"F\", \"M\", \"F\", \"M\", \"M\", \"M\"],\n .....: \"ExamYear\": [\n .....: \"2007\",\n .....: \"2007\",\n .....: \"2007\",\n .....: \"2008\",\n .....: \"2008\",\n .....: \"2008\",\n .....: \"2008\",\n .....: \"2009\",\n .....: \"2009\",\n .....: \"2009\",\n .....: ],\n .....: \"Class\": [\n .....: \"algebra\",\n .....: \"stats\",\n .....: \"bio\",\n .....: \"algebra\",\n .....: \"algebra\",\n .....: \"stats\",\n .....: \"stats\",\n .....: \"al",
+      "sources": [
+        {
+          "section_id": "user_guide/cookbook#grouping",
+          "heading_path": "Cookbook > Grouping",
+          "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#grouping"
+        }
+      ],
+      "section_ids": [
+        "user_guide/cookbook#grouping"
+      ],
+      "section_id": "user_guide/cookbook#grouping",
+      "url": "https://pandas.pydata.org/docs/user_guide/cookbook.html#grouping",
+      "score": 0.5612830101644901
+    },
+    {
+      "chunk_id": "fixed_size:getting_started/comparison/comparison_with_sas:0018",
+      "doc_id": "getting_started/comparison/comparison_with_sas",
+      "title": "Comparison with SAS",
+      "text": "Yes 527.27 96.74\nMale No 1725.75 302.00\n Yes 1217.07 183.07\nTransformation\nIn SAS, if the group aggregations need to be used with the original frame, it must be merged back together. For example, to subtract the mean for each observation by smoker group.\nproc summary data=tips missing nway;\n class smoker;\n var total_bill;\n output out=smoker_means mean(total_bill)=group_bill;\nrun;\n\nproc sort data=tips;\n by smoker;\nrun;\n\ndata tips;\n merge tips(in=a) smoker_means(in=b);\n by smoker;\n adj_total_bill = total_bill - group_bill;\n if a and b;\nrun;\npandas provides a Transformation mechanism that allows these type of operations to be succinctly expressed in one operation.\nIn [1]: gb = tips.groupby(\"smoker\")[\"total_bill\"]\n\nIn [2]: tips[\"adj_total_bill\"] = tips[\"total_bill\"] - gb.transform(\"mean\")\n\nIn [3]: tips\nOut[3]:\n total_bill tip sex smoker day time size adj_total_bill\n67 1.07 1.00 Female Yes Sat Dinner 1 -17.686344\n92 3.75 1.00 Female Yes Fri Dinner 2 -15.006344\n111 5.25 1.00 Female No Sat Dinner 1 -11.938278\n145 6.35 1.50 Female No Thur Lunch 2 -10.838278\n135 6.51 1.25 Female No Thur Lunch 2 -10.678278\n.. ... ... ... ... ... ... ... ...\n182 43.35 3.50 Male Yes Sun Dinner 3 24.593656\n156 46.17 5.00 Male No Sun Dinner 6 28.981722\n59 46.27 6.73 Male No Sat Dinner 4 29.081722\n212 46.33 9.00 Male No Sat Dinner 4 29.141722\n170 48.81 10.00 Male Yes Sat Dinner 3 30.053656\n\n[244 rows x 8 columns]\nBy group processing\nIn addition to aggregation, pandas groupby can be used to replicate most other by group processing from SAS. For example, this DATA step reads the data by sex/smoker group and filters to the first",
+      "sources": [
+        {
+          "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+          "heading_path": "Comparison with SAS > GroupBy",
+          "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby"
+        }
+      ],
+      "section_ids": [
+        "getting_started/comparison/comparison_with_sas#groupby"
+      ],
+      "section_id": "getting_started/comparison/comparison_with_sas#groupby",
+      "url": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sas.html#groupby",
+      "score": 0.5497878292902418
+    },
+    {
+      "chunk_id": "fixed_size:reference/api/pandas.DataFrame.pivot_table:0004",
+      "doc_id": "reference/api/pandas.DataFrame.pivot_table",
+      "title": "pandas.DataFrame.pivot_table",
+      "text": "4.500000\n small 2.333333 4.333333\nWe can also calculate multiple types of aggregations for any given value column.\n>>> table = pd.pivot_table(\n... df,\n... values=[\"D\", \"E\"],\n... index=[\"A\", \"C\"],\n... aggfunc={\"D\": \"mean\", \"E\": [\"min\", \"max\", \"mean\"]},\n... )\n>>> table\n D E\n mean max mean min\nA C\nbar large 5.500000 9 7.500000 6\n small 5.500000 9 8.500000 8\nfoo large 2.000000 5 4.500000 4\n small 2.333333 6 4.333333 2",
+      "sources": [
+        {
+          "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+          "heading_path": "pandas.DataFrame.pivot_table",
+          "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html"
+        }
+      ],
+      "section_ids": [
+        "reference/api/pandas.DataFrame.pivot_table#page"
+      ],
+      "section_id": "reference/api/pandas.DataFrame.pivot_table#page",
+      "url": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pivot_table.html",
+      "score": 0.5475345447022812
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 25125
+}

@@ -1,0 +1,169 @@
+{
+  "question_id": "Q03",
+  "strategy": "structure_aware",
+  "started_utc": "2026-11-18T13:04:08.294995+00:00",
+  "answer": "Use boolean indexing inside the selection brackets. Assuming `df` is a DataFrame with a `country` column, you can use `isin` to keep rows where `country` is either `\"UK\"` or `\"JP\"` [1][2]:\n\n```python\nfiltered = df[df[\"country\"].isin([\"UK\", \"JP\"])]\n```\n\n`isin()` returns `True` for each row whose value is in the provided list [2].\n\nAlternatively, combine two equality conditions with the `|` operator; each condition must be surrounded by parentheses, and you cannot use `or` [2][3]:\n\n```python\nfiltered = df[(df[\"country\"] == \"UK\") | (df[\"country\"] == \"JP\")]\n```\n\nThe parenthesis and `|` usage is also documented for boolean indexing [3].",
+  "refused": false,
+  "citations": [
+    {
+      "n": 1,
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0003",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "How do I filter specific rows from a DataFrame?\nI’m interested in the passengers older than 35 years.\nIn [12]: above_35 = titanic[titanic[\"Age\"] > 35]\n\nIn [13]: above_35.head()\nOut[13]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n1 2 1 1 ... 71.2833 C85 C\n6 7 0 1 ... 51.8625 E46 S\n11 12 1 1 ... 26.5500 C103 S\n13 14 0 3 ... 31.2750 NaN S\n15 16 1 2 ... 16.0000 NaN S\n\n[5 rows x 12 columns]\nTo select rows based on a conditional expression, use a condition inside the selection brackets [].\nThe condition inside the selection brackets titanic[\"Age\"] > 35 checks for which rows the Age column has a value larger than 35:\nIn [14]: titanic[\"Age\"] > 35\nOut[14]:\n0 False\n1 True\n2 False\n3 False\n4 False\n ...\n886 False\n887 False\n888 False\n889 False\n890 False\nName: Age, Length: 891, dtype: bool\nThe output of the conditional expression (>, but also ==, !=, <, <=,… would work) is actually a pandas Series of boolean values (either True or False) with the same number of rows as the original DataFrame. Such a Series of boolean values can be used to filter the DataFrame by putting it in between the selection brackets []. Only rows for which the value is True will be selected.\nWe know from before that the original Titanic DataFrame consists of 891 rows. Let’s have a look at the number of rows which satisfy the condition by checking the shape attribute of the resulting DataFrame above_35:\nIn [15]: above_35.shape\nOut[15]: (217, 12)\nI’m interested in the Titanic passengers from cabin class 2 and 3.\nIn [16]: class_23 = titanic[titanic[\"Pclass\"].isin([2, 3])]\n\nIn [17]: class_23.head()\nOut[17]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6270310945480755
+    },
+    {
+      "n": 2,
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0004",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "]: (217, 12)\nI’m interested in the Titanic passengers from cabin class 2 and 3.\nIn [16]: class_23 = titanic[titanic[\"Pclass\"].isin([2, 3])]\n\nIn [17]: class_23.head()\nOut[17]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nSimilar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list. To filter the rows based on such a function, use the conditional function inside the selection brackets []. In this case, the condition inside the selection brackets titanic[\"Pclass\"].isin([2, 3]) checks for which rows the Pclass column is either 2 or 3.\nThe above is equivalent to filtering by rows for which the class is either 2 or 3 and combining the two statements with an | (or) operator:\nIn [18]: class_23 = titanic[(titanic[\"Pclass\"] == 2) | (titanic[\"Pclass\"] == 3)]\n\nIn [19]: class_23.head()\nOut[19]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nNote\nWhen combining multiple conditional statements, each condition must be surrounded by parentheses (). Moreover, you can not use or/and but need to use the or operator | and the and operator &.\nSee the dedicated section in the user guide about boolean indexing or about the isin function.\nI want to work with passenger data for which the age is known.\nIn [20]:",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6228174332689675
+    },
+    {
+      "n": 3,
+      "chunk_id": "structure_aware:user_guide/indexing:0046",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "Another common operation is the use of boolean vectors to filter the data. The operators are: | for or, & for and, and ~ for not. These must be grouped by using parentheses, since by default Python will evaluate an expression such as df['A'] > 2 & df['B'] < 3 as df['A'] > (2 & df['B']) < 3, while the desired evaluation order is (df['A'] > 2) & (df['B'] < 3).\nUsing a boolean vector to index a Series works exactly as in a NumPy ndarray:\nIn [172]: s = pd.Series(range(-3, 4))\n\nIn [173]: s\nOut[173]:\n0 -3\n1 -2\n2 -1\n3 0\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [174]: s[s > 0]\nOut[174]:\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [175]: s[(s < -1) | (s > 0.5)]\nOut[175]:\n0 -3\n1 -2\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [176]: s[~(s < 0)]\nOut[176]:\n3 0\n4 1\n5 2\n6 3\ndtype: int64\nYou may select rows from a DataFrame using a boolean vector the same length as the DataFrame’s index (for example, something derived from one of the columns of the DataFrame):\nIn [177]: df[df['A'] > 0]\nOut[177]:\n A B C D 0\n2000-01-04 7.000000 0.721555 -1.039575 0.271860 NaN\n2000-01-05 0.567020 -0.424972 0.276232 -1.087401 NaN\n2000-01-06 7.000000 -0.673690 -1.478427 0.524988 NaN\n2000-01-07 0.577046 0.404705 -1.715002 -1.039268 NaN\nList comprehensions and the map method of Series can also be used to produce more complex criteria:\nIn [178]: df2 = pd.DataFrame({'a':",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#boolean-indexing",
+          "heading_path": "Indexing and selecting data > Boolean indexing",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#boolean-indexing"
+      ],
+      "section_id": "user_guide/indexing#boolean-indexing",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing",
+      "score": 0.612033868553314
+    }
+  ],
+  "latency_ms": 14153,
+  "hits": [
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0001",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "How do I select a subset of a DataFrame?",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > Overview",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-select-a-subset-of-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-select-a-subset-of-a-dataframe",
+      "score": 0.6897661626025653
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0003",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "How do I filter specific rows from a DataFrame?\nI’m interested in the passengers older than 35 years.\nIn [12]: above_35 = titanic[titanic[\"Age\"] > 35]\n\nIn [13]: above_35.head()\nOut[13]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n1 2 1 1 ... 71.2833 C85 C\n6 7 0 1 ... 51.8625 E46 S\n11 12 1 1 ... 26.5500 C103 S\n13 14 0 3 ... 31.2750 NaN S\n15 16 1 2 ... 16.0000 NaN S\n\n[5 rows x 12 columns]\nTo select rows based on a conditional expression, use a condition inside the selection brackets [].\nThe condition inside the selection brackets titanic[\"Age\"] > 35 checks for which rows the Age column has a value larger than 35:\nIn [14]: titanic[\"Age\"] > 35\nOut[14]:\n0 False\n1 True\n2 False\n3 False\n4 False\n ...\n886 False\n887 False\n888 False\n889 False\n890 False\nName: Age, Length: 891, dtype: bool\nThe output of the conditional expression (>, but also ==, !=, <, <=,… would work) is actually a pandas Series of boolean values (either True or False) with the same number of rows as the original DataFrame. Such a Series of boolean values can be used to filter the DataFrame by putting it in between the selection brackets []. Only rows for which the value is True will be selected.\nWe know from before that the original Titanic DataFrame consists of 891 rows. Let’s have a look at the number of rows which satisfy the condition by checking the shape attribute of the resulting DataFrame above_35:\nIn [15]: above_35.shape\nOut[15]: (217, 12)\nI’m interested in the Titanic passengers from cabin class 2 and 3.\nIn [16]: class_23 = titanic[titanic[\"Pclass\"].isin([2, 3])]\n\nIn [17]: class_23.head()\nOut[17]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6270310945480755
+    },
+    {
+      "chunk_id": "structure_aware:getting_started/intro_tutorials/03_subset_data:0004",
+      "doc_id": "getting_started/intro_tutorials/03_subset_data",
+      "title": "How do I select a subset of a DataFrame ?",
+      "text": "]: (217, 12)\nI’m interested in the Titanic passengers from cabin class 2 and 3.\nIn [16]: class_23 = titanic[titanic[\"Pclass\"].isin([2, 3])]\n\nIn [17]: class_23.head()\nOut[17]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nSimilar to the conditional expression, the isin() conditional function returns a True for each row the values are in the provided list. To filter the rows based on such a function, use the conditional function inside the selection brackets []. In this case, the condition inside the selection brackets titanic[\"Pclass\"].isin([2, 3]) checks for which rows the Pclass column is either 2 or 3.\nThe above is equivalent to filtering by rows for which the class is either 2 or 3 and combining the two statements with an | (or) operator:\nIn [18]: class_23 = titanic[(titanic[\"Pclass\"] == 2) | (titanic[\"Pclass\"] == 3)]\n\nIn [19]: class_23.head()\nOut[19]:\n PassengerId Survived Pclass ... Fare Cabin Embarked\n0 1 0 3 ... 7.2500 NaN S\n2 3 1 3 ... 7.9250 NaN S\n4 5 0 3 ... 8.0500 NaN S\n5 6 0 3 ... 8.4583 NaN Q\n7 8 0 3 ... 21.0750 NaN S\n\n[5 rows x 12 columns]\nNote\nWhen combining multiple conditional statements, each condition must be surrounded by parentheses (). Moreover, you can not use or/and but need to use the or operator | and the and operator &.\nSee the dedicated section in the user guide about boolean indexing or about the isin function.\nI want to work with passenger data for which the age is known.\nIn [20]:",
+      "sources": [
+        {
+          "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+          "heading_path": "How do I select a subset of a DataFrame ? > How do I filter specific rows from a DataFrame ?",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe"
+        }
+      ],
+      "section_ids": [
+        "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe"
+      ],
+      "section_id": "getting_started/intro_tutorials/03_subset_data#how-do-i-filter-specific-rows-from-a-dataframe",
+      "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/03_subset_data.html#how-do-i-filter-specific-rows-from-a-dataframe",
+      "score": 0.6228174332689675
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/indexing:0046",
+      "doc_id": "user_guide/indexing",
+      "title": "Indexing and selecting data",
+      "text": "Another common operation is the use of boolean vectors to filter the data. The operators are: | for or, & for and, and ~ for not. These must be grouped by using parentheses, since by default Python will evaluate an expression such as df['A'] > 2 & df['B'] < 3 as df['A'] > (2 & df['B']) < 3, while the desired evaluation order is (df['A'] > 2) & (df['B'] < 3).\nUsing a boolean vector to index a Series works exactly as in a NumPy ndarray:\nIn [172]: s = pd.Series(range(-3, 4))\n\nIn [173]: s\nOut[173]:\n0 -3\n1 -2\n2 -1\n3 0\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [174]: s[s > 0]\nOut[174]:\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [175]: s[(s < -1) | (s > 0.5)]\nOut[175]:\n0 -3\n1 -2\n4 1\n5 2\n6 3\ndtype: int64\n\nIn [176]: s[~(s < 0)]\nOut[176]:\n3 0\n4 1\n5 2\n6 3\ndtype: int64\nYou may select rows from a DataFrame using a boolean vector the same length as the DataFrame’s index (for example, something derived from one of the columns of the DataFrame):\nIn [177]: df[df['A'] > 0]\nOut[177]:\n A B C D 0\n2000-01-04 7.000000 0.721555 -1.039575 0.271860 NaN\n2000-01-05 0.567020 -0.424972 0.276232 -1.087401 NaN\n2000-01-06 7.000000 -0.673690 -1.478427 0.524988 NaN\n2000-01-07 0.577046 0.404705 -1.715002 -1.039268 NaN\nList comprehensions and the map method of Series can also be used to produce more complex criteria:\nIn [178]: df2 = pd.DataFrame({'a':",
+      "sources": [
+        {
+          "section_id": "user_guide/indexing#boolean-indexing",
+          "heading_path": "Indexing and selecting data > Boolean indexing",
+          "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing"
+        }
+      ],
+      "section_ids": [
+        "user_guide/indexing#boolean-indexing"
+      ],
+      "section_id": "user_guide/indexing#boolean-indexing",
+      "url": "https://pandas.pydata.org/docs/user_guide/indexing.html#boolean-indexing",
+      "score": 0.612033868553314
+    },
+    {
+      "chunk_id": "structure_aware:user_guide/io:0131",
+      "doc_id": "user_guide/io",
+      "title": "IO tools (text, CSV, HDF5, …)",
+      "text": ".random.randn(10, 4),\n .....: columns=list(\"ABCD\"),\n .....: index=pd.date_range(\"20130101\", periods=10),\n .....: )\n .....:\n\nIn [493]: store.append(\"dfq\", dfq, format=\"table\", data_columns=True)\nUse boolean expressions, with in-line function evaluation.\nIn [494]: store.select(\"dfq\", \"index>pd.Timestamp('20130104') & columns=['A', 'B']\")\nOut[494]:\n A B\n2013-01-05 -0.830545 -0.457071\n2013-01-06 0.431186 1.049421\n2013-01-07 0.617509 -0.811230\n2013-01-08 0.947422 -0.671233\n2013-01-09 -0.183798 -1.211230\n2013-01-10 0.361428 0.887304\nUse inline column reference.\nIn [495]: store.select(\"dfq\", where=\"A>0 or C>0\")\nOut[495]:\n A B C D\n2013-01-02 0.658179 0.362814 -0.917897 0.010165\n2013-01-03 0.905122 1.848731 -1.184241 0.932053\n2013-01-05 -0.830545 -0.457071 1.565581 1.148032\n2013-01-06 0.431186 1.049421 0.383309 0.595013\n2013-01-07 0.617509 -0.811230 -2.088563 -1.393500\n2013-01-08 0.947422 -0.671233 -0.847097 -1.187785\n2013-01-10 0.361428 0.887304 0.266457 -0.399641\nThe columns keyword can be supplied to select a list of columns to be returned, this is equivalent to passing a 'columns=list_of_columns_to_filter':\nIn [496]: store.select(\"df\", \"columns=['A', 'B']\")\nOut[496]:\n A B\n2000-01-01 0.858644 -0.851236\n2000",
+      "sources": [
+        {
+          "section_id": "user_guide/io#hdf5-pytables",
+          "heading_path": "IO tools (text, CSV, HDF5, …) > HDF5 (PyTables)",
+          "url": "https://pandas.pydata.org/docs/user_guide/io.html#hdf5-pytables"
+        }
+      ],
+      "section_ids": [
+        "user_guide/io#hdf5-pytables"
+      ],
+      "section_id": "user_guide/io#hdf5-pytables",
+      "url": "https://pandas.pydata.org/docs/user_guide/io.html#hdf5-pytables",
+      "score": 0.6100869143063161
+    }
+  ],
+  "status": "ok",
+  "wall_latency_ms": 14153
+}
