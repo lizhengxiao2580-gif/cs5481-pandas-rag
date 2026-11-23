@@ -47,13 +47,13 @@ df = pd.read_csv("data.csv", usecols=["name", "age"])
 
 `usecols` accepts strings that correspond to column names inferred from the document header row [2]. This assumes the CSV file has a header row containing columns named `name` and `age`; by default, pandas infers column names from the first non-blank line of the file [3]. Element order in `usecols` is ignored, so if you need a specific column order, select after reading [2].
 
-Correct: **True**; faithful: **True**; refused: **False**; first relevant rank: **2**.
+Correct: **True**; faithful: **True**; refused: **False**; first relevant rank: **1**.
 
 Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passages.
 
 | Rank | Relevant | Source | Evidence / reason |
 |---|---|---|---|
-| 1 | False | [user_guide/io](https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files) | Passage discusses header behavior and duplicate names, not usecols. |
+| 1 | True | [user_guide/io](https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files) | The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable: |
 | 2 | True | [user_guide/io](https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files) | The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable: |
 | 3 | True | [user_guide/io](https://pandas.pydata.org/docs/user_guide/io.html#csv-text-files) | usecolslist-like or callable, default None Return a subset of the columns. If list-like, all elements must either be positional (i.e. integer indices into the document columns) or strings that correspond to column names provided either by the user in names or inferred from the document header row(s). |
 | 4 | False | [reference/api/pandas.read_csv](https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html) | Only function signature and general parameters, no specific usecols explanation. |

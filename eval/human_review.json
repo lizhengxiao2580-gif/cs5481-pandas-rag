@@ -1,16 +1,37 @@
 {
   "status": "completed",
-  "confirmed_on": "2026-11-19",
+  "confirmed_on": "2026-11-22",
   "timezone": "Asia/Shanghai",
   "reviewer_role": "project member",
-  "confirmation_source": "The user confirmed that they actually checked the existing evaluation and found no issues.",
-  "review_type": "Human review and confirmation of existing model-assisted scoring",
-  "score_changes_requested": false,
+  "confirmation_source": "The user accepted the explained Q01 relevance correction and requested its inclusion as a human-review correction in the report.",
+  "review_type": "Confirmation of existing model-assisted scoring and the evidence-backed Q01 correction",
+  "score_changes_requested": true,
   "independent_blind_ratings": false,
+  "confirmed_corrections": [
+    "Q01 structure-aware rank 1: irrelevant to relevant; final MRR@5 = 0.9375"
+  ],
   "artifact_sha256": {
     "questions.jsonl": "ea44f40bfb5ed2ca218d8b0279d28f670b37f199cb2a7c418a461d7a741ce0e6",
-    "results/summary.json": "3b848eccc1670859b271f1cffb1eeaa8c578e46e33a73e39f66a31b422b5be02",
+    "results/summary.json": "5fb85ebf3a5d6cc451e9ea36f9cbfa569e2984c0a65199504d2d20ca1d413893",
     "results/raw_results.jsonl": "3363ea17794b7e8417a4eb4235d43a47cb1a29382200513107a05de1fe261942",
-    "review_overrides.json": "55d48a5c2d222f2395e10c4516a19ac9c53713058b8594ee5bca9928d65a57aa"
-  }
+    "review_overrides.json": "ae4d397ffebb602c884987cb10cc8d511c371ebcda621b39e4afd3f4b6513032"
+  },
+  "previous_confirmations": [
+    {
+      "status": "completed",
+      "confirmed_on": "2026-11-19",
+      "timezone": "Asia/Shanghai",
+      "reviewer_role": "project member",
+      "confirmation_source": "The user confirmed that they actually checked the existing evaluation and found no issues.",
+      "review_type": "Human review and confirmation of existing model-assisted scoring",
+      "score_changes_requested": false,
+      "independent_blind_ratings": false,
+      "artifact_sha256": {
+        "questions.jsonl": "ea44f40bfb5ed2ca218d8b0279d28f670b37f199cb2a7c418a461d7a741ce0e6",
+        "results/summary.json": "3b848eccc1670859b271f1cffb1eeaa8c578e46e33a73e39f66a31b422b5be02",
+        "results/raw_results.jsonl": "3363ea17794b7e8417a4eb4235d43a47cb1a29382200513107a05de1fe261942",
+        "review_overrides.json": "55d48a5c2d222f2395e10c4516a19ac9c53713058b8594ee5bca9928d65a57aa"
+      }
+    }
+  ]
 }

@@ -4,7 +4,7 @@ Q01,fixed_size,2,fixed_size:getting_started/intro_tutorials/03_subset_data:0001,
 Q01,fixed_size,3,fixed_size:reference/api/pandas.read_csv:0001,False,,"Only function signature and general parameters, no specific usecols explanation."
 Q01,fixed_size,4,fixed_size:user_guide/cookbook:0039,False,,Unrelated CSV parsing examples.
 Q01,fixed_size,5,fixed_size:getting_started/intro_tutorials/01_table_oriented:0001,False,,"Introductory DataFrame creation, not relevant."
-Q01,structure_aware,1,structure_aware:user_guide/io:0015,False,,"Passage discusses header behavior and duplicate names, not usecols."
+Q01,structure_aware,1,structure_aware:user_guide/io:0015,True,"The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",The full first-ranked passage already includes the complete usecols explanation. Its earlier header-related content does not make that supporting evidence irrelevant.
 Q01,structure_aware,2,structure_aware:user_guide/io:0016,True,"The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",Directly supports selecting columns by name with usecols.
 Q01,structure_aware,3,structure_aware:user_guide/io:0003,True,"usecolslist-like or callable, default None
 Return a subset of the columns. If list-like, all elements must either be positional (i.e. integer indices into the document columns) or strings that correspond to column names provided either by the user in names or inferred from the document header row(s).",Explains usecols accepts column names.

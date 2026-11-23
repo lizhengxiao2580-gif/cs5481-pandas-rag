@@ -34,10 +34,12 @@ The first unscored warm-up was: “What does a pandas DataFrame represent?”
 - `results/summary.json`: the six agreed evaluation metrics.
 - `figures/`: PNG/SVG quality and latency comparisons for the report or slides.
 
-The evidence-based judge uses the same configured generation model as the system. `grade.py` targets the DeepSeek endpoint configured for this experiment, requests JSON output with thinking disabled, and uses four grading workers with a 180-second timeout. The existing evaluation has been reviewed and confirmed by a project member. The method is model-assisted initial scoring followed by human review of the existing scores, rather than independent blind human ratings. The confirmation is recorded in `human_review.json` and tied to this experiment's artifact hashes; changing the results invalidates it. End-to-end latency is measured during system runs only; grading occurs afterwards.
+The evidence-based judge uses the same configured generation model as the system. `grade.py` targets the DeepSeek endpoint configured for this experiment, requests JSON output with thinking disabled, and uses four grading workers with a 180-second timeout. The original evaluation received project-member review. A later evidence check on 2026-11-22 corrected Q01 structure-aware rank 1 from irrelevant to relevant, and the project member accepted the correction. The method is model-assisted initial scoring followed by human review of the existing scores, rather than independent blind human ratings. The confirmation is recorded in `human_review.json` and tied to this experiment's artifact hashes; changing the results invalidates it. End-to-end latency is measured during system runs only; grading occurs afterwards.
 
 `python eval/check_examples.py` optionally reproduces two review findings; it additionally requires pandas and numpy (the recorded run used pandas 3.1.1). `python eval/plot.py` creates PNG/SVG figures and additionally requires matplotlib. Neither is required to run the backend.
 
 ## Human review confirmation
 
-A project member confirmed completion of the actual review on 2026-11-19 and requested no score changes. `human_review.json` records this confirmation. Model judgments and evidence-based corrections remain separate from the human confirmation.
+A project member confirmed the original scores on 2026-11-19. The later Q01 correction changes structure-aware MRR@5 to 0.9375. The project member accepted this correction on 2026-11-22. The current confirmation is tied to the revised artifact hashes; the earlier confirmation is preserved in its history. `human_review.json` records this confirmation. Model judgments and evidence-based corrections remain separate from the human confirmation.
+
+The local correction is documented in `results/label_correction_2026-11-22.json`. No system answers were rerun or changed.

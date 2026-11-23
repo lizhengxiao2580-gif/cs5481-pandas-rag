@@ -1,6 +1,6 @@
 ﻿question_id,category,answerable,strategy,status,hit_at_5,first_relevant_rank,reciprocal_rank_at_5,correct,faithful,refused,wall_latency_ms,reason,unsupported_claims
 Q01,basic,True,fixed_size,ok,1,1,1.0,True,True,False,20428,"Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passage.",
-Q01,basic,True,structure_aware,ok,1,2,0.5,True,True,False,14643,"Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passages.",
+Q01,basic,True,structure_aware,ok,1,1,1.0,True,True,False,14643,"Answer correctly uses usecols=['name','age'] and explains it. All claims are supported by cited passages.",
 Q02,basic,True,fixed_size,ok,1,1,1.0,True,True,False,11082,Answer correctly states index=False and explains the default. All claims are supported by cited passages.,
 Q02,basic,True,structure_aware,ok,1,1,1.0,True,True,False,12757,Answer correctly states index=False and explains the default. All claims are supported by cited passages.,
 Q03,basic,True,fixed_size,ok,1,1,1.0,True,True,False,19503,"Answer correctly uses isin with a list and boolean mask to filter rows, satisfying the required point. The alternative OR condition is also supported by cited passages.",

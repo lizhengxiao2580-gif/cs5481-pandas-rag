@@ -75,6 +75,8 @@ hits = retrieve_chunks("How do I group by two columns?", k=5, strategy="fixed_si
 result = query("How do I group by two columns?", k=5, strategy="structure_aware")
 ```
 
-Both paths use `config.yaml` with optional `config.local.yaml` overrides. Valid strategy IDs are `fixed_size` and `structure_aware`. Each hit includes `chunk_id`, `doc_id`, `section_ids`, `score`, the text, and source links. A fixed window can touch more than one section. Label evaluation questions by page or section ID and count a hit if any of its IDs matches.
+Both paths use `config.yaml` with optional `config.local.yaml` overrides. Valid strategy IDs are `fixed_size` and `structure_aware`. Each hit includes `chunk_id`, `doc_id`, `section_ids`, `score`, the text, and source links. A fixed window can touch more than one section.
+
+For evaluation, mark a retrieved chunk as relevant only when its body contains substantive evidence supporting at least one required answer point. Matching a page or section ID alone is not sufficient. Hit@5 counts an answerable question as a hit when at least one of its top-five chunks is relevant. MRR@5 averages the reciprocal rank of the first relevant chunk, using zero if none is found in the top five. Both metrics use the 24 answerable questions; the six unanswerable questions are evaluated separately for refusal success.
 
 `query()` returns `answer`, `refused`, `latency_ms` and numbered `citations`. It validates that every emitted citation marker points to a retrieved chunk. Check whether each citation supports its claim when scoring answer correctness. For the strategy comparison, use the same questions, model, and `k` for both runs. The assignment asks for at least 20 question–answer pairs and reporting retrieval hit rate and answer correctness.

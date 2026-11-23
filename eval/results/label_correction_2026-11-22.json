@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-22",
+  "question_id": "Q01",
+  "strategy": "structure_aware",
+  "rank": 1,
+  "original_relevance": false,
+  "corrected_relevance": true,
+  "supporting_quote": "The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:",
+  "reason": "The first-ranked saved passage contains substantive column-selection evidence; the original model label was a false negative.",
+  "previous_mrr_at_5": 0.9166666666666666,
+  "expected_corrected_mrr_at_5": 0.9375,
+  "original_system_outputs_unchanged": true,
+  "human_confirmation_for_this_correction": "accepted_by_project_member",
+  "publication_status": "Included in the repository evaluation materials.",
+  "confirmation_source": "The user accepted the explained Q01 relevance correction and requested its inclusion as a human-review correction in the report."
+}

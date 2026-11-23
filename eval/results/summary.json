@@ -22,7 +22,7 @@
     "n_unanswerable": 6,
     "retrieval_hits": 24,
     "hit_at_5": 1,
-    "mrr_at_5": 0.9166666666666666,
+    "mrr_at_5": 0.9375,
     "correct_answers": 24,
     "answer_correctness": 1,
     "faithful_answers": 24,

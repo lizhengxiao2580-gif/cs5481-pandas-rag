@@ -12,6 +12,8 @@ EVAL = Path(__file__).resolve().parent
 path = EVAL / "review_overrides.json"
 overrides = json.loads(path.read_text())
 CHANGES = [
+    ("Q01", "structure_aware", 1, True, 'The usecols argument allows you to select any subset of the columns in a file, either using the column names, position numbers or a callable:',
+     "The full first-ranked passage already includes the complete usecols explanation. Its earlier header-related content does not make that supporting evidence irrelevant."),
     ("Q04", "fixed_size", 5, True, 'DataFrame.dropna() drops any rows that have missing data:',
      "The how='any' example supports the second required point even without illustrating subset; one supported required point is sufficient for relevance."),
     ("Q07", "structure_aware", 1, True, 'The method will melt all columns NOT mentioned in id_vars together into two columns:',
